@@ -1,26 +1,27 @@
 package com.example.bugtrackersystem.model;
 
-
-
-
 import com.example.bugtrackersystem.model.enums.RoleName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
-
-@EqualsAndHashCode(callSuper = true)
-@Table(name = "roles")
-@javax.persistence.Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class Role extends Entity {
-    @Enumerated(value = EnumType.STRING)
+@Document(collection = "roles")
+public class Role {
+    @Id
+    private String id;
+
     private RoleName role;
+
+    public String getName() {
+        return role.name();
+    }
+
+    public Role(RoleName role) {
+        this.role = role;
+    }
 }

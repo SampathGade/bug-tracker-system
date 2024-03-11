@@ -1,23 +1,22 @@
 package com.example.bugtrackersystem.model;
 
-
 import com.example.bugtrackersystem.model.enums.TicketPriorityName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
-
-@EqualsAndHashCode(callSuper = true)
-@Table(name = "ticket_priorities")
-@javax.persistence.Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class TicketPriority extends Entity{
-    @Enumerated(value = EnumType.STRING)
+@Document(collection = "ticket_priorities")
+public class TicketPriority {
+    @Id
+    private String id;
     private TicketPriorityName priority;
+
+    public TicketPriority(TicketPriorityName priority) {
+        this.priority = priority;
+    }
 }

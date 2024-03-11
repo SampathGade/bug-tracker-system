@@ -1,25 +1,21 @@
 package com.example.bugtrackersystem.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.Objects;
 
-@MappedSuperclass
-public class Entity implements Serializable {
+public abstract class Entity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Long id;
+    @Field("_id")
+    protected String id;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -27,8 +23,8 @@ public class Entity implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Entity)) return false;
-        Entity that = (Entity) o;
-        return Objects.equals(id, that.id);
+        Entity entity = (Entity) o;
+        return Objects.equals(id, entity.id);
     }
 
     @Override

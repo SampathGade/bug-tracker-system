@@ -6,29 +6,34 @@ import com.example.bugtrackersystem.requests.LoginRequest;
 import com.example.bugtrackersystem.requests.RegisterRequest;
 import com.example.bugtrackersystem.services.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/")
 @RequiredArgsConstructor
 public class AuthController {
+    @Autowired
     private final AuthService authService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+        System.out.println("test");
         User user = authService.login(loginRequest.getUsername(), loginRequest.getPassword());
         if (user != null) {
             return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
+    }
+
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("Application in Good Health");
     }
 
     @PostMapping("/register")

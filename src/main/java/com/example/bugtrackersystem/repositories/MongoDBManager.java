@@ -16,6 +16,7 @@ import org.bson.Document;
 public class MongoDBManager {
     private static final String DATABASE_NAME = "bug_tracker";
     private static final String COLLECTION_NAME = "users";
+    private static final String COLLECTION_NAME_ROLES = "roles";
 
     private static MongoClient mongoClient;
 
@@ -77,7 +78,7 @@ public class MongoDBManager {
         MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
 
         // Get reference to the collection
-        MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME);
+        MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME_ROLES);
 
         // Convert Role object to Document
         Document roleDocument = new Document();
@@ -93,7 +94,7 @@ public class MongoDBManager {
         MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
 
         // Get reference to the collection
-        MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME);
+        MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME_ROLES);
 
         // Create a query document
         Document query = new Document("name", roleName);

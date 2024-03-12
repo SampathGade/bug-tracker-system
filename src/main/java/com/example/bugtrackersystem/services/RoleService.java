@@ -22,8 +22,7 @@ public class RoleService {
     // Helper method to convert Document to Role object
     private Role documentToRole(Document document) {
         Role role = new Role();
-        role.setId(document.getString("_id"));
-        role.setRole(RoleName.valueOf(document.getString("role")));
+        role.setRole(RoleName.valueOf(document.getString("name")));
         // Set other fields as needed
         return role;
     }

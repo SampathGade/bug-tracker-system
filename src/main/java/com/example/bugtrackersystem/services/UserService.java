@@ -14,6 +14,8 @@ public class UserService {
     public  User findUserByUsername(String username) {
         // Call the findUserByUsername method of MongoDBManager to find the user in the database
         Document userDocument = MongoDBManager.findUserByUsername(username);
+        System.out.println(userDocument);
+        System.out.println(userDocument!= null);
         return userDocument != null ? createUserFromDocument(userDocument) : null;
     }
 
@@ -27,7 +29,7 @@ public class UserService {
         User user = new User();
         user.setUsername(document.getString("username"));
         user.setEmail(document.getString("email"));
-        // Set other fields as needed
+        user.setPassword(document.getString("password"));
         return user;
     }
 }

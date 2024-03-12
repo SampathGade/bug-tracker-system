@@ -18,10 +18,13 @@ public class AuthService {
 
     public User login(String username, String password) {
         User user = userService.findUserByUsername(username);
+        System.out.println(user);
         if (user == null) {
             throw new InvalidCredentialsException("Invalid username or password");
         }
-        if (passwordEncoder.matches(password, user.getPassword())) {
+        System.out.println(password);
+        System.out.println(user.getPassword());
+        if (password.equalsIgnoreCase(user.getPassword())) {
             return user;
         } else {
             throw new InvalidCredentialsException("Invalid username or password");
@@ -31,7 +34,7 @@ public class AuthService {
     public User register(User user){
         checkUsernameAvailability(user.getUsername());
         checkEmailAvailability(user.getEmail());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(user.getPassword());
         // Assuming "ROLE_USER" is a valid role name defined in your RoleName enum
         user.getRoles().add(roleService.findByRoleName(RoleName.ROLE_USER));
         userService.save(user);

@@ -40,9 +40,7 @@ public class MongoDBManager {
         Document userDocument = new Document();
         userDocument.put("username", user.getUsername());
         userDocument.put("email", user.getEmail());
-        // Add more fields as needed
-
-        // Insert the document into the collection
+        userDocument.put("password",user.getPassword());
         collection.insertOne(userDocument);
     }
 
@@ -55,7 +53,7 @@ public class MongoDBManager {
 
         // Create a query document
         Document query = new Document("username", username);
-
+        System.out.println(collection.find(query).first());
         // Execute the query
         return collection.find(query).first();
     }

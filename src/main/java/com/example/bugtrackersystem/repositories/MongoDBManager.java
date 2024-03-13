@@ -9,7 +9,6 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.example.bugtrackersystem.model.User;
 import org.bson.Document;
@@ -21,7 +20,7 @@ public class MongoDBManager {
 
     private static final String COLLECTION_NAME_PROJECTS = "projects";
 
-    private static MongoClient mongoClient;
+    private static final MongoClient mongoClient;
 
     static {
         // Establish MongoDB connection

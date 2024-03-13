@@ -1,8 +1,5 @@
 package com.example.bugtrackersystem.model;
 
-import com.example.bugtrackersystem.model.Project;
-import com.example.bugtrackersystem.model.Role;
-import com.example.bugtrackersystem.model.Ticket;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -3,6 +3,7 @@ package com.example.bugtrackersystem.repositories;
 
 
 import com.example.bugtrackersystem.model.Role;
+import com.example.bugtrackersystem.requests.ProjectAddRequest;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
@@ -17,6 +18,8 @@ public class MongoDBManager {
     private static final String DATABASE_NAME = "bug_tracker";
     private static final String COLLECTION_NAME = "users";
     private static final String COLLECTION_NAME_ROLES = "roles";
+
+    private static final String COLLECTION_NAME_PROJECTS = "projects";
 
     private static MongoClient mongoClient;
 
@@ -99,5 +102,14 @@ public class MongoDBManager {
 
         // Execute the query
         return collection.find(query).first();
+    }
+
+    public static void insertProject(ProjectAddRequest projectAddRequest) {
+        MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+        MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME_PROJECTS);
+
+        Document projectDocument = new Document();
+        projectDocument.put("name", projectAddRequest.getName());
+        collection.insertOne(projectDocument);
     }
 }

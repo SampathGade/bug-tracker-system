@@ -24,6 +24,15 @@ public class UserService {
         Document userDocument = MongoDBManager.findUserByEmail(email);
         return userDocument != null ? createUserFromDocument(userDocument) : null;
     }
+
+    public User findById(String userId) {
+        Document userDocument = MongoDBManager.findUserById(userId);
+        return userDocument != null ? createUserFromDocument(userDocument) : null;
+    }
+
+    public void delete(User user) {
+        MongoDBManager.deleteUser(user.getId());
+    }
     private  User createUserFromDocument(Document document) {
         // Convert Document object to User object
         User user = new User();

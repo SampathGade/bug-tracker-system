@@ -1,0 +1,82 @@
+/* DashBoardComponent.css */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 200px;
+    background: #fff;
+    padding-bottom: 30px;
+    width: 600px;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.header h1 {
+    color: #3c009d;
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.underLine {
+    width: 61px;
+    height: 6px;
+    background: #3c009d;
+    border-radius: 9px;
+}
+
+.section {
+    margin-top: 30px;
+}
+
+.section-header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #3c009d;
+}
+
+.card {
+    background-color: #f4f4f4;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.card-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card-item {
+    flex: 0 0 calc(33.333% - 20px);
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.card-item:last-child {
+    margin-right: 0;
+}
+
+.card-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.card-details {
+    font-size: 16px;
+}
+
+.card-details-item {
+    margin-bottom: 5px;
+}

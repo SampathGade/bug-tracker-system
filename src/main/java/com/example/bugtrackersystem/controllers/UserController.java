@@ -3,14 +3,18 @@ package com.example.bugtrackersystem.controllers;
 import com.example.bugtrackersystem.model.Project;
 import com.example.bugtrackersystem.model.Ticket;
 import com.example.bugtrackersystem.model.User;
+import com.example.bugtrackersystem.requests.TicketRequest;
 import com.example.bugtrackersystem.services.TicketService;
 import com.example.bugtrackersystem.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
@@ -19,10 +23,10 @@ public class UserController {
     private final UserService userService;
     private final TicketService ticketService;
 
-    @GetMapping("/user/{userId}")
-    @Secured("ROLE_USER")
-    public ResponseEntity<?> getUserById(@PathVariable Long userId){
-        User user = userService.findById(userId.toString());
+    @GetMapping("/user/{userName}")
+    public ResponseEntity<?> getUserById(@PathVariable String userName){
+        User user = userService.findUserByUsername(userName);
+        System.out.println("hey"+user);
         return ResponseEntity.ok(user);
     }
 
@@ -68,4 +72,16 @@ public class UserController {
         User developer = userService.findById(developerId.toString());
         return ResponseEntity.ok(developer.getTicketsWorkingOn());
     }
+
+    @PostMapping("/user/assign/tickets")
+    @Secured("ROLE_DEVELOPER")
+    public ResponseEntity<?> assignTicket(TicketRequest request,Principal principal){
+       User developer = userService.findUserByUsername(principal.getName());
+       if(request.getDeveloper()==null){
+           Set<Ticket> set = developer.getTicketsWorkingOn();
+       }
+        return ResponseEntity.ok(developer.getTicketsWorkingOn());
+    }
+
+
 }

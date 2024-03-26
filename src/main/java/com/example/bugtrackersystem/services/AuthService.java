@@ -22,8 +22,6 @@ public class AuthService {
         if (user == null) {
             throw new InvalidCredentialsException("Invalid username or password");
         }
-        System.out.println(password);
-        System.out.println(user.getPassword());
         if (password.equalsIgnoreCase(user.getPassword())) {
             return user;
         } else {

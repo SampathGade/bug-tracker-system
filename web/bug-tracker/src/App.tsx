@@ -1,21 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import LoginComponent from './components/login/login'
-import DashBoardComponent from './components/Dashboard/DashBoardComponent'
+import LoginComponent from './components/login/login';
+import DashBoardComponent from './components/Dashboard/DashBoardComponent';
 
 function App() {
-  return (
-    <div>
-      <Router>
-        <Routes>
-          <Route path="/" Component={LoginComponent} />
-          <Route path="/home" Component={DashBoardComponent} />
-        </Routes>
-      </Router>
-    </div>
-  );
+    const [userName, setUserName] = useState<string>('');
+
+    const handleLogin = (username: string) => {
+        setUserName(username);
+    };
+
+    return (
+        <div>
+            <Router>
+                <Routes>
+                    {/* Pass userName as a prop to DashBoardComponent */}
+                    <Route path="/home" element={<DashBoardComponent userName={userName} />} />
+                    {/* Pass handleLogin function as a prop to LoginComponent */}
+                    <Route path="/" element={<LoginComponent onLogin={handleLogin} />} />
+                </Routes>
+            </Router>
+        </div>
+    );
 }
 
 export default App;

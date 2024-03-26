@@ -1,9 +1,16 @@
 package com.example.bugtrackersystem.services;
 
+import com.example.bugtrackersystem.model.Ticket;
 import com.example.bugtrackersystem.model.User;
 import com.example.bugtrackersystem.repositories.MongoDBManager;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -27,18 +34,45 @@ public class UserService {
 
     public User findById(String userId) {
         Document userDocument = MongoDBManager.findUserById(userId);
+        System.out.println("oii"+userDocument);
         return userDocument != null ? createUserFromDocument(userDocument) : null;
     }
 
     public void delete(User user) {
         MongoDBManager.deleteUser(user.getId());
     }
-    private  User createUserFromDocument(Document document) {
+    private User createUserFromDocument(Document document) {
         // Convert Document object to User object
         User user = new User();
+        ObjectId objectId = document.getObjectId("_id");
+        user.setId(objectId != null ? objectId : null);
         user.setUsername(document.getString("username"));
         user.setEmail(document.getString("email"));
         user.setPassword(document.getString("password"));
+
+        // Set tickets if available
+        Set<Document> ticketDocuments = (Set<Document>) document.get("tickets");
+        if (ticketDocuments != null) {
+            Set<Ticket> tickets = new HashSet<>();
+            for (Document ticketDocument : ticketDocuments) {
+                Ticket ticket = createTicketFromDocument(ticketDocument);
+                tickets.add(ticket);
+            }
+            user.setTicketsWorkingOn(tickets);
+        }
+
         return user;
+    }
+
+
+    private Ticket createTicketFromDocument(Document ticketDocument) {
+        // Convert Document object to Ticket object
+        Ticket ticket = new Ticket();
+        ticket.setId(ticketDocument.getString("id"));
+        ticket.setTitle(ticketDocument.getString("title"));
+        ticket.setDescription(ticketDocument.getString("description"));
+        // Set other fields of Ticket if needed
+
+        return ticket;
     }
 }

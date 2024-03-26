@@ -61,7 +61,7 @@ public class TicketService {
         ticket.setId(document.getString("_id"));
         ticket.setTitle(document.getString("title"));
         ticket.setDescription(document.getString("description"));
-        // Set other fields accordingly
+        ticket.setTimestamp(document.get("timestamp",Timestamp.class));
         return ticket;
     }
 }

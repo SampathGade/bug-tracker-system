@@ -63,4 +63,15 @@ public class TicketRequest {
     private String type;
     @NotBlank
     private String priority;
+
+    public String getDeveloper() {
+        return developer;
+    }
+
+    public void setDeveloper(String developer) {
+        this.developer = developer;
+    }
+
+    @NotBlank
+    private String developer;
 }

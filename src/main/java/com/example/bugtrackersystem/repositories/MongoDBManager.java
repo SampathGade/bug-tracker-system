@@ -10,6 +10,10 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.bson.types.ObjectId;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class MongoDBManager {
     private static final String DATABASE_NAME = "bug_tracker";
@@ -40,9 +44,16 @@ public class MongoDBManager {
         userDocument.put("email", user.getEmail());
         userDocument.put("password", user.getPassword());
 
+
+        // Convert empty sets for projects and tickets
+        userDocument.put("projects", new HashSet<>());
+        userDocument.put("projectsWorkingOn", new HashSet<>());
+        userDocument.put("ticketsWorkingOn", new HashSet<>());
+
         // Insert the document into the collection
         collection.insertOne(userDocument);
     }
+
 
     public static Document findUserByUsername(String username) {
         // Get reference to the database
@@ -86,7 +97,7 @@ public class MongoDBManager {
         return collection.find(query).first();
     }
 
-    public static void deleteUser(String userId) {
+    public static void deleteUser(ObjectId userId) {
         // Get reference to the database
         MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
 
@@ -140,8 +151,8 @@ public class MongoDBManager {
 
         // Convert Role object to Document
         Document roleDocument = new Document();
-        roleDocument.put("name", role.getName());
-        // Add more fields as needed
+        roleDocument.put("_id", role.getId()); // Assuming id is the unique identifier for Role
+        roleDocument.put("role", role.getRole().name()); // Assuming role is an enum and you want to store its name
 
         // Insert the document into the collection
         collection.insertOne(roleDocument);

@@ -6,6 +6,7 @@ import com.example.bugtrackersystem.model.Ticket;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,13 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Document(collection = "users")
 public class User {
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
@@ -81,8 +76,12 @@ public class User {
         this.ticketsWorkingOn = ticketsWorkingOn;
     }
 
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
     @Id
-    private String id;
+    private ObjectId id;
     private String username;
     private String password;
     private String email;

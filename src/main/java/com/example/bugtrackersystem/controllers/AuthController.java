@@ -23,7 +23,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
-        System.out.println("test");
         User user = authService.login(loginRequest.getUsername(), loginRequest.getPassword());
         if (user != null) {
             return ResponseEntity.ok(user);

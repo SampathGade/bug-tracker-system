@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './DashBoardComponent.css';
 import axios from 'axios';
+import './DashBoardComponent.css';
 
 interface User {
     id: string;
@@ -33,26 +33,38 @@ const DashBoardComponent: React.FC<Props> = ({ userName }) => {
         fetchUserData();
     }, [userName]);
 
+    // Inside the return statement of DashBoardComponent
+
     return (
-        <div>
-            <h1>Dashboard</h1>
+        <div className="container">
+            <div className="navbar">
+                <h1>Dashboard</h1>
+            </div>
             {loading && <p>Loading...</p>}
             {!loading && userData ? (
                 <div>
-                    <h2>Welcome, {userData.username}!</h2>
-                    <p>Email: {userData.email}</p>
-                    <h3>Projects:</h3>
-                    <ul>
-                        {userData.projects.map(project => (
-                            <li key={project.id}>{project.name}</li>
-                        ))}
-                    </ul>
-                    <h3>Tickets Working On:</h3>
-                    <ul>
-                        {userData.ticketsWorkingOn.map(ticket => (
-                            <li key={ticket.id}>{ticket.title}</li>
-                        ))}
-                    </ul>
+                    <div className="profile">
+
+                        <div className="profile-name">Welcome, {userData.username}!</div>
+                    </div>
+                    <div className="table-container">
+                        <h3>Projects:</h3>
+                        {userData.projects.length > 0 ? (
+                            <table className="table">
+                                {/* Table content for projects */}
+                            </table>
+                        ) : (
+                            <p>Currently no projects assigned to you.</p>
+                        )}
+                        <h3>Tickets Working On:</h3>
+                        {userData.ticketsWorkingOn.length > 0 ? (
+                            <table className="table">
+                                {/* Table content for tickets */}
+                            </table>
+                        ) : (
+                            <p>Currently no tickets assigned to you.</p>
+                        )}
+                    </div>
                 </div>
             ) : (
                 <p>No user data found.</p>

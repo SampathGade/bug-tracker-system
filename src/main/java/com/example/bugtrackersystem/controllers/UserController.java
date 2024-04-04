@@ -53,7 +53,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/user/projects")
+    @GetMapping("/user/projects/{username}")
     public ResponseEntity<?> getAllProjectsForDeveloper(@PathVariable String username){
         User developer = userService.findUserByUsername(username);
         return ResponseEntity.ok(developer.getProjectsWorkingOn());

@@ -9,85 +9,46 @@ export default function BasicTable(props) {
     const [items, setItems] = useState([]);
     const BACKEND_ENDPOINT = 'http://localhost:8080';
 
-//     useEffect(() => {
-//       const fetchData = async () => {
-//         try {
-//           const response = await fetch(`${BACKEND_ENDPOINT}/user/projects/${props.username}`);
-//           if (!response.ok) {
-//             throw new Error('Network response was not ok');
-//           }
-//           const data = await response.json();
-//           console.log(data);
-//           setItems(data);
-//         } catch (error) {
-//           console.error('Error fetching data:', error);
-//         }
-//       };
-//       fetchData();
-//   }, []);
-    
-const mdata = [
-    {
-        "Title": "Backend Failing",
-        "Description": "backend crashing to connect to DB",
-        "Assigned User": "Sampath",
-        "Timestamp": "28th Mar",
-        "Project": "COLT",
-        "proiority": "High"
-    },
-    {
-        "Title": "CSS issues",
-        "Description": "css colors are not loaded correctly",
-        "Assigned User": "Sampath",
-        "Timestamp": "27th Mar",
-        "Project": "Integration tool",
-        "proiority": "Low"
-    },
-    {
-        "Title": "React Props not passed",
-        "Description": "react Props are not passed",
-        "Assigned User": "Sampath",
-        "Timestamp": "1st Apr",
-        "Project": "AMS",
-        "proiority": "Medium"
-    },
-    {
-        "Title": "submit button not responding",
-        "Description": "Submit button for creating new requests are not working",
-        "Assigned User": "John",
-        "Timestamp": "2nd Apr",
-        "Project": "AMS",
-        "proiority": "Medium"
-    }
-]
-
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(`${BACKEND_ENDPOINT}/api/user/tickets/admin`);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+        //   console.log(props);
+          setItems(data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+      fetchData();
+    //   console.log(items);
+  }, []);
     // todo call a symple async await to backend chaggpt can easily do it. for incidens
-    const data = useMemo(() => mdata, []);
+    const data = useMemo(() => items, [items]);
     /** @type import('@tanstack/react-table').columnDef<any> */
     const columns = [
         {
             header: 'Title',
-            accessorKey: 'Title'
+            accessorKey: 'title'
         },
         {
             header: 'Description',
-            accessorKey: 'Description'
-        },
-        {
-            header: 'Assigned User',
-            accessorKey: 'Assigned User'
-        },
-        {
-            header: 'Timestamp',
-            accessorKey: 'Timestamp'
+            accessorKey: 'description'
         },
         {
             header: 'Project',
-            accessorKey: 'Project'
+            accessorKey: 'project'
         },
         {
             header: "Proiority",
-            accessorKey: "proiority"
+            accessorKey: "priority"
+        },
+        {
+            header: 'Assigned User',
+            accessorKey: 'developer'
         }
     ];    
     const table = useReactTable({data, columns,

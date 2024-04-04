@@ -40,11 +40,11 @@ const DashBoardComponent: React.FC<Props> = ({ userName }) => {
 
     return (
         <div>
-        <Navbar/>
+        <Navbar userName= {userName}/>
         <br/>
-        <BasicTable username = {userName}/>
+        <BasicTable userName = {userName}/>
         <br/>
-        <Projtable/>
+        <Projtable userName = {userName}/>
         </div>
     );
 };

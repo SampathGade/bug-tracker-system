@@ -1,34 +1,34 @@
-.nav {
+.navCustom {
     margin: 0 !important;
     background-color: #3c009d;
     color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 2rem;
-    padding: 25px 1rem;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    padding: 25px 1rem !important;
 }
 
-.nav ul {
-    font-size: 1.5rem;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    display: flex;
-    gap: 1rem;
+.navCustom ul {
+    font-size: 1.5rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+    display: flex !important;
+    gap: 1rem !important;
 }
 
-.nav a {
+.navCustom a {
     color: #fff !important;
     text-decoration: none;
     display: flex;
     padding: 0.25rem;
 }
 
-.homeNav {
+.homeNavCustom {
     font-size: 3rem;
 }
 
-.nav li:hover a {
+.navCustom li:hover a {
     color: #000000 !important;
 }

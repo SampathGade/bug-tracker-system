@@ -2,51 +2,48 @@ import React, { useMemo } from "react";
 
 import {useReactTable, getCoreRowModel, flexRender, getPaginationRowModel} from '@tanstack/react-table'
 import './BasicTable.css'
+import { useState, useEffect } from 'react';
 
 
-export default function Projtable() {
 
-    const mdata = [
-        {
-            "Project Name": "COLT",
-            "project Code": 106044,
-            "Project Manager": "Vamsi Krishna",
-        },
-        {
-            "Project Name": "AMS",
-            "project Code": 106045,
-            "Project Manager": "Vamsi Krishna",
-        },
-        {
-            "Project Name": "Integration Framework",
-            "project Code": 106046,
-            "Project Manager": "Amenadiel Morningstar",
-        },
-        {
-            "Project Name": "Alpha",
-            "project Code": 106047,
-            "Project Manager": "Sherlock Homes",
-        }
-    ];
-    const data = useMemo(() => mdata, []);
+export default function Projtable(props) {
+
+    const [items, setItems] = useState([]);
+    const BACKEND_ENDPOINT = 'http://localhost:8080';
+
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await fetch(`${BACKEND_ENDPOINT}/api/user/projects/admin`);
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setItems(data);
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        };
+        fetchData();
+    }, []);
+    const data = useMemo(() => items, [items]);
     /** @type import('@tanstack/react-table').columnDef<any> */
     const columns = [
         {
             header: 'Project Name',
-            accessorKey: 'Project Name'
+            accessorKey: 'name'
         },
         {
             header: 'Project Code',
-            accessorKey: 'project Code'
+            accessorKey: 'code'
         },
         {
             header: 'Project Manager',
-            accessorKey: 'Project Manager'
+            accessorKey: 'projectManager'
         }
     ];    
     const table = useReactTable({data, columns,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel()
+        getCoreRowModel: getCoreRowModel()
     });
 
     return (

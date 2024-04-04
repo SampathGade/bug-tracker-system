@@ -1,18 +1,23 @@
 import './Navbar.css';
 import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = (props: { userName: any; }) => {
     return (
-        <nav className="nav">
-            <Link to="/home" className='homeNav'>
+        <nav className="navCustom">
+            <Link to="/home" className='homeNavCustom' state={{"username":props.userName}}>
                 Bug-Tracker
             </Link>
             <ul>
                 <li>
-                    <Link to="#">Create Incident</Link>
+                    <Link to="/manage" state={{"username":props.userName}}>
+                        Assign Incidents
+                    </Link>
                 </li>
                 <li>
-                    <Link to="#">Create Project</Link>
+                    <Link to="/incident" state={{"username":props.userName}}>Create Incident</Link>
+                </li>
+                <li>
+                    <Link to="/project" state={{"username":props.userName}}>Create Project</Link>
                 </li>
 
                 <li>

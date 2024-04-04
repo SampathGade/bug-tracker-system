@@ -97,6 +97,9 @@ public class UserController {
         Ticket newTicket = new Ticket();
         newTicket.setTitle(ticketRequest.getTitle());
         newTicket.setDescription(ticketRequest.getDescription());
+        System.out.println(ticketRequest.getProjectId());
+        Project project = ticketService.findByName(ticketRequest.getProjectId());
+        newTicket.setProject(project);
         // Set other properties based on `TicketRequest`
          // Assume this method retrieves the currently logged-in user
         // You may also need to set the associated project, type, priority, etc.

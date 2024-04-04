@@ -191,6 +191,18 @@ public class MongoDBManager {
 
         collection.insertOne(projectDoc);
     }
+    public static Document findprojectByName(String code) {
+        // Get the database connection
+        MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+
+        // Get the projects collection
+        MongoCollection<Document> collection = database.getCollection("projects");
+
+        // Query for the project by code
+        Document query = new Document("code", code);
+        return collection.find(query).first();
+    }
+
 
     // Add more methods as needed for ticket management
 }

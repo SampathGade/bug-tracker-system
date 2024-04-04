@@ -8,6 +8,7 @@ import com.example.bugtrackersystem.repositories.MongoDBManager;
 import com.example.bugtrackersystem.requests.TicketRequest;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -38,6 +39,13 @@ public class TicketService {
         }
         // Convert Document to Ticket object
         return createTicketFromDocument(ticketDocument);
+    }
+    public Project findByName(String code) {
+        Document projectDocument = MongoDBManager.findprojectByName(code);
+        if(projectDocument == null) {
+            throw new EntityNotFoundException("Project with name " + code + " doesn't exist!");
+        }
+        return createProjectFromDocument(projectDocument);
     }
 
     public Ticket getTicketFromRequest(TicketRequest ticketRequest, User author, Project project) {
@@ -72,4 +80,26 @@ public class TicketService {
         ticket.setTimestamp(document.get("timestamp",Timestamp.class));
         return ticket;
     }
+    public Project createProjectFromDocument(Document projectDocument) {
+        if (projectDocument == null) {
+            return null;
+        }
+
+        Project project = new Project();
+        project.setId(projectDocument.getObjectId("_id").toString()); // Convert ObjectId to String
+        project.setName(projectDocument.getString("name"));
+        project.setCode(projectDocument.getString("code"));
+
+        // Assuming project manager is stored as an ObjectId reference
+
+        // You would typically fetch the ProjectManager entity using this ID
+        // For simplicity, we're just setting the ID as a string here.
+        // project.setProjectManager(findUserById(projectManagerId));
+
+        // Add logic for other fields, such as developers and tickets, similar to project manager
+        // This often involves fetching related entities by their IDs
+
+        return project;
+    }
+
 }

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './DashBoardComponent.css';
+import Navbar from '../../Navbar';
+import BasicTable from '../BasicTable/BasicTable';
 
 interface User {
     id: string;
@@ -36,6 +38,10 @@ const DashBoardComponent: React.FC<Props> = ({ userName }) => {
     // Inside the return statement of DashBoardComponent
 
     return (
+        <div>
+        <Navbar/>
+        <br/>
+        <BasicTable/>
         <div className="container">
             <div className="navbar">
                 <h1>Dashboard</h1>
@@ -69,7 +75,7 @@ const DashBoardComponent: React.FC<Props> = ({ userName }) => {
             ) : (
                 <p>No user data found.</p>
             )}
-        </div>
+        </div></div>
     );
 };
 

@@ -86,7 +86,6 @@ public class UserController {
     }
 
     @PostMapping("/user/assign/tickets")
-    @Secured("ROLE_DEVELOPER")
     public ResponseEntity<?> assignTicket(TicketRequest request,Principal principal){
        User developer = userService.findUserByUsername(principal.getName());
        if(request.getDeveloper()==null){
@@ -100,6 +99,8 @@ public class UserController {
         Project newProject = new Project();
         newProject.setName(projectRequest.getName());
         newProject.setCode(projectRequest.getCode());
+        User user = userService.findUserByUsername(projectRequest.getProjectManagerId());
+        newProject.setProjectManager(user);
         // Assume `projectManager` is determined from the context or provided in the request
         Project savedProject = projectService.createProject(newProject);
         return new ResponseEntity<>(savedProject, HttpStatus.CREATED);

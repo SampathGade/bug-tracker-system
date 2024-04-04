@@ -6,14 +6,13 @@ import com.example.bugtrackersystem.model.Ticket;
 import com.example.bugtrackersystem.model.User;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.*;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -190,6 +189,14 @@ public class MongoDBManager {
                 .append("tickets", project.getTickets().stream().map(ticket -> ticket.getId()).collect(Collectors.toList())); // Convert ticket objects to a list of IDs
 
         collection.insertOne(projectDoc);
+    }
+    public static List<Document> getAllProjects() {
+        MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+        MongoCollection<Document> collection =database.getCollection(COLLECTION_NAME_PROJECTS);
+        FindIterable<Document> iterable = collection.find();
+        List<Document> projects = new ArrayList<>();
+        iterable.into(projects);
+        return projects;
     }
     public static Document findprojectByName(String code) {
         // Get the database connection

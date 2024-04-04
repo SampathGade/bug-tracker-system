@@ -1,5 +1,6 @@
 package com.example.bugtrackersystem.services;
 
+import com.example.bugtrackersystem.model.Project;
 import com.example.bugtrackersystem.model.Ticket;
 import com.example.bugtrackersystem.model.User;
 import com.example.bugtrackersystem.repositories.MongoDBManager;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -30,6 +32,22 @@ public class UserService {
         // Call the findUserByEmail method of MongoDBManager to find the user in the database
         Document userDocument = MongoDBManager.findUserByEmail(email);
         return userDocument != null ? createUserFromDocument(userDocument) : null;
+    }
+
+    private Project documentToProject(Document document) {
+        Project project = new Project();
+        project.setId(document.getObjectId("_id").toString());
+        project.setName(document.getString("name"));
+        project.setCode(document.getString("code"));
+        // Set other fields as needed
+        return project;
+    }
+
+    public List<Project> getAllProjects() {
+        List<Document> projectDocuments = MongoDBManager.getAllProjects();
+        return projectDocuments.stream()
+                .map(this::documentToProject)
+                .collect(Collectors.toList());
     }
 
     public User findById(String userId) {

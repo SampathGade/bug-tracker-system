@@ -16,6 +16,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -56,6 +57,12 @@ public class UserController {
     public ResponseEntity<?> getAllProjectsForDeveloper(@PathVariable String username){
         User developer = userService.findUserByUsername(username);
         return ResponseEntity.ok(developer.getProjectsWorkingOn());
+    }
+
+    @GetMapping("/user/projects/admin")
+    public ResponseEntity<?> getAllProjects(){
+        List<Project> projects = userService.getAllProjects();
+        return ResponseEntity.ok(projects);
     }
 
     @GetMapping("/user/{developerId}/projects")

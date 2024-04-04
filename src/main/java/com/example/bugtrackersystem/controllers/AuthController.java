@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;

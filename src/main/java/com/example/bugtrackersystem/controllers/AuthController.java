@@ -9,7 +9,6 @@ import com.sun.mail.smtp.SMTPTransport;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.messaging.Message;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,11 +16,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
 @RestController
 @RequestMapping("/")
 @RequiredArgsConstructor

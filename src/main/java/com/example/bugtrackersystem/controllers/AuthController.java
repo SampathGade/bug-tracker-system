@@ -5,6 +5,7 @@ import com.example.bugtrackersystem.requests.LoginRequest;
 import com.example.bugtrackersystem.requests.RegisterRequest;
 import com.example.bugtrackersystem.requests.VerifyOTPRequest;
 import com.example.bugtrackersystem.services.AuthService;
+import com.sun.mail.smtp.SMTPTransport;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class AuthController {
         // Generate and send OTP
         String otp = generateOTP();
         otpMap.put(user.getEmail(), otp);
-        sendOTPEmail(user.getEmail(), otp, "your-email@gmail.com", "your-email-password");
+        sendOTPEmail(user.getEmail(), otp, "sindhugoodeye@gmail.com", "9441638973");
 
         return ResponseEntity.ok("OTP sent to your email");
     }
@@ -68,7 +69,7 @@ public class AuthController {
 
         // Store the OTP in the map with the user's email as the key
         otpMap.put(registerRequest.getEmail(), otp);
-        sendOTPEmail(registerRequest.getEmail(), otp, "your-email@gmail.com", "your-email-password");
+        sendOTPEmail(registerRequest.getEmail(), otp, "sindhugoodeye@gmail.com", "9441638973");
 
         return ResponseEntity.ok(registeredUser);
     }
@@ -98,32 +99,34 @@ public class AuthController {
     }
 
     // Method to send OTP email
-    private void sendOTPEmail(String email, String otp, String username, String password) {
+    private void sendOTPEmail(String toEmail, String otp, String fromEmail, String accessToken) {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com"); // or your SMTP server host
-        props.put("mail.smtp.port", "587"); // or your SMTP server port
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth.mechanisms", "XOAUTH2");
 
-        Session session = Session.getInstance(props, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
-            }
-        });
+        Session session = Session.getInstance(props);
 
         try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(username));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+            message.setFrom(new InternetAddress(fromEmail));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
             message.setSubject("OTP for Email Verification");
             message.setText("Dear user,\n\nYour OTP for email verification is: " + otp);
 
-            Transport.send(message);
+            // Set the "AUTH" command with the OAuth 2.0 access token
+            SMTPTransport transport = (SMTPTransport) session.getTransport("smtp");
+            transport.connect("smtp.gmail.com", fromEmail, accessToken);
+            transport.sendMessage(message, message.getAllRecipients());
 
-            System.out.println("OTP sent to: " + email);
+            System.out.println("Response: " + transport.getLastServerResponse());
+
+            transport.close();
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
+
 }

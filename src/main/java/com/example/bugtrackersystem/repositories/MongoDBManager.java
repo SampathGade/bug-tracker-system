@@ -198,6 +198,14 @@ public class MongoDBManager {
         iterable.into(projects);
         return projects;
     }
+    public static List<Document> getAllTickets() {
+        MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+        MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME_TICKETS);
+        FindIterable<Document> iterable = collection.find();
+        List<Document> tickets = new ArrayList<>();
+        iterable.into(tickets);
+        return tickets;
+    }
     public static Document findprojectByName(String code) {
         // Get the database connection
         MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);

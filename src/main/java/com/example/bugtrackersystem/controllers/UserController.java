@@ -59,10 +59,16 @@ public class UserController {
         return ResponseEntity.ok(developer.getProjectsWorkingOn());
     }
 
+
     @GetMapping("/user/projects/admin")
     public ResponseEntity<?> getAllProjects(){
         List<Project> projects = userService.getAllProjects();
         return ResponseEntity.ok(projects);
+    }
+    @GetMapping("/user/tickets/admin")
+    public ResponseEntity<?> getAllTickets(){
+        List<Ticket> tickets = userService.getAllTickets();
+        return ResponseEntity.ok(tickets);
     }
 
     @GetMapping("/user/{developerId}/projects")
@@ -104,7 +110,6 @@ public class UserController {
         Ticket newTicket = new Ticket();
         newTicket.setTitle(ticketRequest.getTitle());
         newTicket.setDescription(ticketRequest.getDescription());
-        System.out.println(ticketRequest.getProjectId());
         Project project = ticketService.findByName(ticketRequest.getProjectId());
         newTicket.setProject(project);
         // Set other properties based on `TicketRequest`

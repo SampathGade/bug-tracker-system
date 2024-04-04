@@ -49,6 +49,20 @@ public class UserService {
                 .map(this::documentToProject)
                 .collect(Collectors.toList());
     }
+    private Ticket documentToTicket(Document document) {
+        Ticket ticket = new Ticket();
+        ticket.setId(document.getObjectId("_id").toString()); // Assuming the use of ObjectId for _id
+        ticket.setTitle(document.getString("title"));
+        ticket.setDescription(document.getString("description"));
+        return ticket;
+    }
+
+    public List<Ticket> getAllTickets() {
+        List<Document> ticketDocuments = MongoDBManager.getAllTickets();
+        return ticketDocuments.stream()
+                .map(this::documentToTicket)
+                .collect(Collectors.toList());
+    }
 
     public User findById(String userId) {
         Document userDocument = MongoDBManager.findUserById(userId);

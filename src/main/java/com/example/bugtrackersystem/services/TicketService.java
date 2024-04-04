@@ -65,7 +65,7 @@ public class TicketService {
 
         // Here you can directly create TicketType and TicketPriority objects
         TicketType ticketType = new TicketType(typeName); // Assuming TicketType constructor accepts TicketTypeName
-        TicketPriority ticketPriority = new TicketPriority(priorityName); // Assuming TicketPriority constructor accepts TicketPriorityName
+        String ticketPriority =""; // Assuming TicketPriority constructor accepts TicketPriorityName
 
         return new Ticket(ticketRequest.getTitle(), ticketRequest.getDescription(),
                 new Timestamp(ticketRequest.getTimestamp()), author, ticketType, ticketPriority, project);

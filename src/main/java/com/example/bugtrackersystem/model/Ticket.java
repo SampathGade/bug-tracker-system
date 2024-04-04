@@ -19,6 +19,7 @@ public class Ticket {
     private String title;
     private String description;
     private Timestamp timestamp;
+    private String priority;
 
     @DBRef
     private User author;
@@ -26,8 +27,7 @@ public class Ticket {
     @DBRef
     private TicketType type;
 
-    @DBRef
-    private TicketPriority priority;
+
 
     @DBRef
     private Project project;
@@ -36,14 +36,14 @@ public class Ticket {
     private User developer;
 
     public Ticket(String title, String description, Timestamp timestamp, User author, TicketType type,
-                  TicketPriority priority, Project project){
+                  String priority, Project project){
         this.title = title;
         this.description = description;
         this.timestamp = timestamp;
         this.author = author;
         this.type = type;
-        this.priority = priority;
         this.project = project;
         this.developer = null;
+        this.priority = priority;
     }
 }

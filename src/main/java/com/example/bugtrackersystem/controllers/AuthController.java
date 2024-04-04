@@ -99,6 +99,7 @@ public class AuthController {
 
     // Method to send OTP email
     private void sendOTPEmail(String toEmail, String otp, String fromEmail, String accessToken) {
+        final String fromEmail1 = "bug-tracker-server <saiyashwant01@gmail.com>";
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -110,7 +111,7 @@ public class AuthController {
 
         try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(fromEmail));
+            message.setFrom(new InternetAddress(fromEmail1));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
             message.setSubject("OTP for Email Verification");
             message.setText("Dear user,\n\nYour OTP for email verification is: " + otp);

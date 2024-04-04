@@ -33,14 +33,12 @@ public class UserController {
     }
 
     @GetMapping("/user/managed-projects")
-    @Secured("ROLE_MANAGER")
     public ResponseEntity<?> getProjectsManagedMy(Principal principal){
         User user = userService.findUserByUsername(principal.getName());
         return ResponseEntity.ok(user.getProjects());
     }
 
     @DeleteMapping("/user")
-    @Secured("ROLE_USER")
     public ResponseEntity<?> deleteAccount(Principal principal){
         User user = userService.findUserByUsername(principal.getName());
         for (Project p : user.getProjectsWorkingOn()){
@@ -55,9 +53,8 @@ public class UserController {
     }
 
     @GetMapping("/user/projects")
-    @Secured("ROLE_DEVELOPER")
-    public ResponseEntity<?> getAllProjectsForDeveloper(Principal principal){
-        User developer = userService.findUserByUsername(principal.getName());
+    public ResponseEntity<?> getAllProjectsForDeveloper(@PathVariable String username){
+        User developer = userService.findUserByUsername(username);
         return ResponseEntity.ok(developer.getProjectsWorkingOn());
     }
 

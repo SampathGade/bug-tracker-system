@@ -21,6 +21,14 @@ public class TicketService {
         // Implement save logic using MongoDBManager
         MongoDBManager.insertTicket(ticket);
     }
+    public Project createProject(Project project) {
+        MongoDBManager.insertProject(project);
+        return project;
+    }
+    public Ticket createTicket(Ticket ticket) {
+        MongoDBManager.insertTicket(ticket);
+        return ticket;
+    }
 
     public Ticket findById(String ticketId) {
         // Implement find by ID logic using MongoDBManager

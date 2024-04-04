@@ -1,5 +1,6 @@
 package com.example.bugtrackersystem.repositories;
 
+import com.example.bugtrackersystem.model.Project;
 import com.example.bugtrackersystem.model.Role;
 import com.example.bugtrackersystem.model.Ticket;
 import com.example.bugtrackersystem.model.User;
@@ -14,12 +15,14 @@ import org.bson.types.ObjectId;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MongoDBManager {
     private static final String DATABASE_NAME = "bug_tracker";
     private static final String COLLECTION_NAME_USERS = "users";
     private static final String COLLECTION_NAME_TICKETS = "tickets";
     private static final String COLLECTION_NAME_ROLES = "roles";
+    private static final String COLLECTION_NAME_PROJECTS = "projects";
     private static MongoClient mongoClient;
 
     static {
@@ -115,18 +118,22 @@ public class MongoDBManager {
         // Get reference to the database
         MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
 
-        // Get reference to the collection
-        MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME_TICKETS);
+        // Get reference to the collection for tickets
+        MongoCollection<Document> collection = database.getCollection("tickets");
 
         // Convert Ticket object to Document
         Document ticketDocument = new Document();
         ticketDocument.put("title", ticket.getTitle());
         ticketDocument.put("description", ticket.getDescription());
-        // Add more fields as needed
+        ticketDocument.put("projectId", ticket.getProject() != null ? ticket.getProject().getId() : null); // Assuming a Project object with getId method
+        ticketDocument.put("typeId", ticket.getType() != null ? ticket.getType().getId() : null); // Assuming a TicketType object with getId method
+        ticketDocument.put("priorityId",ticket.getPriority() != null ? ticket.getPriority().getId() : null ); // Assuming a TicketPriority object with getId method
+        ticketDocument.put("assignedDeveloperId", ticket.getDeveloper() != null ? ticket.getDeveloper().getId() : null); // Check for null in case no developer is assigned
 
         // Insert the document into the collection
         collection.insertOne(ticketDocument);
     }
+
 
     public static Document findTicketById(String ticketId) {
         // Get reference to the database
@@ -170,6 +177,19 @@ public class MongoDBManager {
 
         // Execute the query
         return collection.find(query).first();
+    }
+
+    public static void insertProject(Project project) {
+        MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+        MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME_PROJECTS);
+
+        Document projectDoc = new Document("name", project.getName())
+                .append("code", project.getCode())
+                .append("projectManager", project.getProjectManager() != null ? project.getProjectManager().getId() : null) // Assuming you have a User object for project manager
+                .append("developers", project.getDevelopers().stream().map(dev -> dev.getId()).collect(Collectors.toList())) // Convert developer User objects to a list of IDs
+                .append("tickets", project.getTickets().stream().map(ticket -> ticket.getId()).collect(Collectors.toList())); // Convert ticket objects to a list of IDs
+
+        collection.insertOne(projectDoc);
     }
 
     // Add more methods as needed for ticket management

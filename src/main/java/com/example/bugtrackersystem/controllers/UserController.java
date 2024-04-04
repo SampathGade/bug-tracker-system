@@ -3,12 +3,14 @@ package com.example.bugtrackersystem.controllers;
 import com.example.bugtrackersystem.model.Project;
 import com.example.bugtrackersystem.model.Ticket;
 import com.example.bugtrackersystem.model.User;
+import com.example.bugtrackersystem.requests.ProjectRequest;
 import com.example.bugtrackersystem.requests.TicketRequest;
 import com.example.bugtrackersystem.services.TicketService;
 import com.example.bugtrackersystem.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,7 @@ import java.util.Set;
 public class UserController {
     private final UserService userService;
     private final TicketService ticketService;
-
+    private final TicketService projectService;
     @GetMapping("/user/{userName}")
     public ResponseEntity<?> getUserById(@PathVariable String userName){
         User user = userService.findUserByUsername(userName);
@@ -81,6 +83,28 @@ public class UserController {
            Set<Ticket> set = developer.getTicketsWorkingOn();
        }
         return ResponseEntity.ok(developer.getTicketsWorkingOn());
+    }
+
+    @PostMapping("/create/projects")
+    public ResponseEntity<Project> createProject(@RequestBody ProjectRequest projectRequest) {
+        Project newProject = new Project();
+        newProject.setName(projectRequest.getName());
+        newProject.setCode(projectRequest.getCode());
+        // Assume `projectManager` is determined from the context or provided in the request
+        Project savedProject = projectService.createProject(newProject);
+        return new ResponseEntity<>(savedProject, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/create/Tickets")
+    public ResponseEntity<Ticket> createTicket(@RequestBody TicketRequest ticketRequest) {
+        Ticket newTicket = new Ticket();
+        newTicket.setTitle(ticketRequest.getTitle());
+        newTicket.setDescription(ticketRequest.getDescription());
+        // Set other properties based on `TicketRequest`
+         // Assume this method retrieves the currently logged-in user
+        // You may also need to set the associated project, type, priority, etc.
+        Ticket savedTicket = ticketService.createTicket(newTicket);
+        return new ResponseEntity<>(savedTicket, HttpStatus.CREATED);
     }
 
 

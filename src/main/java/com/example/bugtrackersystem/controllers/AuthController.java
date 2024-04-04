@@ -19,7 +19,6 @@ import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
-import javax.websocket.Session;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;

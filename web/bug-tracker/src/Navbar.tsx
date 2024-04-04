@@ -8,15 +8,15 @@ const Navbar = () => {
                 Bug-Tracker
             </Link>
             <ul>
-                <li>
+                {/* <li>
                     <Link to="/incidents">All Incidents</Link>
                 </li>
                 <li>
                     <Link to="/projects">Projects</Link>
-                </li>
+                </li> */}
 
                 <li>
-                    <Link to='/logout'>
+                    <Link to='/'>
                         Logout
                     </Link>
                 </li>

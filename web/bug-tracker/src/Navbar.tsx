@@ -8,12 +8,12 @@ const Navbar = () => {
                 Bug-Tracker
             </Link>
             <ul>
-                {/* <li>
-                    <Link to="/incidents">All Incidents</Link>
+                <li>
+                    <Link to="#">Create Incident</Link>
                 </li>
                 <li>
-                    <Link to="/projects">Projects</Link>
-                </li> */}
+                    <Link to="#">Create Project</Link>
+                </li>
 
                 <li>
                     <Link to='/'>

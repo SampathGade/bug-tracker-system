@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import LoginComponent from './components/login/login';
 import DashBoardComponent from './components/Dashboard/DashBoardComponent';
+import IncidentForm from './components/forms/IncidentForm';
 
 function App() {
     const [userName, setUserName] = useState<string>('');
@@ -19,6 +20,7 @@ function App() {
                     <Route path="/home" element={<DashBoardComponent userName={userName} />} />
                     {/* Pass handleLogin function as a prop to LoginComponent */}
                     <Route path="/" element={<LoginComponent onLogin={handleLogin} />} />
+                    <Route path="/incident" element={<IncidentForm/>} />
                 </Routes>
             </Router>
         </div>

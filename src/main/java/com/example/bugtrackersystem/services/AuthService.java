@@ -18,28 +18,36 @@ public class AuthService {
 
     public User login(String username, String password) {
         User user = userService.findUserByUsername(username);
-        System.out.println(user);
+
         if (user == null) {
             throw new InvalidCredentialsException("Invalid username or password");
         }
-        System.out.println(password);
-        System.out.println(user.getPassword());
-        if (password.equalsIgnoreCase(user.getPassword())) {
+
+        // Compare the provided plain-text password with the encoded password stored in the database
+        if (passwordEncoder.matches(password, user.getPassword())) {
             return user;
         } else {
             throw new InvalidCredentialsException("Invalid username or password");
         }
     }
 
-    public User register(User user){
+
+
+    public User register(User user, PasswordEncoder passwordEncoder) {
         checkUsernameAvailability(user.getUsername());
         checkEmailAvailability(user.getEmail());
-        user.setPassword(user.getPassword());
+
+        // Encode the password before saving
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+
         // Assuming "ROLE_USER" is a valid role name defined in your RoleName enum
         user.getRoles().add(roleService.findByRoleName(RoleName.ROLE_USER));
-        userService.save(user);
+        userService.save(user); // Assuming userService.save() internally calls the save method
+
         return user;
     }
+
 
     private void checkUsernameAvailability(String username){
         User existingUser = userService.findUserByUsername(username);

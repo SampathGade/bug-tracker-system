@@ -12,6 +12,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.example.bugtrackersystem.model.User;
 import org.bson.Document;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class MongoDBManager {
     private static final String DATABASE_NAME = "bug_tracker";
@@ -38,11 +39,14 @@ public class MongoDBManager {
         // Get reference to the collection
         MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME);
 
+        // Encode the password
+
+
         // Convert User object to Document
         Document userDocument = new Document();
         userDocument.put("username", user.getUsername());
         userDocument.put("email", user.getEmail());
-        userDocument.put("password",user.getPassword());
+        userDocument.put("password", user.getPassword()); // Save the encoded password
         collection.insertOne(userDocument);
     }
 

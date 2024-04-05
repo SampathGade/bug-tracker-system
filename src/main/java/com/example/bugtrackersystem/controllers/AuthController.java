@@ -43,7 +43,7 @@ public class AuthController {
         // Generate and send OTP
         String otp = generateOTP();
         otpMap.put(user.getEmail(), otp);
-        sendOTPEmail(user.getEmail(), otp, "saiyashwanth01@gmail.com", "ya29.a0Ad52N38TOP18ADB21Pca7DoTARhpsKQ2dwBen21o5l9f4IK0e7sJ5BSHlXOP483s9u6ezdu6wkIo1g7UZjOVn8LKjPmfMTp5s9OMO_H3hkBQLoIkW0Rag2yVFJc79snu9d-qZpRqyZyC6Z6yrdGkQafq6Js5CLM-3uryaCgYKAY4SARMSFQHGX2Mix-CgyvcF_r8y0tOuSYp1tQ0171");
+        sendOTPEmail(user.getEmail(), otp, "saiyashwanth01@gmail.com", "ya29.a0Ad52N39hb84PVRLCjlKLf4BBg2WCGHXacxrzVjGfTh7UnCQC5xvpBpeEp-Ibjkn9u7kD-p4XePcTc1G_jhxRfipldjXpI9SygaVHr6eEeEqLbNgmrtzd-aK4J9-vXJ-KtwAg82f9z94HTuOAJOJ-d9ayPf2dAypq5z1wAgaCgYKAVsSARMSFQHGX2MiowqgA-IdoF7qHmBkLMMRYw0173");
 
         return ResponseEntity.ok(user);
     }
@@ -68,7 +68,7 @@ public class AuthController {
 
         // Store the OTP in the map with the user's email as the key
         otpMap.put(registerRequest.getEmail(), otp);
-        sendOTPEmail(registerRequest.getEmail(), otp, "saiyashwanth01@gmail.com", "ya29.a0Ad52N38TOP18ADB21Pca7DoTARhpsKQ2dwBen21o5l9f4IK0e7sJ5BSHlXOP483s9u6ezdu6wkIo1g7UZjOVn8LKjPmfMTp5s9OMO_H3hkBQLoIkW0Rag2yVFJc79snu9d-qZpRqyZyC6Z6yrdGkQafq6Js5CLM-3uryaCgYKAY4SARMSFQHGX2Mix-CgyvcF_r8y0tOuSYp1tQ0171");
+        sendOTPEmail(registerRequest.getEmail(), otp, "saiyashwanth01@gmail.com", "ya29.a0Ad52N39hb84PVRLCjlKLf4BBg2WCGHXacxrzVjGfTh7UnCQC5xvpBpeEp-Ibjkn9u7kD-p4XePcTc1G_jhxRfipldjXpI9SygaVHr6eEeEqLbNgmrtzd-aK4J9-vXJ-KtwAg82f9z94HTuOAJOJ-d9ayPf2dAypq5z1wAgaCgYKAVsSARMSFQHGX2MiowqgA-IdoF7qHmBkLMMRYw0173");
 
         return ResponseEntity.ok(registeredUser);
     }

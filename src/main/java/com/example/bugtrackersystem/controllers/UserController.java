@@ -5,6 +5,7 @@ import com.example.bugtrackersystem.model.Ticket;
 import com.example.bugtrackersystem.model.User;
 import com.example.bugtrackersystem.requests.ProjectRequest;
 import com.example.bugtrackersystem.requests.TicketRequest;
+import com.example.bugtrackersystem.services.EmailService;
 import com.example.bugtrackersystem.services.TicketService;
 import com.example.bugtrackersystem.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class UserController {
     private final UserService userService;
     private final TicketService ticketService;
     private final TicketService projectService;
+    private final EmailService emailService;
     @GetMapping("/user/{userName}")
     public ResponseEntity<?> getUserById(@PathVariable String userName){
         User user = userService.findUserByUsername(userName);
@@ -86,13 +88,44 @@ public class UserController {
     }
 
     @PostMapping("/user/assign/tickets")
-    public ResponseEntity<?> assignTicket(TicketRequest request,Principal principal){
-       User developer = userService.findUserByUsername(principal.getName());
-       if(request.getDeveloper()==null){
-           Set<Ticket> set = developer.getTicketsWorkingOn();
-       }
-        return ResponseEntity.ok(developer.getTicketsWorkingOn());
+    public ResponseEntity<?> assignTicket(@RequestBody TicketRequest request, Principal principal){
+        // Find the developer using the username from the Principal
+        User developer = userService.findUserByUsername(principal.getName());
+
+        // Find the ticket based on the ID provided in the request
+        // Assuming ticketService.findTicketById(id) exists and returns a Ticket object
+        Ticket ticket = ticketService.findById(request.getId());
+
+        if (ticket == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ticket not found.");
+        }
+
+        // Check if the ticket is not already assigned to a developer
+        if (ticket.getDeveloper() == null) {
+            // Assign the ticket to the developer
+            ticket.setDeveloper(developer);
+            developer.getTicketsWorkingOn().add(ticket);
+            developer.setTicketsWorkingOn(developer.getTicketsWorkingOn());
+            // Assuming you have a method to save the updated ticket state
+            ticketService.save(ticket);
+
+            // Prepare and send the email notification
+            final String fromEmail = "saiyashwanth01@gmail.com"; // Should match the Gmail account used for OAuth
+            final String accessToken = ""; // OAuth2 access token, securely stored and retrieved
+
+            // Send email notification
+            emailService.sendTicketAssignmentEmail(developer.getEmail(), fromEmail, accessToken, ticket);
+
+            // Update the developer's working tickets set and return it
+            Set<Ticket> updatedTickets = developer.getTicketsWorkingOn();
+            updatedTickets.add(ticket);
+
+            return ResponseEntity.ok(updatedTickets);
+        } else {
+            return ResponseEntity.badRequest().body("This ticket is already assigned.");
+        }
     }
+
 
     @PostMapping("/create/projects")
     public ResponseEntity<Project> createProject(@RequestBody ProjectRequest projectRequest) {
@@ -113,6 +146,7 @@ public class UserController {
         newTicket.setDescription(ticketRequest.getDescription());
         Project project = ticketService.findByName(ticketRequest.getProjectId());
         newTicket.setProject(project);
+        newTicket.setPriority(ticketRequest.getPriority());
         // Set other properties based on `TicketRequest`
          // Assume this method retrieves the currently logged-in user
         // You may also need to set the associated project, type, priority, etc.

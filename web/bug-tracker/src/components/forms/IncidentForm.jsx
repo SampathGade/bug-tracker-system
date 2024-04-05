@@ -23,7 +23,7 @@ export default function IncidentForm (props) {
             "description": description,
             "projectId": project,
             "typeId": "Bug",
-            "priorityId": priority,
+            "priority": priority,
             "assignedDeveloperId": props.userName
           };
         try {

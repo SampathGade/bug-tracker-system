@@ -39,6 +39,7 @@ public class UserService {
         project.setId(document.getObjectId("_id").toString());
         project.setName(document.getString("name"));
         project.setCode(document.getString("code"));
+        project.setProjectManager(document.getString("projectManager"));
         // Set other fields as needed
         return project;
     }
@@ -54,6 +55,9 @@ public class UserService {
         ticket.setId(document.getObjectId("_id").toString()); // Assuming the use of ObjectId for _id
         ticket.setTitle(document.getString("title"));
         ticket.setDescription(document.getString("description"));
+        ticket.setPriority(document.getString("priorityId"));
+        ticket.setProjectId(document.getString("projectId"));
+        ticket.setDeveloper(document.getString("assignedDeveloperId"));
         return ticket;
     }
 

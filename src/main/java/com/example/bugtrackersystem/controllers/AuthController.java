@@ -43,9 +43,9 @@ public class AuthController {
         // Generate and send OTP
         String otp = generateOTP();
         otpMap.put(user.getEmail(), otp);
-        sendOTPEmail(user.getEmail(), otp, "saiyashwanth01@gmail.com", "ya29.a0Ad52N39FMnPRxGWgF9C_F5lAKT7ScD0uO_daL-igFBOXzocf04D7rFuaWG54YmWLzqJ8GlY1A3Z2RUJJHHRN-A53Cl6DuiMZLMElqGSdrzO6FEuxVtbdAxw3UAcVkzv7zcX36GtdX1LN4TZQy8mFUNvqAy5PRIvHT6diaCgYKAdwSARMSFQHGX2MiXfjHtg5w8yWgNiTXyrNLbQ0171");
+        sendOTPEmail(user.getEmail(), otp, "saiyashwanth01@gmail.com", "ya29.a0Ad52N38TOP18ADB21Pca7DoTARhpsKQ2dwBen21o5l9f4IK0e7sJ5BSHlXOP483s9u6ezdu6wkIo1g7UZjOVn8LKjPmfMTp5s9OMO_H3hkBQLoIkW0Rag2yVFJc79snu9d-qZpRqyZyC6Z6yrdGkQafq6Js5CLM-3uryaCgYKAY4SARMSFQHGX2Mix-CgyvcF_r8y0tOuSYp1tQ0171");
 
-        return ResponseEntity.ok("OTP sent to your email");
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/health")
@@ -68,7 +68,7 @@ public class AuthController {
 
         // Store the OTP in the map with the user's email as the key
         otpMap.put(registerRequest.getEmail(), otp);
-        sendOTPEmail(registerRequest.getEmail(), otp, "saiyashwanth01@gmail.com", "ya29.a0Ad52N39FMnPRxGWgF9C_F5lAKT7ScD0uO_daL-igFBOXzocf04D7rFuaWG54YmWLzqJ8GlY1A3Z2RUJJHHRN-A53Cl6DuiMZLMElqGSdrzO6FEuxVtbdAxw3UAcVkzv7zcX36GtdX1LN4TZQy8mFUNvqAy5PRIvHT6diaCgYKAdwSARMSFQHGX2MiXfjHtg5w8yWgNiTXyrNLbQ0171");
+        sendOTPEmail(registerRequest.getEmail(), otp, "saiyashwanth01@gmail.com", "ya29.a0Ad52N38TOP18ADB21Pca7DoTARhpsKQ2dwBen21o5l9f4IK0e7sJ5BSHlXOP483s9u6ezdu6wkIo1g7UZjOVn8LKjPmfMTp5s9OMO_H3hkBQLoIkW0Rag2yVFJc79snu9d-qZpRqyZyC6Z6yrdGkQafq6Js5CLM-3uryaCgYKAY4SARMSFQHGX2Mix-CgyvcF_r8y0tOuSYp1tQ0171");
 
         return ResponseEntity.ok(registeredUser);
     }

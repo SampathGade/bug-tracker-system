@@ -20,7 +20,7 @@ public class TicketService {
 
     public void save(Ticket ticket) {
         // Implement save logic using MongoDBManager
-        MongoDBManager.insertTicket(ticket);
+        MongoDBManager.updateTicket(ticket);
     }
     public Project createProject(Project project) {
         MongoDBManager.insertProject(project);
@@ -35,7 +35,7 @@ public class TicketService {
         // Implement find by ID logic using MongoDBManager
         Document ticketDocument = MongoDBManager.findTicketById(ticketId);
         if (ticketDocument == null) {
-            throw new EntityNotFoundException("Ticket with id " + ticketId + " doesn't exist!");
+            throw new EntityNotFoundException("Ticket with name " + ticketId + " doesn't exist!");
         }
         // Convert Document to Ticket object
         return createTicketFromDocument(ticketDocument);
@@ -48,7 +48,7 @@ public class TicketService {
         return createProjectFromDocument(projectDocument);
     }
 
-    public Ticket getTicketFromRequest(TicketRequest ticketRequest, User author, Project project) {
+    public Ticket getTicketFromRequest(TicketRequest ticketRequest, User author, String project) {
         TicketTypeName typeName;
         try {
             typeName = TicketTypeName.valueOf(ticketRequest.getType());
@@ -74,7 +74,6 @@ public class TicketService {
     // Method to create Ticket object from Document retrieved from MongoDB
     private Ticket createTicketFromDocument(Document document) {
         Ticket ticket = new Ticket();
-        ticket.setId(document.getString("_id"));
         ticket.setTitle(document.getString("title"));
         ticket.setDescription(document.getString("description"));
         ticket.setTimestamp(document.get("timestamp",Timestamp.class));

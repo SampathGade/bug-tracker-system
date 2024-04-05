@@ -20,6 +20,8 @@ public class Ticket {
     private String description;
     private Timestamp timestamp;
     private String priority;
+    private String projectId;
+    private String developer;
 
     @DBRef
     private User author;
@@ -29,20 +31,18 @@ public class Ticket {
 
 
 
-    @DBRef
-    private Project project;
 
-    @DBRef
-    private User developer;
+
+
 
     public Ticket(String title, String description, Timestamp timestamp, User author, TicketType type,
-                  String priority, Project project){
+                  String priority,String projectId){
         this.title = title;
         this.description = description;
         this.timestamp = timestamp;
         this.author = author;
         this.type = type;
-        this.project = project;
+        this.projectId = projectId;
         this.developer = null;
         this.priority = priority;
     }

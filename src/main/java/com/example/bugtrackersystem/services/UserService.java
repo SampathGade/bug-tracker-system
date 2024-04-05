@@ -17,11 +17,9 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
     public void save(User user) {
-        // Call the insertUser method of MongoDBManager to insert the user into the database
         MongoDBManager.insertUser(user);
     }
     public  User findUserByUsername(String username) {
-        // Call the findUserByUsername method of MongoDBManager to find the user in the database
         Document userDocument = MongoDBManager.findUserByUsername(username);
         System.out.println(userDocument);
         System.out.println(userDocument!= null);
@@ -29,7 +27,6 @@ public class UserService {
     }
 
     public  User findUserByEmail(String email) {
-        // Call the findUserByEmail method of MongoDBManager to find the user in the database
         Document userDocument = MongoDBManager.findUserByEmail(email);
         return userDocument != null ? createUserFromDocument(userDocument) : null;
     }
@@ -52,7 +49,7 @@ public class UserService {
     }
     private Ticket documentToTicket(Document document) {
         Ticket ticket = new Ticket();
-        ticket.setId(document.getObjectId("_id").toString()); // Assuming the use of ObjectId for _id
+        ticket.setId(document.getObjectId("_id").toString());
         ticket.setTitle(document.getString("title"));
         ticket.setDescription(document.getString("description"));
         ticket.setPriority(document.getString("priorityId"));

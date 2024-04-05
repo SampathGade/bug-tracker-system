@@ -16,10 +16,10 @@ import java.sql.Timestamp;
 @Service
 @RequiredArgsConstructor
 public class TicketService {
-    // You can inject MongoDBManager here if needed
+
 
     public void save(Ticket ticket) {
-        // Implement save logic using MongoDBManager
+
         MongoDBManager.updateTicket(ticket);
     }
     public Project createProject(Project project) {
@@ -32,12 +32,11 @@ public class TicketService {
     }
 
     public Ticket findById(String ticketId) {
-        // Implement find by ID logic using MongoDBManager
+
         Document ticketDocument = MongoDBManager.findTicketById(ticketId);
         if (ticketDocument == null) {
             throw new EntityNotFoundException("Ticket with name " + ticketId + " doesn't exist!");
         }
-        // Convert Document to Ticket object
         return createTicketFromDocument(ticketDocument);
     }
     public Project findByName(String code) {
@@ -63,17 +62,18 @@ public class TicketService {
             throw new EntityNotFoundException("Invalid ticket priority");
         }
 
-        // Here you can directly create TicketType and TicketPriority objects
-        TicketType ticketType = new TicketType(typeName); // Assuming TicketType constructor accepts TicketTypeName
-        String ticketPriority =""; // Assuming TicketPriority constructor accepts TicketPriorityName
+
+        TicketType ticketType = new TicketType(typeName);
+        String ticketPriority ="";
 
         return new Ticket(ticketRequest.getTitle(), ticketRequest.getDescription(),
                 new Timestamp(ticketRequest.getTimestamp()), author, ticketType, ticketPriority, project);
     }
 
-    // Method to create Ticket object from Document retrieved from MongoDB
+
     private Ticket createTicketFromDocument(Document document) {
         Ticket ticket = new Ticket();
+        ticket.setId(document.get("_id").toString());
         ticket.setTitle(document.getString("title"));
         ticket.setDescription(document.getString("description"));
         ticket.setTimestamp(document.get("timestamp",Timestamp.class));
@@ -85,19 +85,9 @@ public class TicketService {
         }
 
         Project project = new Project();
-        project.setId(projectDocument.getObjectId("_id").toString()); // Convert ObjectId to String
+        project.setId(projectDocument.getObjectId("_id").toString());
         project.setName(projectDocument.getString("name"));
         project.setCode(projectDocument.getString("code"));
-
-        // Assuming project manager is stored as an ObjectId reference
-
-        // You would typically fetch the ProjectManager entity using this ID
-        // For simplicity, we're just setting the ID as a string here.
-        // project.setProjectManager(findUserById(projectManagerId));
-
-        // Add logic for other fields, such as developers and tickets, similar to project manager
-        // This often involves fetching related entities by their IDs
-
         return project;
     }
 

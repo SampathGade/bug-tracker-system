@@ -46,8 +46,7 @@ public class EmailService {
                         "Please check your dashboard for more information and to update the ticket status.\n\n" +
                         "Best,\n" +
                         "Your Bug Tracker System",
-                ticket.getTitle(), ticket.getDescription()); // Adjust these method calls based on your Ticket class
-
+                ticket.getTitle(), ticket.getDescription());
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(fromEmail1));

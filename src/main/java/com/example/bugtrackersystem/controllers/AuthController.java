@@ -34,13 +34,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
-        // Check if user exists and password matches
         User user = authService.login(loginRequest.getUsername(), loginRequest.getPassword());
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
-
-        // Generate and send OTP
         String otp = generateOTP();
         otpMap.put(user.getEmail(), otp);
         sendOTPEmail(user.getEmail(), otp, "saiyashwanth01@gmail.com", "ya29.a0Ad52N39hb84PVRLCjlKLf4BBg2WCGHXacxrzVjGfTh7UnCQC5xvpBpeEp-Ibjkn9u7kD-p4XePcTc1G_jhxRfipldjXpI9SygaVHr6eEeEqLbNgmrtzd-aK4J9-vXJ-KtwAg82f9z94HTuOAJOJ-d9ayPf2dAypq5z1wAgaCgYKAVsSARMSFQHGX2MiowqgA-IdoF7qHmBkLMMRYw0173");
@@ -55,18 +52,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
-        // Create a new user object from the register request
         User user = new User(registerRequest.getUsername(),
                 registerRequest.getPassword(),
                 registerRequest.getEmail());
 
-        // Register the user with encoded password
         User registeredUser = authService.register(user, passwordEncoder);
-
-        // Generate OTP
         String otp = generateOTP();
-
-        // Store the OTP in the map with the user's email as the key
         otpMap.put(registerRequest.getEmail(), otp);
         sendOTPEmail(registerRequest.getEmail(), otp, "saiyashwanth01@gmail.com", "ya29.a0Ad52N39hb84PVRLCjlKLf4BBg2WCGHXacxrzVjGfTh7UnCQC5xvpBpeEp-Ibjkn9u7kD-p4XePcTc1G_jhxRfipldjXpI9SygaVHr6eEeEqLbNgmrtzd-aK4J9-vXJ-KtwAg82f9z94HTuOAJOJ-d9ayPf2dAypq5z1wAgaCgYKAVsSARMSFQHGX2MiowqgA-IdoF7qHmBkLMMRYw0173");
 
@@ -78,23 +69,18 @@ public class AuthController {
     public ResponseEntity<?> verifyOTP(@RequestBody VerifyOTPRequest verifyOTPRequest) {
         String email = verifyOTPRequest.getEmail();
         String otp = verifyOTPRequest.getOtp();
-
-        // Check if OTP is valid
         if (otpMap.containsKey(email) && otpMap.get(email).equals(otp)) {
-            // Remove OTP from map after successful verification
             otpMap.remove(email);
             return ResponseEntity.ok("OTP verified. Access granted to dashboard.");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid OTP. Access denied.");
         }
     }
-
-    // Method to generate OTP
     private String generateOTP() {
         RandomStringGenerator generator = new RandomStringGenerator.Builder()
                 .withinRange('0', '9')
                 .build();
-        return generator.generate(6); // Generate a 6-digit OTP
+        return generator.generate(6);
     }
 
     // Method to send OTP email
@@ -115,8 +101,6 @@ public class AuthController {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
             message.setSubject("OTP for Email Verification");
             message.setText("Dear user,\n\nYour OTP for email verification is: " + otp);
-
-            // Set the "AUTH" command with the OAuth 2.0 access token
             SMTPTransport transport = (SMTPTransport) session.getTransport("smtp");
             transport.connect("smtp.gmail.com", fromEmail, accessToken);
             transport.sendMessage(message, message.getAllRecipients());

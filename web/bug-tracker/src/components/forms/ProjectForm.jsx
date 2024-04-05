@@ -14,7 +14,7 @@ export default function ProjectForm (props) {
         const payload = {
             "name": projectName,
             "code": projectCode,
-            "projectManagerId": projectManager
+            "projectManager": projectManager
         };
         try {
             const response = await fetch('http://localhost:8080/api/create/projects', {

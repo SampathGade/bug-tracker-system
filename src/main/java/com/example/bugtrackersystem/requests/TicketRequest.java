@@ -83,7 +83,6 @@ public class TicketRequest {
     }
 
     private String projectId;
-
     public String getDeveloper() {
         return developer;
     }

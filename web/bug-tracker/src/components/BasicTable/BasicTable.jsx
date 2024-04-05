@@ -40,7 +40,7 @@ export default function BasicTable(props) {
         },
         {
             header: 'Project',
-            accessorKey: 'project.code'
+            accessorKey: 'projectId'
         },
         {
             header: "Proiority",

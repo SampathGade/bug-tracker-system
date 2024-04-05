@@ -20,7 +20,7 @@ public class ProjectRequest {
 
     // If you want the client to specify a project manager upon project creation
     // and assuming you identify users/managers by some sort of unique identifier in your system
-    private String projectManagerId;
+    private String projectManager;
 
     // Constructors, Getters, and Setters
 
@@ -35,8 +35,8 @@ public class ProjectRequest {
         return code;
     }
 
-    public String getProjectManagerId() {
-        return projectManagerId;
+    public String getProjectManager() {
+        return projectManager;
     }
 
     // Setters
@@ -48,7 +48,7 @@ public class ProjectRequest {
         this.code = code;
     }
 
-    public void setProjectManagerId(String projectManagerId) {
-        this.projectManagerId = projectManagerId;
+    public void setProjectManager(String projectManager) {
+        this.projectManager = projectManager;
     }
 }

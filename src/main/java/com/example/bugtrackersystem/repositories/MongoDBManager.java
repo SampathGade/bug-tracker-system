@@ -7,6 +7,8 @@ import com.example.bugtrackersystem.model.User;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -124,13 +126,36 @@ public class MongoDBManager {
         Document ticketDocument = new Document();
         ticketDocument.put("title", ticket.getTitle());
         ticketDocument.put("description", ticket.getDescription());
-        ticketDocument.put("projectId", ticket.getProject() != null ? ticket.getProject().getId() : null); // Assuming a Project object with getId method
+        ticketDocument.put("projectId", ticket.getProjectId() != null ? ticket.getProjectId() : null); // Assuming a Project object with getId method
         ticketDocument.put("typeId", ticket.getType() != null ? ticket.getType().getId() : null); // Assuming a TicketType object with getId method
-        ticketDocument.put("priorityId",ticket.getPriority() != null ? ticket.getPriority().getId() : null ); // Assuming a TicketPriority object with getId method
-        ticketDocument.put("assignedDeveloperId", ticket.getDeveloper() != null ? ticket.getDeveloper().getId() : null); // Check for null in case no developer is assigned
+        ticketDocument.put("priorityId",ticket.getPriority() != null ? ticket.getPriority() : null ); // Assuming a TicketPriority object with getId method
+        ticketDocument.put("assignedDeveloperId", ticket.getDeveloper() != null ? ticket.getDeveloper() : null); // Check for null in case no developer is assigned
 
         // Insert the document into the collection
         collection.insertOne(ticketDocument);
+    }
+    public static void updateTicket(Ticket ticket){
+        MongoDatabase database = mongoClient.getDatabase(DATABASE_NAME);
+        MongoCollection<Document> collection = database.getCollection("tickets");
+
+        // Assuming the ticket ID is stored as a String and needs to be converted to an ObjectId
+        ObjectId ticketId = new ObjectId(ticket.getId()); // Convert String ID to ObjectId
+
+        Document updateFields = new Document();
+        updateFields.put("title", ticket.getTitle());
+        updateFields.put("description", ticket.getDescription());
+        updateFields.put("assignedDeveloperId", ticket.getDeveloper() != null ? ticket.getDeveloper() : null);
+
+        Document update = new Document("$set", updateFields);
+        UpdateResult result = collection.updateOne(Filters.eq("_id", ticketId), update);
+
+        if(result.getMatchedCount() == 0){
+            System.out.println("No ticket found with ID: " + ticket.getId());
+        } else if(result.getModifiedCount() == 1){
+            System.out.println("Ticket updated successfully.");
+        } else {
+            System.out.println("Ticket update failed.");
+        }
     }
 
 
@@ -142,7 +167,7 @@ public class MongoDBManager {
         MongoCollection<Document> collection = database.getCollection(COLLECTION_NAME_TICKETS);
 
         // Create a query document
-        Document query = new Document("_id", ticketId);
+        Document query = new Document("title", ticketId);
 
         // Execute the query
         return collection.find(query).first();
@@ -184,7 +209,7 @@ public class MongoDBManager {
 
         Document projectDoc = new Document("name", project.getName())
                 .append("code", project.getCode())
-                .append("projectManager", project.getProjectManager() != null ? project.getProjectManager().getId() : null) // Assuming you have a User object for project manager
+                .append("projectManager", project.getProjectManager() != null ? project.getProjectManager() : null) // Assuming you have a User object for project manager
                 .append("developers", project.getDevelopers().stream().map(dev -> dev.getId()).collect(Collectors.toList())) // Convert developer User objects to a list of IDs
                 .append("tickets", project.getTickets().stream().map(ticket -> ticket.getId()).collect(Collectors.toList())); // Convert ticket objects to a list of IDs
 

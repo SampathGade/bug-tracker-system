@@ -88,13 +88,13 @@ public class UserController {
     }
 
     @PostMapping("/user/assign/tickets")
-    public ResponseEntity<?> assignTicket(@RequestBody TicketRequest request, Principal principal){
+    public ResponseEntity<?> assignTicket(@RequestBody TicketRequest request){
         // Find the developer using the username from the Principal
-        User developer = userService.findUserByUsername(principal.getName());
+        User developer = userService.findUserByUsername(request.getDeveloper());
 
         // Find the ticket based on the ID provided in the request
         // Assuming ticketService.findTicketById(id) exists and returns a Ticket object
-        Ticket ticket = ticketService.findById(request.getId());
+        Ticket ticket = ticketService.findById(request.getTitle());
 
         if (ticket == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ticket not found.");
@@ -103,7 +103,7 @@ public class UserController {
         // Check if the ticket is not already assigned to a developer
         if (ticket.getDeveloper() == null) {
             // Assign the ticket to the developer
-            ticket.setDeveloper(developer);
+            ticket.setDeveloper(developer.getUsername());
             developer.getTicketsWorkingOn().add(ticket);
             developer.setTicketsWorkingOn(developer.getTicketsWorkingOn());
             // Assuming you have a method to save the updated ticket state
@@ -111,7 +111,7 @@ public class UserController {
 
             // Prepare and send the email notification
             final String fromEmail = "saiyashwanth01@gmail.com"; // Should match the Gmail account used for OAuth
-            final String accessToken = ""; // OAuth2 access token, securely stored and retrieved
+            final String accessToken = "ya29.a0Ad52N38UhXgT1_q_H8ZoiD206YLg7vCZmUot_cN0HTgtwFu6Ax9SC4yP9Yee56m_q9pQs0WIYntXlbtgbO3lFWWJmgeXTnc08aPRRig0rM4IderGmPBDQAsXnN8fY0uYyAoHHQELAmhOhouvFYzrWfBl6u4u8tB7X1eiaCgYKAZsSARMSFQHGX2Mi1S3iIOCvzsxe7szbUeSrWA0171"; // OAuth2 access token, securely stored and retrieved
 
             // Send email notification
             emailService.sendTicketAssignmentEmail(developer.getEmail(), fromEmail, accessToken, ticket);
@@ -132,8 +132,8 @@ public class UserController {
         Project newProject = new Project();
         newProject.setName(projectRequest.getName());
         newProject.setCode(projectRequest.getCode());
-        User user = userService.findUserByUsername(projectRequest.getProjectManagerId());
-        newProject.setProjectManager(user);
+        User user = userService.findUserByUsername(projectRequest.getProjectManager());
+        newProject.setProjectManager(user.getUsername());
         // Assume `projectManager` is determined from the context or provided in the request
         Project savedProject = projectService.createProject(newProject);
         return new ResponseEntity<>(savedProject, HttpStatus.CREATED);
@@ -145,8 +145,9 @@ public class UserController {
         newTicket.setTitle(ticketRequest.getTitle());
         newTicket.setDescription(ticketRequest.getDescription());
         Project project = ticketService.findByName(ticketRequest.getProjectId());
-        newTicket.setProject(project);
+        newTicket.setProjectId(project.getCode());
         newTicket.setPriority(ticketRequest.getPriority());
+        newTicket.setDeveloper(ticketRequest.getDeveloper());
         // Set other properties based on `TicketRequest`
          // Assume this method retrieves the currently logged-in user
         // You may also need to set the associated project, type, priority, etc.

@@ -22,7 +22,7 @@ public class Project {
     private String code;
 
     @DBRef
-    private User projectManager;
+    private String projectManager;
 
     @DBRef
     private Set<User> developers = new HashSet<>();
@@ -30,7 +30,7 @@ public class Project {
     @DBRef
     private Set<Ticket> tickets = new HashSet<>();
 
-    public Project(String name, User projectManager) {
+    public Project(String name, String projectManager) {
         this.name = name;
         this.projectManager = projectManager;
         this.code = generateCode();

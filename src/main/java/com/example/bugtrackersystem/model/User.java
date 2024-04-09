@@ -32,6 +32,20 @@ public class User {
         return password;
     }
 
+    public ObjectId getId() {
+        return id;
+    }
+
+    public String getSpecialty() {
+        return specialty;
+    }
+
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
+    }
+
+    private String specialty;
+
     public void setPassword(String password) {
         this.password = password;
     }

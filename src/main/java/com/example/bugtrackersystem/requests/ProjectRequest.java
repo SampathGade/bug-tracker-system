@@ -17,16 +17,10 @@ public class ProjectRequest {
     @NotBlank(message = "Project code is required")
     @Size(min = 2, max = 10, message = "Project code must be between 2 and 10 characters")
     private String code;
-
-    // If you want the client to specify a project manager upon project creation
-    // and assuming you identify users/managers by some sort of unique identifier in your system
     private String projectManager;
 
-    // Constructors, Getters, and Setters
 
 
-
-    // Getters
     public String getName() {
         return name;
     }

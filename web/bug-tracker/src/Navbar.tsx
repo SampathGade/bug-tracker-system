@@ -10,11 +10,11 @@ const Navbar = (props: { userName: any; }) => {
             <ul>
                 <li>
                     <Link to="/manage" state={{"username":props.userName}}>
-                        Assign Incidents
+                        Assign Bugs
                     </Link>
                 </li>
                 <li>
-                    <Link to="/incident" state={{"username":props.userName}}>Create Incident</Link>
+                    <Link to="/incident" state={{"username":props.userName}}>Create Bug</Link>
                 </li>
                 <li>
                     <Link to="/project" state={{"username":props.userName}}>Create Project</Link>

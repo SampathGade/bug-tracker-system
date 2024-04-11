@@ -18,11 +18,11 @@ const Login = () => {
             // });
 
             const response = {}
-            response.status = 401
+            response.status = 200
             
             if (response.status === 200) {
                 // Redirect to OTP validation page
-                // history.push('/otp-validation');
+                navigate('/otp-validation');
             } else if (response.status === 401) {
                 // Redirect to InvalidCredentials page
                 navigate('/invalid-credentials');

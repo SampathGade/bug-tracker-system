@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation  } from 'react-router-dom';
 
-const OTPValidationPage = ({ purpose }) => {
+const OTPValidationPage = () => {
     const [otp, setOTP] = useState('');
     const [isInvalidOTP, setIsInvalidOTP] = useState(false); // State to track invalid OTP
     const navigate = useNavigate();
+    const location = useLocation();
+    const purpose = location.state?.purpose;
 
     const handleOTPValidation = async () => {
         // Code to make API call for OTP validation
@@ -18,13 +20,13 @@ const OTPValidationPage = ({ purpose }) => {
             //     body: JSON.stringify({ otp }),
             // });
             const response = {}
-            response.status = 400 // Assuming invalid OTP status code
+            response.status = 200 // Assuming invalid OTP status code
 
             if (response.status === 200) {
                 // Successful OTP validation
                 if (purpose === 'signup') {
                     // Navigate to dashboard or another page upon successful OTP validation for sign-up
-                    navigate('/dashboard');
+                    navigate('/succesfulSignUp');
                 } else if (purpose === 'login') {
                     // Navigate to dashboard or another page upon successful OTP validation for login
                     navigate('/dashboard');
@@ -37,6 +39,13 @@ const OTPValidationPage = ({ purpose }) => {
             console.error('Error:', error);
         }
     };
+
+    useEffect(() => {
+        console.log(purpose)
+        if (purpose !== "signup" && purpose !== "login") {
+            navigate('/login');
+        }
+    }, [purpose, navigate]);
 
     const isSubmitDisabled = otp.trim() === '';
 

@@ -3,6 +3,7 @@ import Login from './components/Login/Login';
 import InvalidCredentials from './components/Login/InvalidCredentials';
 import OTPComponent from './components/Login/OTPValidator';
 import SignUpPage from './components/SignUp/Singup';
+import SuccessfulSignUp from './components/SignUp/SuccessfulSignUp';
 // import Dashboard from './Dashboard';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/invalid-credentials" element={<InvalidCredentials />} />
         <Route path="/otp-validation" element={<OTPComponent />} />
         <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/succesfulSignUp" element={<SuccessfulSignUp />} />
         {/* <Route path="/dashboard" element={<Dashboard />} /> */}
       </Routes>
     </Router>

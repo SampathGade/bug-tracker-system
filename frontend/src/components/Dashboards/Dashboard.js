@@ -11,6 +11,9 @@ const Dashboard = () => {
 
     const isAdmin = loginResponse.role === 'admin';
     const isProductManager = loginResponse.role === 'product_manager';
+    const isDeveloper = loginResponse.role === 'developer';
+    const isQA = loginResponse.role === 'QA';
+    const isExternal = loginResponse.role === 'external';
 
     const handleOnboardPerson = () => {
         // Implement logic for onboarding a person
@@ -50,21 +53,27 @@ const Dashboard = () => {
                 </div>
             )}
 
+            {(!isDeveloper) && (
             <div>
                 <button onClick={handleCreateBug}>Create Bug</button>
             </div>
+            )}
 
             <div>
                 <button onClick={handleViewBugs}>View Bugs</button>
             </div>
 
+            {(!isExternal) && (
             <div>
                 <button onClick={handleViewProjects}>View Projects</button>
             </div>
+            )}
 
+            {(isAdmin || isProductManager) && (
             <div>
                 <button onClick={handleGenerateReport}>Generate Report</button>
             </div>
+            )}
         </div>
     );
 };

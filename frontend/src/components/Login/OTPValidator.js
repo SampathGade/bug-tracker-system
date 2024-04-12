@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const OTPValidationPage = () => {
+const OTPValidationPage = ({ purpose }) => {
     const [otp, setOTP] = useState('');
     const [isInvalidOTP, setIsInvalidOTP] = useState(false); // State to track invalid OTP
     const navigate = useNavigate();
@@ -21,8 +21,14 @@ const OTPValidationPage = () => {
             response.status = 400 // Assuming invalid OTP status code
 
             if (response.status === 200) {
-                // Successful OTP validation, navigate to dashboard
-                // navigate.push('/dashboard');
+                // Successful OTP validation
+                if (purpose === 'signup') {
+                    // Navigate to dashboard or another page upon successful OTP validation for sign-up
+                    navigate('/dashboard');
+                } else if (purpose === 'login') {
+                    // Navigate to dashboard or another page upon successful OTP validation for login
+                    navigate('/dashboard');
+                }
             } else {
                 // Invalid OTP, handle accordingly
                 setIsInvalidOTP(true); // Set state to true to show warning message

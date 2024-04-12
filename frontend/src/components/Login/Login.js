@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -22,7 +22,7 @@ const Login = () => {
             
             if (response.status === 200) {
                 // Redirect to OTP validation page
-                navigate('/otp-validation');
+                navigate('/otp-validation', { state: { purpose: 'login' } });
             } else if (response.status === 401) {
                 // Redirect to InvalidCredentials page
                 navigate('/invalid-credentials');
@@ -40,6 +40,7 @@ const Login = () => {
             <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <button onClick={handleLogin} disabled={isLoginDisabled}>Login</button>
+            <p>Don't have an account? <Link to="/signup">Sign up here</Link></p>
         </div>
     );
 };

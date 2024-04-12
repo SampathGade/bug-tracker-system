@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation  } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const OTPValidationPage = () => {
     const [otp, setOTP] = useState('');
@@ -40,8 +40,24 @@ const OTPValidationPage = () => {
         }
     };
 
+    const handleResendOTP = async () => {
+        // Code to make API call to resend OTP
+        try {
+            // Make API call to resend OTP
+            // const response = await fetch('YOUR_RESEND_OTP_API_URL', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({}),
+            // });
+            console.log('Resend OTP requested');
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
     useEffect(() => {
-        console.log(purpose)
         if (purpose !== "signup" && purpose !== "login") {
             navigate('/login');
         }
@@ -55,6 +71,7 @@ const OTPValidationPage = () => {
             <input type="text" placeholder="Enter OTP" value={otp} onChange={(e) => setOTP(e.target.value)} />
             {isInvalidOTP && <p style={{ color: 'red' }}>Invalid OTP. Please try again.</p>} {/* Conditional rendering of warning message */}
             <button onClick={handleOTPValidation} disabled={isSubmitDisabled}>Submit</button>
+            <button onClick={handleResendOTP}>Resend OTP</button> {/* Button to resend OTP */}
         </div>
     );
 };

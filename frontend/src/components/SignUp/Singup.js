@@ -21,7 +21,7 @@ const SignUpPage = () => {
 
             if (response.status === 200) {
                 // Navigate to OTP validation page
-                navigate('/otp-validation', { state: { purpose: 'signup' } });
+                navigate('/otp-validation', { state: { purpose: 'signup', response : null } });
             }
         } catch (error) {
             console.error('Error:', error);

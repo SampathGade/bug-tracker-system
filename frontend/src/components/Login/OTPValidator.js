@@ -7,6 +7,10 @@ const OTPValidationPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const purpose = location.state?.purpose;
+    const loginResponse = location.state?.response;
+
+    console.log('the loginResponse in Otp')
+    console.log(loginResponse)
 
     const handleOTPValidation = async () => {
         // Code to make API call for OTP validation
@@ -21,6 +25,7 @@ const OTPValidationPage = () => {
             // });
             const response = {}
             response.status = 200 // Assuming invalid OTP status code
+            response.role = 'admin'
 
             if (response.status === 200) {
                 // Successful OTP validation
@@ -29,7 +34,7 @@ const OTPValidationPage = () => {
                     navigate('/succesfulSignUp');
                 } else if (purpose === 'login') {
                     // Navigate to dashboard or another page upon successful OTP validation for login
-                    navigate('/dashboard');
+                    navigate('/dashboard',{ state: {response: response}});
                 }
             } else {
                 // Invalid OTP, handle accordingly

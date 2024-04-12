@@ -19,10 +19,11 @@ const Login = () => {
 
             const response = {}
             response.status = 200
+            response.role = "admin"
             
             if (response.status === 200) {
                 // Redirect to OTP validation page
-                navigate('/otp-validation', { state: { purpose: 'login' } });
+                navigate('/otp-validation', { state: { purpose: 'login',response: response} });
             } else if (response.status === 401) {
                 // Redirect to InvalidCredentials page
                 navigate('/invalid-credentials');

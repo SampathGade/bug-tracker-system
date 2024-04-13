@@ -14,9 +14,10 @@ const Dashboard = () => {
     const isDeveloper = loginResponse.role === 'developer';
     const isQA = loginResponse.role === 'QA';
     const isExternal = loginResponse.role === 'external';
+    const navigate = useNavigate();
 
     const handleOnboardPerson = () => {
-        // Implement logic for onboarding a person
+        navigate("/onboard")
     };
 
     const handleCreateProject = () => {

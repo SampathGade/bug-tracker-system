@@ -10,6 +10,8 @@ import ReviewRequest from './components/Dashboards/OnBoarding/ReviewRequest';
 import OnboardPerson from './components/Dashboards/OnBoarding/NewOnboard';
 import CreateProject from './components/Dashboards/CreateProject/CreateProject';
 import CreateBug from './components/Dashboards/CreateBug/CreateBug';
+import ViewBugs from './components/Dashboards/ViewBug/ViewBug';
+import ViewProjects from './components/Dashboards/ViewProjects/ViewProjects';
 function App() {
   return (
     <Router>
@@ -26,6 +28,8 @@ function App() {
         <Route path="/onboardPerson" element={<OnboardPerson/>}/>
         <Route path="/createProject" element={<CreateProject/>}/>
         <Route path="/createBug" element={<CreateBug/>}/>
+        <Route path="/viewBug" element={<ViewBugs/>}/>
+        <Route path="/viewProjects" element={<ViewProjects/>}/>
       </Routes>
     </Router>
   );

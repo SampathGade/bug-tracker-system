@@ -29,7 +29,7 @@ const Dashboard = () => {
     };
 
     const handleViewBugs = () => {
-        // Implement logic for viewing bugs
+        navigate("/viewBugs")
     };
 
     const handleViewProjects = () => {

@@ -21,11 +21,11 @@ const Dashboard = () => {
     };
 
     const handleCreateProject = () => {
-        // Implement logic for creating a project
+        navigate("/createProject")
     };
 
     const handleCreateBug = () => {
-        // Implement logic for creating a bug
+        navigate("/createBug")
     };
 
     const handleViewBugs = () => {

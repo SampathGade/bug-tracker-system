@@ -8,6 +8,8 @@ import Dashboard from './components/Dashboards/Dashboard';
 import OnboardPage from './components/Dashboards/OnBoarding/Onboard';
 import ReviewRequest from './components/Dashboards/OnBoarding/ReviewRequest';
 import OnboardPerson from './components/Dashboards/OnBoarding/NewOnboard';
+import CreateProject from './components/Dashboards/CreateProject/CreateProject';
+import CreateBug from './components/Dashboards/CreateBug/CreateBug';
 function App() {
   return (
     <Router>
@@ -22,6 +24,8 @@ function App() {
         <Route path="/onboard" element={<OnboardPage />}/>
         <Route path="/reviewRequests" element={<ReviewRequest/>}/>
         <Route path="/onboardPerson" element={<OnboardPerson/>}/>
+        <Route path="/createProject" element={<CreateProject/>}/>
+        <Route path="/createBug" element={<CreateBug/>}/>
       </Routes>
     </Router>
   );

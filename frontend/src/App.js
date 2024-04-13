@@ -7,6 +7,7 @@ import SuccessfulSignUp from './components/SignUp/SuccessfulSignUp';
 import Dashboard from './components/Dashboards/Dashboard';
 import OnboardPage from './components/Dashboards/OnBoarding/Onboard';
 import ReviewRequest from './components/Dashboards/OnBoarding/ReviewRequest';
+import OnboardPerson from './components/Dashboards/OnBoarding/NewOnboard';
 function App() {
   return (
     <Router>
@@ -20,6 +21,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/onboard" element={<OnboardPage />}/>
         <Route path="/reviewRequests" element={<ReviewRequest/>}/>
+        <Route path="/onboardPerson" element={<OnboardPerson/>}/>
       </Routes>
     </Router>
   );

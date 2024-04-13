@@ -9,7 +9,7 @@ const OnboardPage = () => {
             <Link to="/reviewRequests">
                 <button>Review Requests</button>
             </Link>
-            <Link to="/onboardNewPerson">
+            <Link to="/onboardPerson">
                 <button>Onboard a New Person</button>
             </Link>
         </div>

@@ -29,11 +29,11 @@ const Dashboard = () => {
     };
 
     const handleViewBugs = () => {
-        navigate("/viewBugs")
+        navigate("/viewBug")
     };
 
     const handleViewProjects = () => {
-        // Implement logic for viewing projects
+        navigate("/viewProjects")
     };
 
     const handleGenerateReport = () => {

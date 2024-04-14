@@ -1,24 +1,28 @@
 package com.example.bugtrackersystem.services.emailSender;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 import com.example.bugtrackersystem.repositories.UserRepository;
+
+import java.util.List;
 
 @Service
 public class EmailServiceImpl implements EmailService {
 
-    @Autowired
-    private JavaMailSender emailSender;
+    private final JavaMailSender emailSender;
+    private final UserRepository userRepository;
+    private final String senderEmail;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Value("${email.sender}")
-    private String senderEmail;
+    public EmailServiceImpl(JavaMailSender emailSender, UserRepository userRepository, @Value("${email.sender}") String senderEmail) {
+        this.emailSender = emailSender;
+        this.userRepository = userRepository;
+        this.senderEmail = senderEmail;
+    }
 
     @Override
     public void sendMailToAdmin(String role, String userEmail) {

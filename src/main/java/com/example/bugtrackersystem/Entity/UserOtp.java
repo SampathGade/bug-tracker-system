@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class UserOtp {
     @Id
     private String id;
-    private String userId;
+    private String userEmail;
     private String otp;
     private LocalDateTime createdAt;
     private LocalDateTime expiresAt;

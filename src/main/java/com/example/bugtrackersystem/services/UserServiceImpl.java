@@ -23,4 +23,17 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmail(String userEmail) {
         return userRepository.findByUserEmail(userEmail);
     }
+
+    @Override
+    public void createUserWithEmailAndRole(String userEmail, String role, String password) {
+        // Hash the password (You can use bcrypt or other secure hashing algorithms)
+        String hashedPassword = password;
+        User newUser = new User();
+        newUser.setUserEmail(userEmail);
+        newUser.setRole(role);
+        newUser.setPassword(hashedPassword);
+
+        // Save the new user to the database
+        userRepository.save(newUser);
+    }
 }

@@ -8,5 +8,6 @@ import com.example.bugtrackersystem.repositories.UserRepository;
 public interface UserService {
     User getUserByUserId(String userId);
     User getUserByEmail(String userEmail);
+    void createUserWithEmailAndRole(String userEmail, String role, String password);
 }
 

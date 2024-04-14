@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.bugtrackersystem.Entity.User;
 import com.example.bugtrackersystem.requests.LoginRequest;
+import com.example.bugtrackersystem.requests.SignUpRequest;
 import com.example.bugtrackersystem.services.UserService;
 
 @RestController
@@ -19,6 +20,16 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<String> signUp(@RequestBody SignUpRequest signUpRequest) {
+        try {
+            userService.createUserWithEmailAndRole(signUpRequest.getUserEmail(), signUpRequest.getRole(), signUpRequest.getPassword());
+            return new ResponseEntity<>("User signed up successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to sign up user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/login")

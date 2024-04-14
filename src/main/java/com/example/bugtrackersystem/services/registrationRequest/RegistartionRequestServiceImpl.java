@@ -1,11 +1,13 @@
 package com.example.bugtrackersystem.services.registrationRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.bugtrackersystem.Entity.User;
 import com.example.bugtrackersystem.repositories.UserRepository;
 import com.example.bugtrackersystem.services.emailSender.EmailService;
 
+@Service
 public class RegistartionRequestServiceImpl implements RegistrationRequestService{
 
     private UserRepository userRepository;

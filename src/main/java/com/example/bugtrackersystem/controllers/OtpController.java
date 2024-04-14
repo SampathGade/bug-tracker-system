@@ -11,6 +11,7 @@ import com.example.bugtrackersystem.requests.ValidateOtpRequest;
 import com.example.bugtrackersystem.services.UserOtpService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/otp")
 public class OtpController {
 

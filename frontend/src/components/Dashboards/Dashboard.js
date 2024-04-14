@@ -1,81 +1,56 @@
-import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import './Dashboard.css'; // Ensure this CSS is properly linked and contains the required styles
 
+// Import components
+import OnboardPerson from './OnBoarding/Onboard';
+import CreateProject from './CreateProject/CreateProject';
+import CreateBug from './CreateBug/CreateBug';
+import ViewBugs from './ViewBug/ViewBug';
+import ViewProjects from './ViewProjects/ViewProjects';
+// import GenerateReport from '.';
+
+const NavbarButton = ({ children, onClick }) => (
+    <button className="navbarButton" onClick={onClick}>
+        {children}
+    </button>
+);
 
 const Dashboard = () => {
-    const location = useLocation();
-    const loginResponse = location.state?.response;
+    const [activeView, setActiveView] = useState('ViewBugs');
 
-    console.log('the loginResponse in Dashboard')
-    console.log(loginResponse)
-
-    const isAdmin = loginResponse.role === 'admin';
-    const isProductManager = loginResponse.role === 'product_manager';
-    const isDeveloper = loginResponse.role === 'developer';
-    const isQA = loginResponse.role === 'QA';
-    const isExternal = loginResponse.role === 'external';
-    const navigate = useNavigate();
-
-    const handleOnboardPerson = () => {
-        navigate("/onboard")
-    };
-
-    const handleCreateProject = () => {
-        navigate("/createProject")
-    };
-
-    const handleCreateBug = () => {
-        navigate("/createBug")
-    };
-
-    const handleViewBugs = () => {
-        navigate("/viewBug")
-    };
-
-    const handleViewProjects = () => {
-        navigate("/viewProjects")
-    };
-
-    const handleGenerateReport = () => {
-        // Implement logic for generating a report
+    const renderComponent = () => {
+        switch (activeView) {
+            case 'ViewBugs':
+                return <ViewBugs />;
+            case 'OnboardPerson':
+                return <OnboardPerson />;
+            // case 'CreateProject':
+            //     return <CreateProject />;
+            // case 'CreateBug':
+            //     return <CreateBug />;
+            case 'ViewProjects':
+                return <ViewProjects />;
+            // case 'GenerateReport':
+            //     return <GenerateReport />;
+            default:
+                return <ViewBugs />; // Default view
+        }
     };
 
     return (
-        <div>
-            {isAdmin && (
-                <div>
-                    <button onClick={handleOnboardPerson}>Onboard a Person</button>
-                </div>
-            )}
-
-            {(isAdmin || isProductManager) && (
-                <div>
-                    <button onClick={handleCreateProject}>Create Project</button>
-                </div>
-            )}
-
-            {(!isDeveloper) && (
-            <div>
-                <button onClick={handleCreateBug}>Create Bug</button>
+        <>
+            <div className="navbar">
+                <NavbarButton onClick={() => setActiveView('ViewBugs')}>View Bugs</NavbarButton>
+                <NavbarButton onClick={() => setActiveView('OnboardPerson')}>Onboard a Person</NavbarButton>
+                {/* <NavbarButton onClick={() => setActiveView('CreateProject')}>Create Project</NavbarButton> */}
+                {/* <NavbarButton onClick={() => setActiveView('GenerateReport')}>Generate Report</NavbarButton> */}
+                {/* <NavbarButton onClick={() => setActiveView('CreateBug')}>Create Bug</NavbarButton> */}
+                <NavbarButton onClick={() => setActiveView('ViewProjects')}>View Projects</NavbarButton>
             </div>
-            )}
-
-            <div>
-                <button onClick={handleViewBugs}>View Bugs</button>
+            <div className="content">
+                {renderComponent()}
             </div>
-
-            {(!isExternal) && (
-            <div>
-                <button onClick={handleViewProjects}>View Projects</button>
-            </div>
-            )}
-
-            {(isAdmin || isProductManager) && (
-            <div>
-                <button onClick={handleGenerateReport}>Generate Report</button>
-            </div>
-            )}
-        </div>
+        </>
     );
 };
 

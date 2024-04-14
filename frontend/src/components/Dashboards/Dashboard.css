@@ -1,0 +1,54 @@
+/* Navbar styles */
+.navbar {
+    display: flex;
+    justify-content: space-between; /* More balanced spacing */
+    align-items: center; /* Vertically center the buttons */
+    padding: 1rem;
+    background: linear-gradient(135deg, #89a7e0 0%, #a48ad4 100%); /* Softer blue and purple gradient */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+  
+  /* Navbar button styles */
+  .navbarButton {
+    padding: 10px 15px; /* Slightly larger padding for a sharper look */
+    color: white;
+    background: linear-gradient(45deg, #857ad4 0%, #70a1ff 100%); /* Softer gradient for buttons */
+    border: none;
+    border-radius: 3px; /* Sharper radius */
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for 3D effect */
+  }
+  
+  .navbarButton:hover, .navbarButton:focus {
+    transform: translateY(-2px); /* Subtle lift effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover for depth */
+  }
+  
+  /* Content area styles */
+  .content {
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 10px;
+    margin-top: 10px;
+    transition: transform 0.3s ease-out; /* Smooth transition for content changes */
+  }
+  
+  /* Responsive adjustments for smaller screens */
+  @media (max-width: 480px) {
+    .navbar {
+        flex-direction: column; /* Stack the buttons vertically on small screens */
+        padding: 0.5rem;
+    }
+  
+    .navbarButton {
+        width: 100%; /* Full width buttons for better touch targets */
+        margin-bottom: 10px; /* Space out stacked buttons */
+    }
+  
+    .content {
+        padding: 10px; /* Less padding on smaller screens */
+    }
+  }
+  

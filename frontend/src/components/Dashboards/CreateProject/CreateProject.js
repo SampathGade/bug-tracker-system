@@ -1,53 +1,38 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import styles from './CreateProject.module.css';
 
-const CreateProject = () => {
+const CreateProject = ({ onProjectUpdated, closeModal, project }) => {
     const [projectName, setProjectName] = useState('');
-    const [projectManager, setProjectManager] = useState('');
-    const navigate = useNavigate();
+    const [manager, setManager] = useState('');
+    const [details, setDetails] = useState('');
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            if (!projectName) {
-                console.error('Project Name is required');
-                return;
-            }
-
-            // Make API call to create project
-            // const response = await fetch('YOUR_CREATE_PROJECT_API_URL', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({ projectName, projectManager }),
-            // });
-            // const data = await response.json();
-            
-            // Simulated response
-            const data = { success: true }; // Assuming success response
-
-            if (data.success) {
-                // If project creation is successful, navigate back to Dashboard
-                navigate("/dashboard");
-            } else {
-                // Handle error case
-                console.error('Failed to create project');
-            }
-        } catch (error) {
-            console.error('Error:', error);
+    useEffect(() => {
+        if (project) {
+            setProjectName(project.projectName);
+            setManager(project.manager);
+            setDetails(project.details);
         }
+    }, [project]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const projectData = { projectName, manager, details };
+        onProjectUpdated(projectData, project ? project.id : null);
+        closeModal();
     };
 
     return (
-        <div>
-            <h2>Create Project</h2>
-            <form onSubmit={handleSubmit}>
+        <div className={styles.container}>
+            <button onClick={closeModal} className={styles.closeButton}>&times;</button>
+            <h2>{project ? "Edit Project" : "Create Project"}</h2>
+            <form onSubmit={handleSubmit} className={styles.form}>
                 <label>Project Name:</label>
                 <input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} required />
-                <label>Project Manager:</label>
-                <input type="text" value={projectManager} onChange={(e) => setProjectManager(e.target.value)} />
-                <button type="submit">Submit</button>
+                <label>Manager:</label>
+                <input type="text" value={manager} onChange={(e) => setManager(e.target.value)} required />
+                <label>Details:</label>
+                <textarea value={details} onChange={(e) => setDetails(e.target.value)} />
+                <button type="submit" className={styles.button}>{project ? "Update Project" : "Create Project"}</button>
             </form>
         </div>
     );

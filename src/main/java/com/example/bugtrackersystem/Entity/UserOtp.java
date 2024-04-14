@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class UserOtp {
     @Id
     private String id;
+    @NonNull
     private String userEmail;
     private String otp;
     private LocalDateTime createdAt;

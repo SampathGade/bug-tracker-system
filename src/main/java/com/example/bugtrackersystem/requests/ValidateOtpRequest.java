@@ -10,7 +10,7 @@ import lombok.NonNull;
 @AllArgsConstructor
 public class ValidateOtpRequest {
     @NonNull
-    private String userId;
+    private String userEmail;
     @NonNull
     private String otp;
 }

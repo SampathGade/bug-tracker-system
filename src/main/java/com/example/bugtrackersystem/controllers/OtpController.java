@@ -23,16 +23,24 @@ public class OtpController {
 
     @PostMapping("/generate")
     public ResponseEntity<UserOtp> generateOtp(@RequestBody GenerateOtpRequest generateOtpRequest) {
-        UserOtp generatedOtp = userOtpService.generateOtp(generateOtpRequest.getUserId());
-        return ResponseEntity.ok(generatedOtp);
+        try {
+            UserOtp generatedOtp = userOtpService.generateOtp(generateOtpRequest.getUserEmail());
+            return ResponseEntity.ok(generatedOtp);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PostMapping("/validate")
     public ResponseEntity<String> validateOtp(@RequestBody ValidateOtpRequest validateOtpRequest) {
-        if (userOtpService.validateOtp(validateOtpRequest.getUserId(), validateOtpRequest.getOtp())) {
-            return ResponseEntity.ok("OTP validated successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid OTP");
+        try {
+            if (userOtpService.validateOtp(validateOtpRequest.getUserEmail(), validateOtpRequest.getOtp())) {
+                return ResponseEntity.ok("OTP validated successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid OTP");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

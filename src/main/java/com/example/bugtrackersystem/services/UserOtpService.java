@@ -20,28 +20,28 @@ public class UserOtpService {
         this.userOtpRepository = userOtpRepository;
     }
 
-    public UserOtp generateOtp(String userId) {
+    public UserOtp generateOtp(String userEmail) {
         // Deactivate any existing active OTP for the same userId
-        deactivateActiveOtpForUser(userId);
+        deactivateActiveOtpForUser(userEmail);
 
         // Generate new OTP
         String otp = generateRandomOtp();
         LocalDateTime createdAt = LocalDateTime.now();
         LocalDateTime expiresAt = createdAt.plusMinutes(otpExpiryMinutes);
-        UserOtp userOtp = new UserOtp(null,userId, otp, createdAt, expiresAt, true);
+        UserOtp userOtp = new UserOtp(null,userEmail, otp, createdAt, expiresAt, true);
         return userOtpRepository.save(userOtp);
     }
 
     private void deactivateActiveOtpForUser(String userId) {
-        UserOtp existingActiveOtp = userOtpRepository.findByUserIdAndActive(userId, true);
+        UserOtp existingActiveOtp = userOtpRepository.findByUserEmailAndActive(userId, true);
         if (existingActiveOtp != null) {
             existingActiveOtp.setActive(false);
             userOtpRepository.save(existingActiveOtp);
         }
     }
 
-    public boolean validateOtp(String userId, String otp) {
-        UserOtp userOtp = userOtpRepository.findByUserId(userId);
+    public boolean validateOtp(String userEmail, String otp) {
+        UserOtp userOtp = userOtpRepository.findByUserEmail(userEmail);
         if (userOtp != null && userOtp.isActive() && userOtp.getOtp().equals(otp)) {
             LocalDateTime currentTime = LocalDateTime.now();
             if (currentTime.isBefore(userOtp.getExpiresAt())) {

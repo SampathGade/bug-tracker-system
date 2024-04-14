@@ -10,5 +10,5 @@ import lombok.NonNull;
 @AllArgsConstructor
 public class GenerateOtpRequest {
     @NonNull
-    private String userId;
+    private String userEmail;
 }

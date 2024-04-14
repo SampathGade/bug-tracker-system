@@ -23,20 +23,6 @@ const OTPValidationPage = () => {
         }
     }, [purpose, navigate]);
 
-    useEffect(() => {
-        const handleBeforeUnload = (event) => {
-            // Customize the standard message (the exact message may not be shown in modern browsers)
-            event.preventDefault(); 
-            event.returnValue = ''; // Chrome requires returnValue to be set
-        };
-
-        window.addEventListener("beforeunload", handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener("beforeunload", handleBeforeUnload);
-        };
-    }, []);
-
     const handleOTPValidation = async () => {
         try {
             const response = await fetch('http://localhost:8080/otp/validate', {
@@ -46,16 +32,11 @@ const OTPValidationPage = () => {
             });
 
             if (response.ok) {
-                const responseData = await response.json();
-                if (responseData.isValid) {
                     if (purpose === 'login') {
                         navigate('/dashboard'); 
                     } else {
                         navigate('/successfulSignUp')
                     }
-                } else {
-                    setIsInvalidOTP(true);
-                }
             } else {
                 setIsInvalidOTP(true);
             }

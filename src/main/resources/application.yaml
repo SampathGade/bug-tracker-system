@@ -17,4 +17,3 @@ spring:
             enable: true
 email:
   sender: your-email@gmail.com
-  

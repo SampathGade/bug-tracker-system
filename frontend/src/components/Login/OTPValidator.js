@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../Auth/AuthContext';
 import styles from './OTPValidation.module.css';
 
 const OTPValidationPage = () => {
@@ -7,7 +8,14 @@ const OTPValidationPage = () => {
     const [isInvalidOTP, setIsInvalidOTP] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
+    const { user } = useAuth();
     const purpose = location.state?.purpose;
+
+    useEffect(() => {
+        if (!user) {
+            navigate('/login');
+        }
+    }, [user, navigate]);
 
     useEffect(() => {
         if (purpose !== "signup" && purpose !== "login") {
@@ -17,38 +25,62 @@ const OTPValidationPage = () => {
 
     useEffect(() => {
         const handleBeforeUnload = (event) => {
-            // Set a flag for the reload
-            sessionStorage.setItem("reloading", "true");
-
-            // Show a confirmation dialog
-            const message = "Are you sure you want to leave? All progress will be lost.";
-            event.returnValue = message; // Standard for most browsers
-            return message; // For supporting older browsers
+            // Customize the standard message (the exact message may not be shown in modern browsers)
+            event.preventDefault(); 
+            event.returnValue = ''; // Chrome requires returnValue to be set
         };
-
-        if (sessionStorage.getItem("reloading")) {
-            sessionStorage.removeItem("reloading");
-            const userConfirmed = window.confirm("Are you sure you want to leave? All progress will be lost.");
-            if (userConfirmed) {
-                navigate('/login');
-            } else {
-                // Optionally handle the case where user chooses not to navigate away
-            }
-        }
 
         window.addEventListener("beforeunload", handleBeforeUnload);
 
         return () => {
             window.removeEventListener("beforeunload", handleBeforeUnload);
         };
-    }, [navigate]);
+    }, []);
 
     const handleOTPValidation = async () => {
-        // Existing validation logic here...
+        try {
+            const response = await fetch('http://localhost:8080/otp/validate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userEmail: user.userEmail, otp: otp }),
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                if (responseData.isValid) {
+                    if (purpose === 'login') {
+                        navigate('/dashboard'); 
+                    } else {
+                        navigate('/successfulSignUp')
+                    }
+                } else {
+                    setIsInvalidOTP(true);
+                }
+            } else {
+                setIsInvalidOTP(true);
+            }
+        } catch (error) {
+            console.error('Error validating OTP:', error);
+            setIsInvalidOTP(true);
+        }
     };
 
     const handleResendOTP = async () => {
-        console.log('Resend OTP requested');
+        try {
+            const response = await fetch('http://localhost:8080/otp/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userEmail: user.userEmail }),
+            });
+
+            if (response.ok) {
+                console.log('OTP resent successfully');
+            } else {
+                console.error('Failed to resend OTP');
+            }
+        } catch (error) {
+            console.error('Error resending OTP:', error);
+        }
     };
 
     const isSubmitDisabled = otp.trim() === '';
@@ -64,7 +96,7 @@ const OTPValidationPage = () => {
                     value={otp}
                     onChange={(e) => setOTP(e.target.value)}
                 />
-                {isInvalidOTP && <p className={styles.error}>Invalid OTP. Please try again.</p>}
+                {isInvalidOTP && <p className={styles.error}>Invalid OTP. Please try again or resend OTP.</p>}
                 <button onClick={handleOTPValidation} className={styles.button} disabled={isSubmitDisabled}>Submit</button>
                 <button onClick={handleResendOTP} className={styles.button}>Resend OTP</button>
             </div>

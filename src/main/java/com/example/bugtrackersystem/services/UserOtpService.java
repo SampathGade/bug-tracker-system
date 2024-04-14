@@ -49,7 +49,7 @@ public class UserOtpService {
     }
 
     public boolean validateOtp(String userEmail, String otp) {
-        UserOtp userOtp = userOtpRepository.findByUserEmail(userEmail);
+        UserOtp userOtp = userOtpRepository.findByUserEmailAndActive(userEmail, true);
         if (userOtp != null && userOtp.isActive() && userOtp.getOtp().equals(otp)) {
             LocalDateTime currentTime = LocalDateTime.now();
             if (currentTime.isBefore(userOtp.getExpiresAt())) {

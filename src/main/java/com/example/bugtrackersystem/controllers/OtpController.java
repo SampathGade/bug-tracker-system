@@ -41,6 +41,7 @@ public class OtpController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid OTP");
             }
         } catch (Exception e) {
+            System.out.println(e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

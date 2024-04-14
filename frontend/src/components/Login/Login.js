@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../../Auth/AuthContext';
 import styles from './login.module.css'; 
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');  // State for storing error message
+    const [errorMessage, setErrorMessage] = useState(''); 
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleLogin = async () => {
@@ -20,7 +22,21 @@ const Login = () => {
     
             if (response.ok) {
                 const responseData = await response.json();
-                navigate('/otp-validation', { state: { purpose: 'login', response: responseData } });
+                login(responseData);
+                // Attempt to generate OTP before navigation
+                const otpResponse = await fetch('http://localhost:8080/otp/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ userEmail: email }), // Assuming OTP is based on email
+                });
+
+                if (otpResponse.ok) {
+                    navigate('/otp-validation', { state: { purpose: 'login' } });
+                } else {
+                    setErrorMessage('Issue with OTP generation. Please try again.');
+                }
             } else {
                 if (response.status === 401) {
                     setErrorMessage('Invalid email or password. Please try again.');

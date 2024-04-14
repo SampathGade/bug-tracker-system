@@ -1,4 +1,5 @@
 package com.example.bugtrackersystem.services;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -7,6 +8,8 @@ import java.util.Random;
 
 import com.example.bugtrackersystem.Entity.UserOtp;
 import com.example.bugtrackersystem.repositories.UserOtpRepository;
+import com.example.bugtrackersystem.services.emailSender.EmailService;
+import com.example.bugtrackersystem.services.emailSender.EmailServiceImpl;
 
 @Service
 public class UserOtpService {
@@ -16,8 +19,12 @@ public class UserOtpService {
 
     private final UserOtpRepository userOtpRepository;
 
-    public UserOtpService(UserOtpRepository userOtpRepository) {
+    private EmailService emailService;
+
+    @Autowired
+    public UserOtpService(UserOtpRepository userOtpRepository, EmailServiceImpl emailService) {
         this.userOtpRepository = userOtpRepository;
+        this.emailService = emailService;
     }
 
     public UserOtp generateOtp(String userEmail) {
@@ -29,6 +36,7 @@ public class UserOtpService {
         LocalDateTime createdAt = LocalDateTime.now();
         LocalDateTime expiresAt = createdAt.plusMinutes(otpExpiryMinutes);
         UserOtp userOtp = new UserOtp(null,userEmail, otp, createdAt, expiresAt, true);
+//        emailService.sendMailToUser(userEmail, otp);
         return userOtpRepository.save(userOtp);
     }
 

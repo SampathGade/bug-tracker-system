@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import styles from './login.module.css'; 
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');  // State for storing error message
     const navigate = useNavigate();
 
     const handleLogin = async () => {
@@ -22,26 +24,33 @@ const Login = () => {
             response.role = "admin"
             
             if (response.status === 200) {
-                // Redirect to OTP validation page
-                navigate('/otp-validation', { state: { purpose: 'login',response: response} });
+                // Navigate to OTP validation or another page on successful login
+                navigate('/otp-validation', { state: { purpose: 'login', response: response } });
             } else if (response.status === 401) {
-                // Redirect to InvalidCredentials page
-                navigate('/invalid-credentials');
+                // Set the error message for invalid credentials
+                setErrorMessage('Invalid email or password. Please try again.');
             }
         } catch (error) {
             console.error('Error occurred while logging in:', error);
+            // Set the error message for network or other errors
+            setErrorMessage('An error occurred. Please try again later.');
         }
     };
 
-    // Function to check if email and password are not empty
     const isLoginDisabled = email.trim() === '' || password.trim() === '';
 
     return (
-        <div>
-            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <button onClick={handleLogin} disabled={isLoginDisabled}>Login</button>
-            <p>Don't have an account? <Link to="/signup">Sign up here</Link></p>
+        <div className={styles.container}>
+            <div className={styles.loginForm}>
+                <h2 className={styles.title}>Login to Your Account</h2>
+                {errorMessage && <p className={styles.error}>{errorMessage}</p>} 
+                <input type="email" placeholder="Email" className={styles.input} value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input type="password" placeholder="Password" className={styles.input} value={password} onChange={(e) => setPassword(e.target.value)} />
+                <button onClick={handleLogin} className={styles.button} disabled={isLoginDisabled}>Login</button>
+                <p className={styles.signupText}>
+                    Don't have an account? <Link to="/signup" className={styles.signupLink}>Sign up here</Link>
+                </p>
+            </div>
         </div>
     );
 };

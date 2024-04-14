@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import styles from './OTPValidation.module.css'; // Import the CSS module
 
 const OTPValidationPage = () => {
     const [otp, setOTP] = useState('');
@@ -71,12 +72,14 @@ const OTPValidationPage = () => {
     const isSubmitDisabled = otp.trim() === '';
 
     return (
-        <div>
-            <h1>OTP Validation Page</h1>
-            <input type="text" placeholder="Enter OTP" value={otp} onChange={(e) => setOTP(e.target.value)} />
-            {isInvalidOTP && <p style={{ color: 'red' }}>Invalid OTP. Please try again.</p>} {/* Conditional rendering of warning message */}
-            <button onClick={handleOTPValidation} disabled={isSubmitDisabled}>Submit</button>
-            <button onClick={handleResendOTP}>Resend OTP</button> {/* Button to resend OTP */}
+        <div className={styles.container}>
+            <div className={styles.otpForm}>
+                <h2 className={styles.title}>OTP Validation</h2>
+                <input type="text" placeholder="Enter OTP" className={styles.input} value={otp} onChange={(e) => setOTP(e.target.value)} />
+                {isInvalidOTP && <p className={styles.error}>Invalid OTP. Please try again.</p>}
+                <button onClick={handleOTPValidation} className={styles.button} disabled={isSubmitDisabled}>Submit</button>
+                <button onClick={handleResendOTP} className={styles.button}>Resend OTP</button>
+            </div>
         </div>
     );
 };

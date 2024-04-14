@@ -12,6 +12,7 @@ import CreateProject from './components/Dashboards/CreateProject/CreateProject';
 import CreateBug from './components/Dashboards/CreateBug/CreateBug';
 import ViewBugs from './components/Dashboards/ViewBug/ViewBug';
 import ViewProjects from './components/Dashboards/ViewProjects/ViewProjects';
+import './App.css'
 function App() {
   return (
     <Router>

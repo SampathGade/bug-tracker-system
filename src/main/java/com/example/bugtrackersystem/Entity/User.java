@@ -20,6 +20,7 @@ public class User {
     private String role;
     private List<String> projects;
     private String password;
+    private String status;
 }
 
 

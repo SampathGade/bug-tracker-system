@@ -5,20 +5,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.bugtrackersystem.Entity.User;
+import com.example.bugtrackersystem.requests.AdminSignUpRequest;
 import com.example.bugtrackersystem.requests.LoginRequest;
 import com.example.bugtrackersystem.requests.SignUpRequest;
 import com.example.bugtrackersystem.services.UserService;
+import com.example.bugtrackersystem.services.UserServiceImpl;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
@@ -44,5 +48,21 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Invalid credentials"); // Authentication failed
         }
+    }
+
+    @PostMapping("/signupByAdmin")
+    public ResponseEntity<String> adminSignUp(@RequestBody AdminSignUpRequest adminSignUpRequest) {
+        try {
+            String userEmail = adminSignUpRequest.getUserEmail();
+            String role = adminSignUpRequest.getRole();
+
+            userService.createUserWithEmailAndRole(userEmail, role);
+
+            return ResponseEntity.ok("Completed admin onbaording ");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error completing admin sign up");
+        }
+
+        
     }
 }

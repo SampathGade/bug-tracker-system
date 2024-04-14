@@ -10,29 +10,26 @@ const Login = () => {
 
     const handleLogin = async () => {
         try {
-            // Make API call to validate credentials
-            // const response = await fetch('your_login_api_url', {
-            //     method: 'POST',
-            //     headers: {
-            //     'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({ email, password }),
-            // });
-
-            const response = {}
-            response.status = 200
-            response.role = "admin"
-            
-            if (response.status === 200) {
-                // Navigate to OTP validation or another page on successful login
-                navigate('/otp-validation', { state: { purpose: 'login', response: response } });
-            } else if (response.status === 401) {
-                // Set the error message for invalid credentials
-                setErrorMessage('Invalid email or password. Please try again.');
+            const response = await fetch('http://localhost:8080/user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userEmail: email, password }),
+            });
+    
+            if (response.ok) {
+                const responseData = await response.json();
+                navigate('/otp-validation', { state: { purpose: 'login', response: responseData } });
+            } else {
+                if (response.status === 401) {
+                    setErrorMessage('Invalid email or password. Please try again.');
+                } else {
+                    setErrorMessage('An error occurred. Please try again later.');
+                }
             }
         } catch (error) {
             console.error('Error occurred while logging in:', error);
-            // Set the error message for network or other errors
             setErrorMessage('An error occurred. Please try again later.');
         }
     };

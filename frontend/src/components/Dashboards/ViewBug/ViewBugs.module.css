@@ -1,0 +1,103 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    background-color: #f5f5f5; /* Soft gray background */
+    min-height: 100vh;
+  }
+  
+  .heading {
+    color: #333; /* Dark gray for heading */
+    font-family: 'Helvetica', sans-serif; /* Classic font */
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  
+  .bugsList {
+    width: 90%;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+  }
+  
+  .bugCard {
+    background-color: #ffffff;
+    border: 1px solid #ddd; /* Light border for separation */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .bugCard:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .label {
+    display: block;
+    margin-top: 5px;
+    color: #666; /* Slightly darker gray for labels */
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  .value {
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .button:hover {
+    background-color: #2980b9;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    width: 50%;
+    max-width: 600px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    transition: opacity 300ms ease-in-out;
+  }
+  
+  .buttonContainer {
+    display: flex;
+    justify-content: flex-end; /* Align button to the right */
+    width: 90%;
+    max-width: 1000px;
+    margin-bottom: 20px; /* Add some space below the button */
+  }
+  

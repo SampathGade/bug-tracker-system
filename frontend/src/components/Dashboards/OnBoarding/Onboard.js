@@ -1,19 +1,62 @@
-// OnboardPage.js
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import styles from './OnboardPerson.module.css'; // Import the styles
 
-const OnboardPage = () => {
+const OnboardPerson = () => {
+    const [email, setEmail] = useState('');
+    const [role, setRole] = useState('');
+    const [requests, setRequests] = useState([
+        { email: "example1@example.com", role: "Developer", approved: true },
+        { email: "example2@example.com", role: "Product Manager", approved: false },
+        { email: "example3@example.com", role: "QA Analyst", approved: false },
+    ]);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const newRequest = { email, role, approved: false };
+        setRequests([...requests, newRequest]);
+        setEmail('');
+        setRole('');
+    };
+
     return (
-        <div>
-            <h2>Onboard Page</h2>
-            <Link to="/reviewRequests">
-                <button>Review Requests</button>
-            </Link>
-            <Link to="/onboardPerson">
-                <button>Onboard a New Person</button>
-            </Link>
+        <div className={styles.container}>
+            <div className={styles.loginForm}>
+                <form onSubmit={handleSubmit} className={styles.form}>
+                    <div className={styles.title}>Onboard a New Person</div>
+                    <label>
+                        Email:
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            className={styles.input}
+                            required
+                        />
+                    </label>
+                    <label>
+                        Role:
+                        <input
+                            type="text"
+                            value={role}
+                            onChange={e => setRole(e.target.value)}
+                            className={styles.input}
+                            required
+                        />
+                    </label>
+                    <button type="submit" className={styles.button}>Submit</button>
+                </form>
+
+                <h2 className={styles.title}>Onboarding Requests</h2>
+                <ul className={styles.requestList}>
+                    {requests.map((request, index) => (
+                        <li key={index} className={styles.requestItem}>
+                            Email: {request.email}, Role: {request.role}, Approved: {request.approved ? 'Yes' : 'No'}
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 };
 
-export default OnboardPage;
+export default OnboardPerson;

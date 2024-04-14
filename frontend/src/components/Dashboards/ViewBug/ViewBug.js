@@ -1,66 +1,70 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import Modal from 'react-modal';
+import CreateBug from './CreateBug';
+import styles from './ViewBugs.module.css';
+
+Modal.setAppElement('#root');
 
 const ViewBugs = () => {
     const [bugs, setBugs] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editableBug, setEditableBug] = useState(null);
 
     useEffect(() => {
-        fetchData(currentPage);
-    }, [currentPage]);
+        fetchData();
+    }, []);
 
-    const fetchData = async (page) => {
-        try {
-            // Make API call to fetch bugs for the specified page
-            // const response = await fetch(`YOUR_BUGS_API_URL?page=${page}`);
-            // const data = await response.json();
-            
-            // Simulated data for testing
-            const data = [
-                { bugName: 'Bug 1', bugType: 'Type 1', currentStatus: 'Open', assignee: 'User A' },
-                { bugName: 'Bug 2', bugType: 'Type 2', currentStatus: 'Closed', assignee: 'User B' },
-                { bugName: 'Bug 3', bugType: 'Type 3', currentStatus: 'Open', assignee: 'User C' },
-                // More bug objects...
-            ];
+    const fetchData = () => {
+        const data = [
+            { id: 1, bugName: 'Bug 1', bugType: 'Type 1', currentStatus: 'Open', assignee: 'User A', expectedOutput: '', currentOutput: '' },
+            { id: 2, bugName: 'Bug 2', bugType: 'Type 2', currentStatus: 'Closed', assignee: 'User B', expectedOutput: '', currentOutput: '' },
+            { id: 3, bugName: 'Bug 3', bugType: 'Type 3', currentStatus: 'Open', assignee: 'User C', expectedOutput: '', currentOutput: '' },
+        ];
+        setBugs(data);
+    };
 
-            setBugs(data);
-            setTotalPages(5); // Assuming there are 5 pages in total
-        } catch (error) {
-            console.error('Error fetching bugs:', error);
+    const handleCreateOrEditBug = (bugData, id) => {
+        if (id) {
+            setBugs(bugs.map(bug => bug.id === id ? { ...bug, ...bugData } : bug));
+        } else {
+            setBugs([...bugs, { ...bugData, id: bugs.length + 1 }]);
         }
+        setIsModalOpen(false);
     };
 
-    const handleNextPage = () => {
-        setCurrentPage((prevPage) => prevPage + 1);
-    };
-
-    const handlePrevPage = () => {
-        setCurrentPage((prevPage) => prevPage - 1);
+    const openEditModal = (bug) => {
+        setEditableBug(bug);
+        setIsModalOpen(true);
     };
 
     return (
-        <div>
-            <h2>View Bugs</h2>
-            <div>
+        <div className={styles.container}>
+            <h2 className={styles.heading}>View Bugs</h2>
+            <div className={styles.buttonContainer}>
+                <button onClick={() => { setEditableBug(null); setIsModalOpen(true); }} className={styles.button}>Create New Bug</button>
+            </div>
+            <div className={styles.bugsList}>
                 {bugs.map((bug, index) => (
-                    <div key={index}>
-                        <p>Bug Name: {bug.bugName}</p>
-                        <p>Bug Type: {bug.bugType}</p>
-                        <p>Current Status: {bug.currentStatus}</p>
-                        <p>Assignee: {bug.assignee}</p>
-                        <button>Change Assignee</button>
+                    <div key={index} className={styles.bugCard}>
+                        <p><strong>Bug Name:</strong> {bug.bugName}</p>
+                        <p><strong>Bug Type:</strong> {bug.bugType}</p>
+                        <p><strong>Current Status:</strong> {bug.currentStatus}</p>
+                        <p><strong>Assignee:</strong> {bug.assignee}</p>
+                        <button onClick={() => openEditModal(bug)} className={styles.button}>Edit</button>
                     </div>
                 ))}
             </div>
-            <div>
-                <button onClick={handlePrevPage} disabled={currentPage === 1}>Previous</button>
-                <span>{currentPage} / {totalPages}</span>
-                <button onClick={handleNextPage} disabled={currentPage === totalPages}>Next</button>
-            </div>
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={() => setIsModalOpen(false)}
+                className={styles.modal}
+                overlayClassName={styles.overlay}
+            >
+                <CreateBug onBugCreated={handleCreateOrEditBug} closeModal={() => setIsModalOpen(false)} bug={editableBug} />
+            </Modal>
         </div>
-    );
+      );
+      
 };
 
 export default ViewBugs;

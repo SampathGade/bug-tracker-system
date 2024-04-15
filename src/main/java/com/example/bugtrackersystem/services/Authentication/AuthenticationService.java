@@ -28,7 +28,7 @@ public class AuthenticationService {
 
     public boolean checkCredentials(String email, String password) {
         User user = userRepository.findByEmail(email);
-        if (user != null && (password.equals(user.getPassword()))) {
+        if (user != null && (password.equals(user.getPassword())) && ("Onboarded".equalsIgnoreCase(user.getStatus()))) {
             logger.info("Credentials are valid for email: {}", email);
             return true;
         }
@@ -46,16 +46,16 @@ public class AuthenticationService {
         logger.info("OTP generated and sent to email: {}", email);
     }
 
-    public boolean validateOtp(String email, String otp) {
+    public User validateOtp(String email, String otp) {
         User user = userRepository.findByEmail(email);
         if (user != null && otp.equals(user.getOtp()) && user.getOtpExpiry().isAfter(LocalDateTime.now())) {
             user.setOtp(null);
             userRepository.save(user);
             logger.info("OTP validated for email: {}", email);
-            return true;
+            return user;
         }
         logger.warn("Invalid OTP attempt for email: {}", email);
-        return false;
+        return user;
     }
 
     public void createUser(String email , String password, String role){

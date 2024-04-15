@@ -51,7 +51,9 @@ const Login = () => {
         });
 
         if (response.ok) {
-            localStorage.setItem('user', JSON.stringify({ email }));
+            const userData = await response.json();  // Assuming the API sends the user data as JSON
+            localStorage.setItem('user', JSON.stringify(userData)); 
+            console.log(localStorage.getItem('user'));
             // window.location.href = '/dashboard';
         } else {
             setErrorMessage(processErrorMessage(response.status));

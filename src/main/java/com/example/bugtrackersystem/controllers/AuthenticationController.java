@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.example.bugtrackersystem.entity.User;
 import com.example.bugtrackersystem.requests.LoginRequest;
 import com.example.bugtrackersystem.requests.OtpVerificationRequest;
 import com.example.bugtrackersystem.requests.SignUpRequest;
@@ -40,11 +41,11 @@ public class AuthenticationController {
     }
 
     @PostMapping("/verify-otp")
-    public ResponseEntity<String> verifyOtp(@RequestBody OtpVerificationRequest otpRequest) {
+    public ResponseEntity<?> verifyOtp(@RequestBody OtpVerificationRequest otpRequest) {
         try {
-            boolean isValid = authService.validateOtp(otpRequest.getEmail(), otpRequest.getOtp());
-            if (isValid) {
-                return ResponseEntity.ok("Login successful.");
+            User user = authService.validateOtp(otpRequest.getEmail(), otpRequest.getOtp());
+            if (user != null) {
+                return ResponseEntity.ok(user);
             } else {
                 logger.error("Unauthorized OTP attempt for user: {}", otpRequest.getEmail());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized: Invalid or expired OTP.");

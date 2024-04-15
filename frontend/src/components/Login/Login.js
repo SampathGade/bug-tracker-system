@@ -1,71 +1,108 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../Auth/AuthContext';
-import styles from './login.module.css'; 
+import './Login.css'; // Ensure this points to your updated CSS file path
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState(''); 
-    const { login } = useAuth();
-    const navigate = useNavigate();
+    const [otp, setOtp] = useState('');
+    const [showOtpInput, setShowOtpInput] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const handleLogin = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/user/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userEmail: email, password }),
-            });
-    
-            if (response.ok) {
-                const responseData = await response.json();
-                login(responseData);
-                // Attempt to generate OTP before navigation
-                const otpResponse = await fetch('http://localhost:8080/otp/generate', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ userEmail: email }), // Assuming OTP is based on email
-                });
-
-                if (otpResponse.ok) {
-                    navigate('/otp-validation', { state: { purpose: 'login' } });
-                } else {
-                    setErrorMessage('Issue with OTP generation. Please try again.');
-                }
-            } else {
-                if (response.status === 401) {
-                    setErrorMessage('Invalid email or password. Please try again.');
-                } else {
-                    setErrorMessage('An error occurred. Please try again later.');
-                }
-            }
-        } catch (error) {
-            console.error('Error occurred while logging in:', error);
-            setErrorMessage('An error occurred. Please try again later.');
+    const processErrorMessage = (error) => {
+        switch (error.status) {
+            case 401:
+                return "Credentials invalid. Please try again.";
+            case 404:
+                return "Error: The server endpoint was not found.";
+            case 500:
+                return "Error: Server error. Please try again later.";
+            default:
+                return "An unexpected error occurred.";
         }
     };
 
-    const isLoginDisabled = email.trim() === '' || password.trim() === '';
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        // Replace with your actual API endpoint
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        if (response.ok) {
+            setShowOtpInput(true);
+            setErrorMessage('');
+        } else {
+            const error = await response.json();
+            setErrorMessage(processErrorMessage(error));
+        }
+    };
+
+    const verifyOtp = async (e) => {
+        e.preventDefault();
+        // Replace with your actual API endpoint
+        const response = await fetch('/api/verify-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, otp })
+        });
+
+        if (response.ok) {
+            // Save authenticated user
+            localStorage.setItem('user', JSON.stringify({ email }));
+            // Redirect to dashboard
+            window.location.href = '/dashboard';
+        } else {
+            const error = await response.json();
+            setErrorMessage(processErrorMessage(error));
+        }
+    };
 
     return (
-        <div className={styles.container}>
-            <div className={styles.loginForm}>
-                <h2 className={styles.title}>Login to Your Account</h2>
-                {errorMessage && <p className={styles.error}>{errorMessage}</p>} 
-                <input type="email" placeholder="Email" className={styles.input} value={email} onChange={(e) => setEmail(e.target.value)} />
-                <input type="password" placeholder="Password" className={styles.input} value={password} onChange={(e) => setPassword(e.target.value)} />
-                <button onClick={handleLogin} className={styles.button} disabled={isLoginDisabled}>Login</button>
-                <p className={styles.signupText}>
-                    Don't have an account? <Link to="/signup" className={styles.signupLink}>Sign up here</Link>
-                </p>
+        <div className="login-container">
+            <div className="login-form">
+                {errorMessage && <div className="error-message">{errorMessage}</div>}
+                {!showOtpInput ? (
+                    <form onSubmit={handleLogin}>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Enter email"
+                            required
+                        />
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="Password"
+                            required
+                        />
+                        <button
+                            type="submit"
+                            disabled={!email || !password}
+                        >
+                            Login
+                        </button>
+                    </form>
+                ) : (
+                    <form onSubmit={verifyOtp}>
+                        <input
+                            type="text"
+                            value={otp}
+                            onChange={(e) => setOtp(e.target.value)}
+                            placeholder="Enter OTP"
+                            required
+                        />
+                        <button type="submit" disabled={!otp.trim()}> {/* Disabled until OTP is entered */}
+                            Verify OTP
+                        </button>
+                    </form>
+                )}
             </div>
         </div>
     );
-};
+}
 
 export default Login;

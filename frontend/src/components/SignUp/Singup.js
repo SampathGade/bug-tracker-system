@@ -9,6 +9,7 @@ const SignUp = () => {
     const [showOtpInput, setShowOtpInput] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');  // State to handle success message
 
     const handleSignUp = async (e) => {
         e.preventDefault();
@@ -39,8 +40,10 @@ const SignUp = () => {
         });
 
         if (response.ok) {
-            localStorage.setItem('user', JSON.stringify({ email, role }));
-            window.location.href = '/login'; 
+            setSuccessMessage("Sign Up request raised successfully!");
+            setTimeout(() => {  // Navigate to login after showing success message
+                window.location.href = '/login';
+            }, 3000);  // Delay for 3 seconds before redirecting
         } else {
             const errorText = await response.text();
             setErrorMessage(errorText || "OTP verification failed. Please try again.");
@@ -50,9 +53,10 @@ const SignUp = () => {
 
     return (
         <div className="signup-container">
-        <h1>Sign Up</h1> 
+            <h1>Sign Up</h1> 
             <div className="signup-form">
                 {errorMessage && <div className="error-message">{errorMessage}</div>}
+                {successMessage && <div className="success-message">{successMessage}</div>}
                 {!showOtpInput ? (
                     <form onSubmit={handleSignUp}>
                         <input

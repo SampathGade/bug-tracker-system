@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +59,7 @@ public class AuthenticationService {
         return user;
     }
 
-    public void createUser(String email , String password, String role){
+    public void createUser(String email, String password, String role) {
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
@@ -67,5 +68,21 @@ public class AuthenticationService {
         userRepository.save(user);
         //need to write logic to send the request Email to admin
     }
+
+    public List<User> getOnboardingPendingUsers() {
+        return userRepository.findByStatus("Review Pending");
+    }
+
+    public void updateRequestStatus(String email, String role, String status) {
+        User user = userRepository.findByEmail(email);
+        user.setRole(role);
+        if ("accept".equalsIgnoreCase(status)){
+           user.setStatus("Onboarded");
+           userRepository.save(user);
+        } else {
+            userRepository.delete(user);
+        }
+    }
+
 }
 

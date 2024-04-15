@@ -1,5 +1,6 @@
 package com.example.bugtrackersystem.controllers;
 
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import com.example.bugtrackersystem.entity.User;
 import com.example.bugtrackersystem.requests.LoginRequest;
 import com.example.bugtrackersystem.requests.OtpVerificationRequest;
 import com.example.bugtrackersystem.requests.SignUpRequest;
+import com.example.bugtrackersystem.requests.UpdateStatusRequest;
 import com.example.bugtrackersystem.services.Authentication.AuthenticationService;
 
 @RestController
@@ -57,7 +59,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> login(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<String> signup(@RequestBody SignUpRequest signUpRequest) {
         try {
                 authService.createUser(signUpRequest.getEmail(), signUpRequest.getPassword(),signUpRequest.getRole());
                 authService.generateAndSendOtp(signUpRequest.getEmail());
@@ -66,5 +68,27 @@ public class AuthenticationController {
             logger.error("Internal server error during sing-up process for user: {}, error: {}", signUpRequest.getEmail(), e.getMessage());
             return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
         }
+    }
+
+    @GetMapping("/pending")
+    public ResponseEntity<?> pending() {
+        try {
+            return ResponseEntity.ok(authService.getOnboardingPendingUsers());
+        } catch (Exception e) {
+            logger.error("Internal server error during getting pending requests , error: {}",e.getMessage());
+            return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
+        }
+    }
+
+    @PostMapping("/updateStatus")
+    public ResponseEntity<?> processRequests(@RequestBody UpdateStatusRequest updateStatusRequest) {
+        try{
+            authService.updateRequestStatus(updateStatusRequest.getEmail(), updateStatusRequest.getRole(), updateStatusRequest.getStatus());
+            return ResponseEntity.ok().body("Pending request processed");
+        } catch (Exception e){
+            logger.error(e.getMessage());
+            return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
+        }
+
     }
 }

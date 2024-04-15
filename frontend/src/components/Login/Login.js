@@ -10,8 +10,8 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
 
     const processErrorMessage = (error) => {
-        switch (error.status) {
-            case 401:
+        switch (error) {
+            case 401:    
                 return "Credentials invalid. Please try again.";
             case 404:
                 return "Error: The server endpoint was not found.";
@@ -54,8 +54,7 @@ const Login = () => {
             localStorage.setItem('user', JSON.stringify({ email }));
             // window.location.href = '/dashboard';
         } else {
-            const error = await response.json();
-            setErrorMessage(processErrorMessage(error));
+            setErrorMessage(processErrorMessage(response.status));
         }
         setLoading(false);
     };
@@ -96,7 +95,7 @@ const Login = () => {
                             placeholder="Enter OTP"
                             required
                         />
-                        <button type="submit" disabled={!otp.trim() || loading}>
+                        <button type="submit" disabled={!otp || loading}>
                             Verify OTP
                         </button>
                     </form>

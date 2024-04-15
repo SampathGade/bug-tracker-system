@@ -42,15 +42,14 @@ public class AuthenticationService {
         user.setOtp(otp);
         user.setOtpExpiry(LocalDateTime.now().plusMinutes(10));
         userRepository.save(user);
-        emailService.sendOtpEmail(email, otp);
+//        emailService.sendOtpEmail(email, otp);
         logger.info("OTP generated and sent to email: {}", email);
     }
 
     public boolean validateOtp(String email, String otp) {
         User user = userRepository.findByEmail(email);
-        if (user != null && user.getOtp().equals(otp) && user.getOtpExpiry().isAfter(LocalDateTime.now())) {
+        if (user != null && otp.equals(user.getOtp()) && user.getOtpExpiry().isAfter(LocalDateTime.now())) {
             user.setOtp(null);
-            user.setOtpExpiry(null);
             userRepository.save(user);
             logger.info("OTP validated for email: {}", email);
             return true;

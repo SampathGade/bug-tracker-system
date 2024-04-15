@@ -79,6 +79,7 @@ public class AuthenticationService {
         if ("accept".equalsIgnoreCase(status)){
            user.setStatus("Onboarded");
            userRepository.save(user);
+           // need to send Email here as well
         } else {
             userRepository.delete(user);
         }

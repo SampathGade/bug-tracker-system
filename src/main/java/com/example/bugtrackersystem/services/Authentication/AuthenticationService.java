@@ -57,5 +57,15 @@ public class AuthenticationService {
         logger.warn("Invalid OTP attempt for email: {}", email);
         return false;
     }
+
+    public void createUser(String email , String password, String role){
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setRole(role);
+        user.setStatus("Review Pending");
+        userRepository.save(user);
+        //need to write logic to send the request Email to admin
+    }
 }
 

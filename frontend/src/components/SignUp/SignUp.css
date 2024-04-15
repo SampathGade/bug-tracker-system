@@ -1,0 +1,73 @@
+/* SignUp.css */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4; /* Light gray background for the whole page */
+    background-image: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%); /* A blue gradient background */
+}
+
+h1 {
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    text-align: center;
+    color: #333; /* Example text color */
+}
+
+.signup-form {
+    background: #ffffff; /* White background for the form */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+    width: 100%;
+    max-width: 400px;
+    transition: transform 0.3s ease-in-out; /* Smooth transform on focus */
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s ease-in-out; /* Smooth transition for border color */
+}
+
+input:focus, select:focus {
+    border-color: #5d93e1; /* Blue border on focus */
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    border: none;
+    background-color: #5d93e1; /* Matching blue for button */
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease; /* Smooth background color change and transform */
+}
+
+button:hover {
+    background-color: #417cb8; /* Darker blue on hover */
+    transform: translateY(-2px); /* Slight raise effect on hover */
+}
+
+button:disabled {
+    background-color: #cccccc; /* Grey out the button when disabled */
+    cursor: not-allowed;
+}
+
+.error-message {
+    color: #b33a3a;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    text-align: center;
+}

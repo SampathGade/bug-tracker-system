@@ -61,6 +61,7 @@ const Login = () => {
 
     return (
         <div className="login-container">
+        <h1>Login</h1> 
             <div className="login-form">
                 {errorMessage && <div className="error-message">{errorMessage}</div>}
                 {!showOtpInput ? (
@@ -100,6 +101,7 @@ const Login = () => {
                         </button>
                     </form>
                 )}
+                <button onClick={() => window.location.href='/signup'}>Sign Up</button>
             </div>
         </div>
     );

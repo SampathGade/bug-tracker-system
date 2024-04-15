@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.example.bugtrackersystem.requests.LoginRequest;
 import com.example.bugtrackersystem.requests.OtpVerificationRequest;
+import com.example.bugtrackersystem.requests.SignUpRequest;
 import com.example.bugtrackersystem.services.Authentication.AuthenticationService;
 
 @RestController
@@ -50,6 +51,18 @@ public class AuthenticationController {
             }
         } catch (Exception e) {
             logger.error("Internal server error during OTP verification for user: {}, error: {}", otpRequest.getEmail(), e.getMessage());
+            return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
+        }
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<String> login(@RequestBody SignUpRequest signUpRequest) {
+        try {
+                authService.createUser(signUpRequest.getEmail(), signUpRequest.getPassword(),signUpRequest.getRole());
+                authService.generateAndSendOtp(signUpRequest.getEmail());
+                return ResponseEntity.ok("Onboarding request successful");
+        } catch (Exception e) {
+            logger.error("Internal server error during sing-up process for user: {}, error: {}", signUpRequest.getEmail(), e.getMessage());
             return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
         }
     }

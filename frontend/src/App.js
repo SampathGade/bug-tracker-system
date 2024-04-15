@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './components/Login/Login';
-import OTPComponent from './components/Login/OTPValidator';
 import SignUpPage from './components/SignUp/Singup';
 import SuccessfulSignUp from './components/SignUp/SuccessfulSignUp';
 import Dashboard from './components/Dashboards/Dashboard';
@@ -18,7 +17,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/otp-validation" element={<OTPComponent />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/succesfulSignUp" element={<SuccessfulSignUp />} />
         <Route path="/dashboard" element={<Dashboard />} />

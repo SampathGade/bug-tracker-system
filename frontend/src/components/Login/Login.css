@@ -11,6 +11,14 @@
     background-color: #7F7FD5; /* Updated background color for the page */
     background-image: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5); /* Gradient background */
   }
+
+  h1 {
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    text-align: center;
+    color: #333; /* Example text color */
+}
   
   .login-container {
     display: flex;

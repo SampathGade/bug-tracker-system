@@ -1,25 +1,32 @@
 spring:
   data:
     mongodb:
-      host: mongodb://localhost:27017
-      database: yourDatabaseName
-
+      host: localhost
+      port: 27017
+      database: Bug-Tracker
   mail:
     host: smtp.gmail.com
-    port: 587
-    username: your-email@gmail.com
-    password: your-email-password
+    port: 465
+    username: drakedraganeel@gmail.com
+    password: your-app-password
+    protocol: smtps  # Notice 'smtps' for secure SMTP
     properties:
       mail:
         smtp:
           auth: true
-          starttls:
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: false
+        smtps:
+          ssl:
             enable: true
-
-  security:
-    user:
-      name: admin
-      password: admin
-
+          connectiontimeout: 5000  # Timeout in milliseconds
+          timeout: 5000            # Socket read timeout
+          writetimeout: 5000
+logging:
+    level:
+      org.springframework.mail: DEBUG
+      com.sun.mail: DEBUG
 server:
   port: 8080

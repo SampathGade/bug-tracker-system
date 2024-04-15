@@ -13,16 +13,12 @@ public class EmailSenderImpl implements EmailSender {
 
     public void sendOtpEmail(String to, String otp) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("your-email@gmail.com");  // Same as your `spring.mail.username`
+        message.setFrom("drakedraganeel@gmail.com");  // Same as your `spring.mail.username`
         message.setTo(to);
-        message.setSubject("Your OTP");
+        message.setSubject("Otp for bug tracker");
         message.setText("Here is your OTP for login: " + otp);
+        mailSender.send(message);
+        System.out.println("OTP email sent successfully!");
 
-        try {
-            mailSender.send(message);
-            System.out.println("OTP email sent successfully!");
-        } catch (Exception e) {
-            System.err.println("Failed to send email: " + e.getMessage());
-        }
     }
 }

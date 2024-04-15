@@ -7,6 +7,7 @@ const Login = () => {
     const [otp, setOtp] = useState('');
     const [showOtpInput, setShowOtpInput] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const processErrorMessage = (error) => {
         switch (error.status) {
@@ -23,8 +24,8 @@ const Login = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        // Replace with your actual API endpoint
-        const response = await fetch('/api/login', {
+        setLoading(true);
+        const response = await fetch('http://localhost:8080/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password })
@@ -37,26 +38,26 @@ const Login = () => {
             const error = await response.json();
             setErrorMessage(processErrorMessage(error));
         }
+        setLoading(false);
     };
 
     const verifyOtp = async (e) => {
         e.preventDefault();
-        // Replace with your actual API endpoint
-        const response = await fetch('/api/verify-otp', {
+        setLoading(true);
+        const response = await fetch('http://localhost:8080/auth/verify-otp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, otp })
         });
 
         if (response.ok) {
-            // Save authenticated user
             localStorage.setItem('user', JSON.stringify({ email }));
-            // Redirect to dashboard
-            window.location.href = '/dashboard';
+            // window.location.href = '/dashboard';
         } else {
             const error = await response.json();
             setErrorMessage(processErrorMessage(error));
         }
+        setLoading(false);
     };
 
     return (
@@ -81,7 +82,7 @@ const Login = () => {
                         />
                         <button
                             type="submit"
-                            disabled={!email || !password}
+                            disabled={!email || !password || loading}
                         >
                             Login
                         </button>
@@ -95,7 +96,7 @@ const Login = () => {
                             placeholder="Enter OTP"
                             required
                         />
-                        <button type="submit" disabled={!otp.trim()}> {/* Disabled until OTP is entered */}
+                        <button type="submit" disabled={!otp.trim() || loading}>
                             Verify OTP
                         </button>
                     </form>
@@ -103,6 +104,6 @@ const Login = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Login;

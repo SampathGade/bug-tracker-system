@@ -1,19 +1,25 @@
 spring:
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: Bug-Tracker
+      host: mongodb://localhost:27017
+      database: yourDatabaseName
+
   mail:
     host: smtp.gmail.com
     port: 587
     username: your-email@gmail.com
-    password: your-password
+    password: your-email-password
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
-email:
-  sender: your-email@gmail.com
+
+  security:
+    user:
+      name: admin
+      password: admin
+
+server:
+  port: 8080

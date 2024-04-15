@@ -1,0 +1,28 @@
+package com.example.bugtrackersystem.entity;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Document(collection = "userDetails")  // Specifies the collection name in MongoDB
+@Data
+@NoArgsConstructor
+public class User {
+    @Id
+    private String id;
+
+    @Indexed(unique = true)  // Ensures that the email is unique across all documents in the users collection
+    private String email;
+
+    private String password; // This should ideally be stored as a hashed value
+    private String otp;
+    private LocalDateTime otpExpiry;
+    private String role;
+    private String status;
+
+    // Additional constructors and methods can be added as needed
+}
+

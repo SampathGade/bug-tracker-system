@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Dashboard.css'; // Make sure this is the path to your CSS file
 
 // Import components
-import OnboardPerson from './OnBoarding/Onboard';
+import PendingRequests from './OnBoarding/PendingRequests';
 import ViewBugs from './ViewBug/ViewBug';
 import ViewProjects from './ViewProjects/ViewProjects';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
@@ -41,7 +41,7 @@ const Dashboard = () => {
             case 'ViewBugs':
                 return <ViewBugs />;
             case 'OnboardPerson':
-                return <OnboardPerson />;
+                return <PendingRequests />;
             case 'ViewProjects':
                 return <ViewProjects />;
             default:

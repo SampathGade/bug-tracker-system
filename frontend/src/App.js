@@ -3,8 +3,7 @@ import Login from './components/Login/Login';
 import SignUpPage from './components/SignUp/Singup';
 import SuccessfulSignUp from './components/SignUp/SuccessfulSignUp';
 import Dashboard from './components/Dashboards/Dashboard';
-import OnboardPage from './components/Dashboards/OnBoarding/Onboard';
-import ReviewRequest from './components/Dashboards/OnBoarding/ReviewRequest';
+import ReviewRequest from './components/Dashboards/OnBoarding/PendingRequests';
 import CreateProject from './components/Dashboards/CreateProject/CreateProject';
 import CreateBug from './components/Dashboards/CreateBug/CreateBug';
 import ViewBugs from './components/Dashboards/ViewBug/ViewBug';
@@ -19,7 +18,6 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/succesfulSignUp" element={<SuccessfulSignUp />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/onboard" element={<OnboardPage />}/>
         <Route path="/reviewRequests" element={<ReviewRequest/>}/>
         <Route path="/createProject" element={<CreateProject/>}/>
         <Route path="/createBug" element={<CreateBug/>}/>

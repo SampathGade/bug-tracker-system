@@ -5,7 +5,6 @@ import SuccessfulSignUp from './components/SignUp/SuccessfulSignUp';
 import Dashboard from './components/Dashboards/Dashboard';
 import OnboardPage from './components/Dashboards/OnBoarding/Onboard';
 import ReviewRequest from './components/Dashboards/OnBoarding/ReviewRequest';
-import OnboardPerson from './components/Dashboards/OnBoarding/NewOnboard';
 import CreateProject from './components/Dashboards/CreateProject/CreateProject';
 import CreateBug from './components/Dashboards/CreateBug/CreateBug';
 import ViewBugs from './components/Dashboards/ViewBug/ViewBug';
@@ -22,7 +21,6 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/onboard" element={<OnboardPage />}/>
         <Route path="/reviewRequests" element={<ReviewRequest/>}/>
-        <Route path="/onboardPerson" element={<OnboardPerson/>}/>
         <Route path="/createProject" element={<CreateProject/>}/>
         <Route path="/createBug" element={<CreateBug/>}/>
         <Route path="/viewBug" element={<ViewBugs/>}/>

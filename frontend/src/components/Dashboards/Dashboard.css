@@ -1,54 +1,129 @@
-/* Navbar styles */
+/* Reset and basic styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f5f7; /* Subtle background color */
+}
+
+/* Top navigation bar with shadow for depth */
 .navbar {
-    display: flex;
-    justify-content: space-between; /* More balanced spacing */
-    align-items: center; /* Vertically center the buttons */
-    padding: 1rem;
-    background: linear-gradient(135deg, #89a7e0 0%, #a48ad4 100%); /* Softer blue and purple gradient */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  }
-  
-  /* Navbar button styles */
-  .navbarButton {
-    padding: 10px 15px; /* Slightly larger padding for a sharper look */
-    color: white;
-    background: linear-gradient(45deg, #857ad4 0%, #70a1ff 100%); /* Softer gradient for buttons */
-    border: none;
-    border-radius: 3px; /* Sharper radius */
-    cursor: pointer;
-    font-size: 16px;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for 3D effect */
-  }
-  
-  .navbarButton:hover, .navbarButton:focus {
-    transform: translateY(-2px); /* Subtle lift effect */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover for depth */
-  }
-  
-  /* Content area styles */
-  .content {
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.85);
-    border-radius: 10px;
-    margin-top: 10px;
-    transition: transform 0.3s ease-out; /* Smooth transition for content changes */
-  }
-  
-  /* Responsive adjustments for smaller screens */
-  @media (max-width: 480px) {
-    .navbar {
-        flex-direction: column; /* Stack the buttons vertically on small screens */
-        padding: 0.5rem;
-    }
-  
-    .navbarButton {
-        width: 100%; /* Full width buttons for better touch targets */
-        margin-bottom: 10px; /* Space out stacked buttons */
-    }
-  
-    .content {
-        padding: 10px; /* Less padding on smaller screens */
-    }
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  background-color: #0052cc; /* Deep blue similar to JIRA */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  padding: 0 20px;
+  align-items: center;
+  color: white;
+}
+
+/* Navigation items on the left */
+.navbar-left {
+  display: flex;
+}
+
+.navbarButton {
+  background: none;
+  border: none;
+  padding: 10px 15px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.navbarButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* User profile and dropdown on the right */
+.navbar-right {
+  position: relative;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.navbar-right:hover .profile-dropdown {
+  display: block;
+}
+
+.profile-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+}
+
+/* Dropdown menu styles */
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  border-radius: 3px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.profile-dropdown button {
+  color: #333;
+  padding: 10px 20px;
+  text-align: left;
+  border: none;
+  background: none;
+  width: 100%;
+  text-decoration: none;
+  display: block;
+  transition: background 0.3s;
+}
+
+.profile-dropdown button:hover {
+  background-color: #f4f5f7;
+}
+
+/* Main content styling */
+.content {
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+/* This is a sample card style for the bug list items */
+.card .card-content {
+  margin-bottom: 10px;
+}
+
+.card .card-content:last-child {
+  margin-bottom: 0;
+}
+
+.card .card-title {
+  color: #333;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.card button {
+  background: #0052cc;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.card button:hover {
+  background: #003380;
+}

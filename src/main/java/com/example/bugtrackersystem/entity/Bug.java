@@ -18,6 +18,6 @@ public class Bug {
     private String bugType;
     private String projectManager;
     private String assignee;
-    private List<String> comments;
+    private List<Comment> comments;
     private String createdBy;
 }

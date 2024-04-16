@@ -43,6 +43,19 @@ public class BugController {
         }
     }
 
+    @PostMapping("/updateBug")
+    public ResponseEntity<?> updateBug(@RequestBody Bug bug) {
+        try {
+           Bug updateBug = bugRepository.findByname(bug.getName());
+           updateBug.setAssignee(bug.getAssignee());
+           updateBug.setProjectManager(bug.getProjectManager());
+           updateBug.setComments(bug.getComments());
+            return ResponseEntity.ok().body("bug created succesfully");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
+        }
+    }
+
 
 
 }

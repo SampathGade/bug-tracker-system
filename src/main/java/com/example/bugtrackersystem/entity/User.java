@@ -22,6 +22,7 @@ public class User {
     private LocalDateTime otpExpiry;
     private String role;
     private String status;
+    private String projectManager;
 
     // Additional constructors and methods can be added as needed
 }

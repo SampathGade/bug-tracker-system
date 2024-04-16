@@ -39,4 +39,15 @@ public class UserService {
         }
         return projectManagers;
     }
+    public List<User> getDevelopersAndTesters() {
+        List<String> roleList = new ArrayList<>();
+        roleList.add("developer");
+        roleList.add("qa");
+        List<User> userList = userRepository.findByRoles(roleList);
+        if (userList == null) {
+            userList = new ArrayList<>();
+        }
+        return userList;
+    }
+
 }

@@ -58,4 +58,15 @@ public class UserController {
             return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
         }
     }
+
+    @GetMapping("/getDevelopers")
+    public ResponseEntity<?> getDevelopers() {
+        try {
+            List<User> userList = userService.getDevelopersAndTesters();
+            return ResponseEntity.ok().body(userList);
+        } catch (Exception e) {
+            logger.error("Internal server error during getting projectManagers , error: {}", e.getMessage());
+            return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
+        }
+    }
 }

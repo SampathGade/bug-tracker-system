@@ -5,6 +5,7 @@ import './Dashboard.css'; // Make sure this is the path to your CSS file
 import PendingRequests from './OnBoarding/PendingRequests';
 import ViewBugs from './ViewBug/ViewBug';
 import ViewProjects from './ViewProjects/ViewProjects';
+import Users from './ViewUsers/Users';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
 
 // Button component for the navigation bar
@@ -44,6 +45,8 @@ const Dashboard = () => {
                 return <PendingRequests />;
             case 'ViewProjects':
                 return <ViewProjects />;
+            case 'Users':
+                return <Users />;    
             default:
                 return <ViewBugs />;
         }
@@ -56,6 +59,9 @@ const Dashboard = () => {
                     <NavbarButton label="View Bugs" onClick={() => setActiveView('ViewBugs')} />
                     {userData && userData.role === 'admin' && (
                     <NavbarButton label="Pending Onboarding" onClick={() => setActiveView('OnboardPerson')} />
+                )}
+                {userData && (userData.role === 'admin' || userData.role === 'project manager') && (
+                    <NavbarButton label="View Users" onClick={() => setActiveView('Users')} />
                 )}
                     <NavbarButton label="View Projects" onClick={() => setActiveView('ViewProjects')} />
                 </div>

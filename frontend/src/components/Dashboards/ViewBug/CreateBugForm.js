@@ -41,9 +41,9 @@ const CreateBugForm = ({ onBugCreated, currentUser, onClose }) => {
         event.preventDefault();
         const payload = {
             name: bugName,
-            projectName,
-            bugType,
-            assignee
+            projectName : projectName,
+            bugType : bugType,
+            assignee : assignee
         };
 
         const response = await fetch('http://localhost:8080/bug/createBug', {

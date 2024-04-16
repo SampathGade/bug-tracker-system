@@ -25,7 +25,7 @@ public class ProjectController {
     public ResponseEntity<?> createProject(@RequestBody CreateProjectRequest createProjectRequest) {
         try {
             projectService.createProject(createProjectRequest.getName(), createProjectRequest.getDescription(),
-                    createProjectRequest.getProductManager(), createProjectRequest.getUsers());
+                    createProjectRequest.getProjectManager(), createProjectRequest.getUsers());
             return ResponseEntity.ok().body("project created successfully ");
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");

@@ -1,0 +1,48 @@
+package com.example.bugtrackersystem.controllers;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import com.example.bugtrackersystem.entity.Bug;
+import com.example.bugtrackersystem.entity.User;
+import com.example.bugtrackersystem.repository.BugRepository;
+import com.example.bugtrackersystem.requests.GetUsersRequest;
+import com.example.bugtrackersystem.services.BugService;
+
+@RestController
+@RequestMapping("/bug")
+public class BugController {
+
+    @Autowired
+    private BugService bugService;
+
+    @Autowired
+    private BugRepository bugRepository;
+
+    @PostMapping("/getBugsByUser")
+    public ResponseEntity<?> getBugs(@RequestBody GetUsersRequest getUsersRequest) {
+        try {
+            List<Bug> bugList = bugService.getBugs(getUsersRequest.getRole(), getUsersRequest.getEmail());
+            return ResponseEntity.ok().body(bugList);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
+        }
+    }
+
+    @PostMapping("/createBug")
+    public ResponseEntity<?> createBug(@RequestBody Bug bug) {
+        try {
+            bugRepository.save(bug);
+            return ResponseEntity.ok().body("bug created succesfully");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
+        }
+    }
+
+
+
+}

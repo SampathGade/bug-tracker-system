@@ -12,7 +12,7 @@ import java.util.List;
 public class CreateProjectRequest {
     private String name;
     private String description;
-    private String productManager;
+    private String projectManager;
     private List<String > users;
     private List<String> bugTypes;
 }

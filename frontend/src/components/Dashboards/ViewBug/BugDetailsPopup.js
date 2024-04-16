@@ -8,11 +8,20 @@ const BugDetailsPopup = ({ bug, onClose, onBugUpdated, currentUser }) => {
     const [assignees, setAssignees] = useState([]);
 
     useEffect(() => {
+        // Fetch developers list for assignee dropdown
         fetch('http://localhost:8080/users/getDevelopers', { method: 'GET' })
         .then(response => response.json())
         .then(setAssignees)
         .catch(console.error);
     }, []);
+
+    const handleAssigneeChange = (e) => {
+        const newAssignee = e.target.value;
+        setDetails(prevDetails => ({
+            ...prevDetails,
+            assignee: newAssignee
+        }));
+    };
 
     const handleCommentSubmit = () => {
         const updatedComments = [...comments, { text: comment, author: currentUser.email }];
@@ -44,7 +53,10 @@ const BugDetailsPopup = ({ bug, onClose, onBugUpdated, currentUser }) => {
                 <p><strong>Project:</strong> {details.projectName}</p>
                 <p><strong>Bug Type:</strong> {details.bugType}</p>
                 <p><strong>Project Manager:</strong> {details.projectManager}</p>
-                <select value={details.assignee} onChange={(e) => setDetails({...details, assignee: e.target.value})} disabled={!(currentUser.role === 'admin' || currentUser.role === 'project manager')}>
+                <p><strong>Assignee:</strong></p>
+                <select value={details.assignee}
+                        onChange={handleAssigneeChange}
+                        disabled={!["admin", "project manager"].includes(currentUser.role)}>
                     {assignees.map(dev => (
                         <option key={dev.email} value={dev.email}>{dev.email}</option>
                     ))}

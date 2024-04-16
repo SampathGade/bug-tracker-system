@@ -18,33 +18,39 @@ const CreateBugForm = ({ onBugCreated, currentUser, onClose }) => {
             },
             body: JSON.stringify({ role: currentUser.role, email: currentUser.email })
         })
-            .then(response => response.json())
-            .then(data => {
-                setProjects(data);
-                if (data.length > 0) {
-                    setProjectName(data[0].name); // Default to first project
-                    setBugType(data[0].bugTypes[0]); // Default to first bug type
-                }
-            })
-            .catch(console.error);
+        .then(response => response.json())
+        .then(data => {
+            setProjects(data);
+            if (data.length > 0) {
+                setProjectName(data[0].name); // Default to first project
+                setBugType(data[0].bugTypes[0]); // Default to first bug type
+            }
+        })
+        .catch(console.error);
 
         // Fetch developers if the user is admin or project manager
         if (['admin', 'project manager'].includes(currentUser.role)) {
             fetch('http://localhost:8080/users/getDevelopers', { method: 'GET' })
                 .then(response => response.json())
-                .then(setDevelopers)
+                .then(data => {
+                    setDevelopers(data);
+                    if (data.length > 0) {
+                        setAssignee(data[0].email); // Set default assignee
+                    }
+                })
                 .catch(console.error);
         }
-    }, [currentUser.role]);
+    }, [currentUser.role, currentUser.email]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         const payload = {
             name: bugName,
-            projectName : projectName,
-            bugType : bugType,
-            assignee : assignee
+            projectName,
+            bugType,
+            assignee
         };
+        console.log('Submitting payload:', payload); // Debug the payload
 
         const response = await fetch('http://localhost:8080/bug/createBug', {
             method: 'POST',

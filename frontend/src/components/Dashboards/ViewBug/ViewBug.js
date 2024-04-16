@@ -1,70 +1,77 @@
 import React, { useState, useEffect } from 'react';
-import Modal from 'react-modal';
-import CreateBug from './CreateBug';
-import styles from './ViewBugs.module.css';
-
-Modal.setAppElement('#root');
+import BugCell from './BugCell';
+import BugDetailsPopup from './BugDetailsPopup';
+import CreateBugForm from './CreateBugForm';
+import './Project.css';  // Make sure this CSS is correctly linked
 
 const ViewBugs = () => {
     const [bugs, setBugs] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editableBug, setEditableBug] = useState(null);
+    const [selectedBug, setSelectedBug] = useState(null);
+    const [showCreateBugForm, setShowCreateBugForm] = useState(false);
+    const [currentUser, setCurrentUser] = useState({});
 
     useEffect(() => {
-        fetchData();
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            setCurrentUser(user);
+            fetchBugs(user);
+        } else {
+            // Ideally, redirect to login or show an appropriate message/error
+            console.log("User not found. Redirecting to login.");
+        }
     }, []);
 
-    const fetchData = () => {
-        const data = [
-            { id: 1, bugName: 'Bug 1', bugType: 'Type 1', currentStatus: 'Open', assignee: 'User A', expectedOutput: '', currentOutput: '' },
-            { id: 2, bugName: 'Bug 2', bugType: 'Type 2', currentStatus: 'Closed', assignee: 'User B', expectedOutput: '', currentOutput: '' },
-            { id: 3, bugName: 'Bug 3', bugType: 'Type 3', currentStatus: 'Open', assignee: 'User C', expectedOutput: '', currentOutput: '' },
-        ];
-        setBugs(data);
-    };
-
-    const handleCreateOrEditBug = (bugData, id) => {
-        if (id) {
-            setBugs(bugs.map(bug => bug.id === id ? { ...bug, ...bugData } : bug));
+    const fetchBugs = async (user) => {
+        const response = await fetch('http://localhost:8080/bug/getBugsByUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ role: user.role, email: user.email })
+        });
+        if (response.ok) {
+            const data = await response.json();
+            setBugs(data);
         } else {
-            setBugs([...bugs, { ...bugData, id: bugs.length + 1 }]);
+            console.error("Failed to fetch bugs");
         }
-        setIsModalOpen(false);
     };
 
-    const openEditModal = (bug) => {
-        setEditableBug(bug);
-        setIsModalOpen(true);
+    const handleSelectBug = (bug) => {
+        setSelectedBug(bug);
+    };
+
+    const toggleCreateBugForm = () => {
+        setShowCreateBugForm(!showCreateBugForm);
+    };
+
+    const handleClose = () => {
+        setSelectedBug(null); // Assuming this might also close bug details popup
+        setShowCreateBugForm(false); // Close the create bug form
     };
 
     return (
-        <div className={styles.container}>
-            <h2 className={styles.heading}>View Bugs</h2>
-            <div className={styles.buttonContainer}>
-                <button onClick={() => { setEditableBug(null); setIsModalOpen(true); }} className={styles.button}>Create New Bug</button>
-            </div>
-            <div className={styles.bugsList}>
-                {bugs.map((bug, index) => (
-                    <div key={index} className={styles.bugCard}>
-                        <p><strong>Bug Name:</strong> {bug.bugName}</p>
-                        <p><strong>Bug Type:</strong> {bug.bugType}</p>
-                        <p><strong>Current Status:</strong> {bug.currentStatus}</p>
-                        <p><strong>Assignee:</strong> {bug.assignee}</p>
-                        <button onClick={() => openEditModal(bug)} className={styles.button}>Edit</button>
-                    </div>
-                ))}
-            </div>
-            <Modal
-                isOpen={isModalOpen}
-                onRequestClose={() => setIsModalOpen(false)}
-                className={styles.modal}
-                overlayClassName={styles.overlay}
-            >
-                <CreateBug onBugCreated={handleCreateOrEditBug} closeModal={() => setIsModalOpen(false)} bug={editableBug} />
-            </Modal>
+        <div className="content-container">
+            {['admin', 'project manager'].includes(currentUser.role) && (
+                <button onClick={toggleCreateBugForm}>
+                    {showCreateBugForm ? "Cancel" : "Create New Bug"}
+                </button>
+            )}
+            {showCreateBugForm && (
+                <CreateBugForm onBugCreated={() => fetchBugs(currentUser)} currentUser={currentUser} onClose={handleClose} />
+            )}
+            {bugs.length > 0 ? (
+                bugs.map(bug => (
+                    <BugCell key={bug.id} bug={bug} onSelect={handleSelectBug} />
+                ))
+            ) : (
+                <p>No bugs available</p>
+            )}
+            {selectedBug && (
+                <BugDetailsPopup bug={selectedBug} onClose={handleClose} onBugUpdated={() => fetchBugs(currentUser)} currentUser={currentUser} />
+            )}
         </div>
-      );
-      
+    );
 };
 
 export default ViewBugs;

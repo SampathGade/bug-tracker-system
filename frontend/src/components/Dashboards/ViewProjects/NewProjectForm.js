@@ -36,7 +36,7 @@ const NewProjectForm = ({ onProjectCreated, currentUser, onClose }) => {
             name: projectName,
             description: projectDescription,
             projectManager,
-            users: selectedDevelopers
+            users: selectedDevelopers.map(developer => developer.toString())
         };
 
         const response = await fetch('http://localhost:8080/project/createProject', {
@@ -75,7 +75,8 @@ const NewProjectForm = ({ onProjectCreated, currentUser, onClose }) => {
                 Users:
                 <select multiple value={selectedDevelopers} onChange={handleDeveloperSelection}>
                     {developers.map(dev => (
-                        <option key={dev.email} value={dev.email}>{dev.email}</option>))}
+                        <option key={dev.email} value={dev.email}>{dev.email}</option>
+))}
                 </select>
             </label>
             <button type="submit">Submit</button>

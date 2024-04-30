@@ -1,0 +1,144 @@
+/* Dashboard.css */
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    background-color: #333;
+    padding: 10px;
+    color: white;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+.filters-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Distributes space between items */
+    padding: 10px;
+    background-color: #bdc3c7;
+}
+
+.filters-panel select, .filters-panel label {
+    max-width: 150px; /* Limit the width of the project dropdown */
+    margin-right: 20px;
+}
+
+.bugs-board {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    gap: 10px;
+}
+
+.bug-column {
+    flex: 1;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+    min-height: 300px;
+}
+
+.bug-card {
+    background-color: white;
+    border: 1px solid #ccc;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.bug-card:hover {
+    border-color: blue;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.bug-column {
+    flex: 1;
+    margin: 5px;
+    padding: 10px;
+    background-color: #ecf0f1; /* Very light gray to differentiate sections */
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadows for depth */
+}
+
+.bug-column:hover {
+    background-color: #e2e2e2;
+}
+
+.bug-card {
+    background-color: white;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.bug-card:hover {
+    transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+.bug-card:active {
+    opacity: 0.6;
+}
+
+.assignee-icons {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.assignee-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #2c3e50; /* Dark blue background */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out; /* Smooth transition for color change */
+}
+
+.assignee-icon input[type="checkbox"]:checked + label .icon-label {
+    background-color: #3498db; /* Light blue to indicate selection */
+    color: white;
+}
+
+.icon-label {
+    pointer-events: none; /* Prevent label from blocking checkbox */
+}
+
+.create-bug-button {
+    margin-top: 10px;
+    align-self: flex-start; /* Align button at the top of its container */
+}

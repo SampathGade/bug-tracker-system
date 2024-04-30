@@ -1,78 +1,54 @@
 import React, { useState } from 'react';
-import './Login.css'; // Ensure this points to your updated CSS file path
+import { useNavigate } from 'react-router-dom';
+import './Login.css'
 
-const Login = () => {
+const LoginComponent = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [otp, setOtp] = useState('');
     const [showOtpInput, setShowOtpInput] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-    const processErrorMessage = (error) => {
-        switch (error) {
-            case 401:    
-                return "Credentials invalid. Please try again.";
-            case 404:
-                return "Error: The server endpoint was not found.";
-            case 500:
-                return "Error: Server error. Please try again later.";
-            default:
-                return "An unexpected error occurred.";
-        }
-    };
+    const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const isFormValid = email && password && validateEmail(email);
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        const response = await fetch('http://localhost:8080/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        // Uncomment and modify URL to integrate with real API
+        // const response = await fetch('/api/login', {
+        //     method: 'POST',
+        //     headers: {'Content-Type': 'application/json'},
+        //     body: JSON.stringify({ email, password })
+        // });
+        // Mock response for demonstration
+        const response = { status: 200 }; // Mocking a successful login
 
-        if (response.ok) {
+        if (response.status === 200) {
             setShowOtpInput(true);
-            setErrorMessage('');
         } else {
-            const error = await response.json();
-            setErrorMessage(processErrorMessage(error));
+            alert('Invalid credentials or other authentication error.');
         }
-        setLoading(false);
     };
 
-    const verifyOtp = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        const response = await fetch('http://localhost:8080/auth/verify-otp', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, otp })
-        });
-
-        if (response.ok) {
-            const userData = await response.json();  // Assuming the API sends the user data as JSON
-            localStorage.setItem('user', JSON.stringify(userData)); 
-            console.log(localStorage.getItem('user'));
-            window.location.href = '/dashboard';
-        } else {
-            setErrorMessage(processErrorMessage(response.status));
-        }
-        setLoading(false);
+    const handleOtpSubmit = async (event) => {
+        event.preventDefault();
+        localStorage.setItem('userToken','test')
+        // Implement OTP verification logic here
+        navigate('/dashboard');
     };
 
     return (
         <div className="login-container">
-        <h1>Login</h1> 
-            <div className="login-form">
-                {errorMessage && <div className="error-message">{errorMessage}</div>}
+            <h1>Bug Tracker</h1> {/* Main container heading */}
+            <div className="form-container">
+                <h2>Login</h2> {/* Form container heading */}
                 {!showOtpInput ? (
-                    <form onSubmit={handleLogin}>
+                    <form onSubmit={handleSubmit}>
                         <input
                             type="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Enter email"
+                            placeholder="Email"
                             required
                         />
                         <input
@@ -82,31 +58,26 @@ const Login = () => {
                             placeholder="Password"
                             required
                         />
-                        <button
-                            type="submit"
-                            disabled={!email || !password || loading}
-                        >
-                            Login
-                        </button>
+                        <button type="submit" disabled={!isFormValid}>Login</button>
+                        <button onClick={() => navigate('/forgot-password')}>Forgot Password</button>
+                        <button onClick={() => navigate('/signup')}>Sign Up</button>
                     </form>
                 ) : (
-                    <form onSubmit={verifyOtp}>
+                    <form onSubmit={handleOtpSubmit}>
                         <input
                             type="text"
                             value={otp}
-                            onChange={(e) => setOtp(e.target.value)}
+                            onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
                             placeholder="Enter OTP"
                             required
                         />
-                        <button type="submit" disabled={!otp || loading}>
-                            Verify OTP
-                        </button>
+                        <button type="submit" disabled={!otp}>Validate OTP</button>
+                        <button onClick={() => setShowOtpInput(false)}>Regenerate OTP</button>
                     </form>
                 )}
-                <button onClick={() => window.location.href='/signup'}>Sign Up</button>
             </div>
         </div>
     );
 };
 
-export default Login;
+export default LoginComponent;

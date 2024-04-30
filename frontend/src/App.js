@@ -6,12 +6,14 @@ import Dashboard from './components/Dashboards/Dashboard';
 import ReviewRequest from './components/Dashboards/OnBoarding/PendingRequests';
 import ViewBugs from './components/Dashboards/ViewBug/ViewBug';
 import ViewProjects from './components/Dashboards/ViewProjects/ViewProjects';
+import ForgotPassword from './components/Login/ForgetPassword';
 import './App.css'
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path='/forgot-password' element={<ForgotPassword/>}/>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/succesfulSignUp" element={<SuccessfulSignUp />} />

@@ -1,77 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import BugCell from './BugCell';
-import BugDetailsPopup from './BugDetailsPopup';
+import React, { useState } from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import CreateBugForm from './CreateBugForm';
-import './Project.css';  // Make sure this CSS is correctly linked
+import BugDetails from './BugDetailsPopup';
 
-const ViewBugs = () => {
-    const [bugs, setBugs] = useState([]);
-    const [selectedBug, setSelectedBug] = useState(null);
-    const [showCreateBugForm, setShowCreateBugForm] = useState(false);
-    const [currentUser, setCurrentUser] = useState({});
-
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user) {
-            setCurrentUser(user);
-            fetchBugs(user);
-        } else {
-            // Ideally, redirect to login or show an appropriate message/error
-            console.log("User not found. Redirecting to login.");
-        }
-    }, []);
-
-    const fetchBugs = async (user) => {
-        const response = await fetch('http://localhost:8080/bug/getBugsByUser', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ role: user.role, email: user.email })
-        });
-        if (response.ok) {
-            const data = await response.json();
-            setBugs(data);
-        } else {
-            console.error("Failed to fetch bugs");
-        }
-    };
-
-    const handleSelectBug = (bug) => {
-        setSelectedBug(bug);
-    };
-
-    const toggleCreateBugForm = () => {
-        setShowCreateBugForm(!showCreateBugForm);
-    };
-
-    const handleClose = () => {
-        setSelectedBug(null); // Assuming this might also close bug details popup
-        setShowCreateBugForm(false); // Close the create bug form
-    };
-
-    return (
-        <div className="content-container">
-            {['admin', 'project manager'].includes(currentUser.role) && (
-                <button onClick={toggleCreateBugForm}>
-                    {showCreateBugForm ? "Cancel" : "Create New Bug"}
-                </button>
-            )}
-            {showCreateBugForm && (
-                <CreateBugForm onBugCreated={() => fetchBugs(currentUser)} currentUser={currentUser} onClose={handleClose} />
-            )}
-            {bugs.length > 0 ? (
-                bugs.map(bug => (
-                    <BugCell key={bug.id} bug={bug} onSelect={handleSelectBug} />
-                ))
-            ) : (
-                <p>No bugs available</p>
-            )}
-            {selectedBug && (
-                <BugDetailsPopup bug={selectedBug} onClose={handleClose} onBugUpdated={() => fetchBugs(currentUser)} currentUser={currentUser} />
-            )}
-        </div>
-    );
+const initialBugs = {
+  todo: [{ id: 'bug-1', title: 'Login Page Error', assignee: 'Alice' }],
+  inProgress: [{ id: 'bug-3', title: 'API Load Issues', assignee: 'Bob' }],
+  done: [{ id: 'bug-4', title: 'Header Alignment Fixed', assignee: '' }]
 };
 
-export default ViewBugs;
+const BugComponent = () => {
+  const [bugs, setBugs] = useState(initialBugs);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [selectedBug, setSelectedBug] = useState(null);
+
+  const handleCreateBug = (bug) => {
+    const newBug = { ...bug, id: `bug-${Date.now()}`, status: 'todo' };
+    setBugs({ ...bugs, todo: [...bugs.todo, newBug] });
+    setShowCreateForm(false);
+  };
+
+  const handleCancelCreate = () => {
+    setShowCreateForm(false);
+  };
+
+  const handleBugClick = (bug) => {
+    setSelectedBug(bug);
+  };
+
+  const handleBugClose = () => {
+    setSelectedBug(null);
+  };
+
+  return (
+    <div>
+      {showCreateForm && <CreateBugForm onSave={handleCreateBug} onCancel={handleCancelCreate} />}
+      {selectedBug && <BugDetails bug={selectedBug} onClose={handleBugClose} />}
+      <button onClick={() => setShowCreateForm(true)}>Create Bug</button>
+      <DragDropContext onDragEnd={() => {}}>
+        {['todo', 'inProgress', 'done'].map(status => (
+          <Droppable droppableId={status} key={status}>
+            {(provided) => (
+              <div ref={provided.innerRef} {...provided.droppableProps} className="column">
+                <h2>{status.toUpperCase()}</h2>
+                {bugs[status].map((bug, index) => (
+                  <Draggable key={bug.id} draggableId={bug.id} index={index}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="bug"
+                        onClick={() => handleBugClick(bug)}
+                      >
+                        {bug.title}
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        ))}
+      </DragDropContext>
+    </div>
+  );
+};
+
+export default BugComponent;

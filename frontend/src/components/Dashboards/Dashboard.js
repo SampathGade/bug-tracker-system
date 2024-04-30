@@ -1,83 +1,69 @@
 import React, { useState, useEffect } from 'react';
-import './Dashboard.css'; // Make sure this is the path to your CSS file
+import { useNavigate } from 'react-router-dom';
+import './Dashboard.css'
 
-// Import components
-import PendingRequests from './OnBoarding/PendingRequests';
-import ViewBugs from './ViewBug/ViewBug';
-import ViewProjects from './ViewProjects/ViewProjects';
-import Users from './ViewUsers/Users';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
+// Import sub-components
+import BugComponent from './ViewBug/ViewBug';
+// import UserProfile from '';
+import OnboardingComponent from './OnBoarding/PendingRequests';
+import ViewPeopleComponent from './ViewUsers/Users';
+import ProjectComponent from './ViewProjects/ViewProjects';
 
-// Button component for the navigation bar
-const NavbarButton = ({ label, onClick }) => (
-    <button className="navbarButton" onClick={onClick}>
-        {label}
-    </button>
-);
-
-// Main Dashboard component
 const Dashboard = () => {
-    const [activeView, setActiveView] = useState('ViewBugs');
-    const [userData, setUserData] = useState(null);
+    const [activeComponent, setActiveComponent] = useState('bugs');
     const navigate = useNavigate();
 
     useEffect(() => {
-        const user = localStorage.getItem('user');
-        if (user) {
-            const parsedUser = JSON.parse(user);
-            setUserData(parsedUser);
-            // You can now use `userData.role` to conditionally render components based on user role
-        } else {
+        if (!localStorage.getItem('userToken')) {
             navigate('/login');
         }
     }, [navigate]);
 
-    const logout = () => {
-        localStorage.removeItem('user'); // Remove user from local storage
-        navigate('/login'); // Navigate back to login page
+    const handleLogout = () => {
+        localStorage.clear();
+        navigate('/login');
+    };
+
+    const getUserInitials = () => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        return `ys`;
     };
 
     const renderComponent = () => {
-        switch (activeView) {
-            case 'ViewBugs':
-                return <ViewBugs />;
-            case 'OnboardPerson':
-                return <PendingRequests />;
-            case 'ViewProjects':
-                return <ViewProjects />;
-            case 'Users':
-                return <Users />;    
+        switch (activeComponent) {
+            case 'bugs':
+                return <BugComponent />;
+            case 'onboarding':
+                return <OnboardingComponent />;
+            case 'people':
+                return <ViewPeopleComponent />;
+            case 'projects':
+                return <ProjectComponent />;
             default:
-                return <ViewBugs />;
+                return <BugComponent />;
         }
     };
 
     return (
-        <>
-            <div className="navbar">
-                <div className="navbar-left">
-                    <NavbarButton label="View Bugs" onClick={() => setActiveView('ViewBugs')} />
-                    {userData && userData.role === 'admin' && (
-                    <NavbarButton label="Pending Onboarding" onClick={() => setActiveView('OnboardPerson')} />
-                )}
-                {userData && (userData.role === 'admin' || userData.role === 'project manager') && (
-                    <NavbarButton label="View Users" onClick={() => setActiveView('Users')} />
-                )}
-                    <NavbarButton label="View Projects" onClick={() => setActiveView('ViewProjects')} />
-                </div>
-                <div className="navbar-right">
-                    <div className="user-profile">
-                        <button className="profile-button">Profile</button>
-                        <div className="profile-dropdown">
-                            <button onClick={logout}>Logout</button>
+        <div className="dashboard">
+            <nav>
+                <ul>
+                    <li onClick={() => setActiveComponent('bugs')}>Bugs</li>
+                    <li onClick={() => setActiveComponent('onboarding')}>Onboarding</li>
+                    <li onClick={() => setActiveComponent('people')}>View People</li>
+                    <li onClick={() => setActiveComponent('projects')}>Projects</li>
+                    <li className="profile-icon" onClick={() => setActiveComponent('profile')}>
+                        {getUserInitials()}
+                        <div className="dropdown-content">
+                            <a href="#logout" onClick={handleLogout}>Logout</a>
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </li>
+                </ul>
+            </nav>
             <div className="content">
                 {renderComponent()}
             </div>
-        </>
+        </div>
     );
 };
 

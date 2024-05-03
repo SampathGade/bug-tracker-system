@@ -10,7 +10,7 @@ const BugCard = ({ bug, onEdit }) => {
     return (
         <div className="bug-card" draggable="true"
              onDragStart={handleDragStart} onClick={onEdit}>
-            <h3>{bug.title}</h3>
+            <h3>{bug.name}</h3>
             <p>Status: {bug.status}</p>
         </div>
     );

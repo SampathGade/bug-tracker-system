@@ -66,17 +66,30 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.5); /* Dimmed background */
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
 .overlay-content {
+    width: 60%; /* Sets the modal width to 60% of the viewport width */
     background-color: white;
     padding: 20px;
     border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Adds a subtle shadow for depth */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Ensures no internal content spills out */
 }
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .overlay-content {
+        width: 90%; /* Adjusts width for smaller screens */
+    }
+}
+
 
 .bug-column {
     flex: 1;

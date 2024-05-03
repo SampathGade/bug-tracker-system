@@ -14,10 +14,12 @@ public class Bug {
     @Id
     private String id;
     private String name;
-    private String projectName;
-    private String bugType;
+    private String description;
+    private String project;
+    private String type;
     private String projectManager;
     private String assignee;
     private List<Comment> comments;
     private String createdBy;
+    private String status;
 }

@@ -40,7 +40,8 @@ const LoginComponent = () => {
 //        console.log(response)
         if (response.status === 200) {
             const data = await response.json();
-            localStorage.setItem('userToken', data.token);
+            console.log(data)
+            localStorage.setItem('userRole', data.role);
             localStorage.setItem('userEmail', email);
             navigate('/dashboard');
         } else if (response.status === 401) {

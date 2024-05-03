@@ -14,7 +14,7 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!localStorage.getItem('userToken')) {
+        if (!localStorage.getItem('userEmail')) {
             navigate('/login');
         }
     }, [navigate]);
@@ -25,7 +25,7 @@ const Dashboard = () => {
     };
 
     const getUserInitials = () => {
-        const user = JSON.parse(localStorage.getItem('user'));
+        // const user = JSON.parse(localStorage.getItem('userEmail'));
         return `ys`;
     };
 

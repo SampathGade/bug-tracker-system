@@ -3,13 +3,13 @@ import './BugComponent.css'
 
 
 const EditBugModal = ({ bug, onClose }) => {
-    const [title, setTitle] = useState(bug.title);
+    const [name, setName] = useState(bug.name);
     const [description, setDescription] = useState(bug.description);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         // Here, you would handle the API call to update the bug
-        console.log('Updating Bug:', bug.id, title, description);
+        console.log('Updating Bug:', bug.id, name, description);
         onClose(); // Close the modal after submission
     };
 
@@ -20,7 +20,7 @@ const EditBugModal = ({ bug, onClose }) => {
                     <h2>Edit Bug</h2>
                     <label>
                         Title:
-                        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
                     </label>
                     <label>
                         Description:

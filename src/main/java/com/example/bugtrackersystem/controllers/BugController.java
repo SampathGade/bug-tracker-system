@@ -36,6 +36,7 @@ public class BugController {
     @PostMapping("/createBug")
     public ResponseEntity<?> createBug(@RequestBody Bug bug) {
         try {
+            bug.setStatus("To Do");
             bugRepository.save(bug);
             return ResponseEntity.ok().body("bug created succesfully");
         } catch (Exception e) {

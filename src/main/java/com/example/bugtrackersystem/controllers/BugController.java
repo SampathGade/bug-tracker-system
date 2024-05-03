@@ -58,6 +58,23 @@ public class BugController {
         }
     }
 
+    @PostMapping("/updateBugStatus")
+    public ResponseEntity<?> updateBugStatus(@RequestBody Bug bug) {
+        try {
+            // Check if the bug exists in the database
+            return bugRepository.findById(bug.getId()).map(existingBug -> {
+                existingBug.setStatus(bug.getStatus());
+                // Save the updated bug
+                bugRepository.save(existingBug);
+                return ResponseEntity.ok().body("Bug status updated successfully");
+            }).orElseGet(() -> ResponseEntity.notFound().build()); // Handle the case where the bug is not found
+        } catch (Exception e) {
+            // Log the exception (you could log the stack trace or message)
+            e.printStackTrace(); // For demonstration purposes
+            return ResponseEntity.internalServerError().body("An internal server error occurred: " + e.getMessage());
+        }
+    }
+
 
 
 }

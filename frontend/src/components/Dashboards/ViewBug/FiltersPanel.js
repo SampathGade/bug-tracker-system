@@ -1,9 +1,8 @@
 import React from 'react';
-import './BugComponent.css'
+import './BugComponent.css';
 
-const FiltersPanel = ({ filters, onFilterChange }) => {
-    const projects = ['Project X', 'Project Y', 'Project Z']; // Example projects
-    const assignees = ['User 1', 'User 2', 'User 3', 'User 4']; // Example assignees
+const FiltersPanel = ({ filters, onFilterChange, projects }) => {
+    const assignees = ['User 1', 'User 2', 'User 3', 'User 4'];
 
     const getInitials = (name) => name.split(' ').map(n => n[0]).join('').toUpperCase();
 

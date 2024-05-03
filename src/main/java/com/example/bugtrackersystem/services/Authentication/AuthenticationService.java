@@ -85,13 +85,14 @@ public class AuthenticationService {
     }
 ;
     public List<User> getOnboardingPendingUsers() {
-        return userRepository.findByStatus("Review Pending");
+        return userRepository.findByStatus("Pending");
     }
 
-    public void updateRequestStatus(String email, String role, String status) {
+    public void updateRequestStatus(String email, String role, String projectManager, String status) {
         User user = userRepository.findByEmail(email);
         user.setRole(role);
-        if ("accept".equalsIgnoreCase(status)){
+        user.setProjectManager(projectManager);
+        if ("accepted".equalsIgnoreCase(status)){
            user.setStatus("Onboarded");
            userRepository.save(user);
            // need to send Email here as well

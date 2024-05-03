@@ -16,4 +16,5 @@ public class UpdateStatusRequest {
     private String role;
     @NonNull
     private String status;
+    private String projectManager;
 }

@@ -136,7 +136,7 @@ public class AuthenticationController {
     @PostMapping("/updateStatus")
     public ResponseEntity<?> processRequests(@RequestBody UpdateStatusRequest updateStatusRequest) {
         try{
-            authService.updateRequestStatus(updateStatusRequest.getEmail(), updateStatusRequest.getRole(), updateStatusRequest.getStatus());
+            authService.updateRequestStatus(updateStatusRequest.getEmail(), updateStatusRequest.getRole(), updateStatusRequest.getProjectManager(), updateStatusRequest.getStatus());
             return ResponseEntity.ok().body("Pending request processed");
         } catch (Exception e){
             logger.error(e.getMessage());

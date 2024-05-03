@@ -1,16 +1,10 @@
-// UserCell.js
 import React from 'react';
-import './PendingRequests.css';
 
-
-const UserCell = ({ user, onSelect }) => {
+const UserCell = ({ user, onSelectUser }) => {
     return (
-        <div className="user-cell" onClick={(e) => {
-            e.stopPropagation();
-            onSelect(user);
-        }}>
-            <div>Email: {user.email}</div>
-            <div>Role: {user.role}</div>
+        <div className="user-cell" onClick={() => onSelectUser(user)}>
+            <p>Email: {user.email}</p>
+            <p>Role: {user.role}</p>
         </div>
     );
 };

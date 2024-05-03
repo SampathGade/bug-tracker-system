@@ -5,7 +5,7 @@ import './Dashboard.css'
 // Import sub-components
 import BugComponent from './ViewBug/ViewBug';
 // import UserProfile from '';
-import OnboardingComponent from './OnBoarding/PendingRequests';
+import OnboardingComponent from './OnBoarding/OnboardingComponent';
 import ViewPeopleComponent from './ViewUsers/Users';
 import ProjectComponent from './ViewProjects/ViewProjects';
 

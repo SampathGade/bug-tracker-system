@@ -56,7 +56,7 @@ public class AuthenticationService {
             return user;
         }
         logger.warn("Invalid OTP attempt for email: {}", email);
-        return user;
+        return null;
     }
 
     public void createUser(String email, String password, String role) {

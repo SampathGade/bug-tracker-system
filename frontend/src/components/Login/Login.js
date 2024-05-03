@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Login.css'
+import './Login.css';
 
 const LoginComponent = () => {
     const [email, setEmail] = useState('');
@@ -15,33 +15,46 @@ const LoginComponent = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         // Uncomment and modify URL to integrate with real API
-        // const response = await fetch('/api/login', {
-        //     method: 'POST',
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify({ email, password })
-        // });
+        const response = await fetch('http://localhost:3000/auth/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ email, password })
+        });
         // Mock response for demonstration
-        const response = { status: 200 }; // Mocking a successful login
-
+        // const response = { status: 200 }; // Mocking a successful login
+//        console.log(response)
         if (response.status === 200) {
             setShowOtpInput(true);
-        } else {
+        } else if(response.status === 401) {
             alert('Invalid credentials or other authentication error.');
         }
     };
 
     const handleOtpSubmit = async (event) => {
         event.preventDefault();
-        localStorage.setItem('userToken','test')
-        // Implement OTP verification logic here
-        navigate('/dashboard');
+        const response = await fetch('http://localhost:3000/auth/verify-otp', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ email, otp })
+        });
+//        console.log(response)
+        if (response.status === 200) {
+            const data = await response.json();
+            localStorage.setItem('userToken', data.token);
+            localStorage.setItem('userEmail', email);
+            navigate('/dashboard');
+        } else if (response.status === 401) {
+            alert('Invalid OTP.');
+        } else {
+            alert('Error validating OTP, please try again later.');
+        }
     };
 
     return (
         <div className="login-container">
-            <h1>Bug Tracker</h1> {/* Main container heading */}
+            <h1>Bug Tracker</h1>
             <div className="form-container">
-                <h2>Login</h2> {/* Form container heading */}
+                <h2>Login</h2>
                 {!showOtpInput ? (
                     <form onSubmit={handleSubmit}>
                         <input

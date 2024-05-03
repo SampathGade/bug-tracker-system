@@ -1,6 +1,5 @@
 package com.example.bugtrackersystem.controllers;
 
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,12 +57,34 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody SignUpRequest signUpRequest) {
+    @PostMapping("/verify-email")
+    public ResponseEntity<String> validEmail(@RequestBody SignUpRequest signUpRequest) {
         try {
-                authService.createUser(signUpRequest.getEmail(), signUpRequest.getPassword(),signUpRequest.getRole());
-                authService.generateAndSendOtp(signUpRequest.getEmail());
-                return ResponseEntity.ok("Onboarding request successful");
+                boolean isDuplicate = authService.isDuplicateUser(signUpRequest.getEmail());
+                if(!isDuplicate) {
+                    authService.generateAndSendOtp(signUpRequest.getEmail());
+                    return ResponseEntity.ok("Email validating successful");
+                }
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Onboarding request pending or already an user");
+        } catch (Exception e) {
+            logger.error("Internal server error during sing-up process for user: {}, error: {}", signUpRequest.getEmail(), e.getMessage());
+            return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
+        }
+    }
+
+    @PostMapping("/create-user")
+    public ResponseEntity<?> createUser(@RequestBody SignUpRequest signUpRequest) {
+        try {
+            User user = authService.validateOtp(signUpRequest.getEmail(), signUpRequest.getOtp());
+            if (user != null) {
+                authService.createUser(signUpRequest.getEmail(),
+                        signUpRequest.getPassword(), signUpRequest.getRole());
+                return ResponseEntity.ok("user created successfully");
+            } else {
+                logger.error("Unauthorized OTP attempt for user: {}", signUpRequest.getEmail());
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized: Invalid or expired OTP.");
+            }
+
         } catch (Exception e) {
             logger.error("Internal server error during sing-up process for user: {}, error: {}", signUpRequest.getEmail(), e.getMessage());
             return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");

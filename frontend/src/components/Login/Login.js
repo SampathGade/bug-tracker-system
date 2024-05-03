@@ -15,7 +15,7 @@ const LoginComponent = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         // Uncomment and modify URL to integrate with real API
-        const response = await fetch('http://localhost:3000/auth/login', {
+        const response = await fetch('http://localhost:8080/auth/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ email, password })
@@ -32,7 +32,7 @@ const LoginComponent = () => {
 
     const handleOtpSubmit = async (event) => {
         event.preventDefault();
-        const response = await fetch('http://localhost:3000/auth/verify-otp', {
+        const response = await fetch('http://localhost:8080/auth/verify-otp', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ email, otp })

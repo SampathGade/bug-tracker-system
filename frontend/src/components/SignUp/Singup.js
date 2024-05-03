@@ -11,12 +11,14 @@ const SignUpComponent = () => {
     const navigate = useNavigate();
 
     const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    
+
     const handleSubmitEmail = async (event) => {
         event.preventDefault();
-        // API call to register email and request OTP
-        // Mocked response
-        const response = { status: 200 }; // Assuming successful response
+        const response = await fetch('http://localhost:8080/auth/verify-email', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ email })
+        });
         if (response.status === 200) {
             setShowOtpForm(true);
         } else if (response.status === 409) {
@@ -26,14 +28,39 @@ const SignUpComponent = () => {
         }
     };
 
+    const handleRegenerateOTP = async () => {
+        const response = await fetch('http://localhost:8080/auth/verify-email', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ email })
+        });
+        if (response.status === 200) {
+            alert('OTP regenerated. Please check your email.');
+            setOtp('');  // Clear the OTP field to allow the user to enter the new OTP
+        } else {
+            alert('Error regenerating OTP.');
+        }
+    };
+
     const handleSubmitDetails = async (event) => {
         event.preventDefault();
         if (password !== confirmPassword) {
             alert('Passwords do not match.');
             return;
         }
-        // API call to verify OTP and register the user
-        navigate('/login', { replace: true });
+
+        const response = await fetch('http://localhost:8080/auth/create-user', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ email, password, role, otp })
+        });
+        if (response.status === 200) {
+            navigate('/login', { replace: true });
+        } else if (response.status === 401) {
+            alert('Invalid OTP');
+        } else {
+            alert('Error validating OTP, please try again later');
+        }
     };
 
     return (
@@ -89,6 +116,7 @@ const SignUpComponent = () => {
                         <button type="submit" disabled={!otp || !password || password !== confirmPassword || !role}>
                             Complete Registration
                         </button>
+                        <button type="button" onClick={handleRegenerateOTP}>Regenerate OTP</button>
                     </form>
                 )}
             </div>

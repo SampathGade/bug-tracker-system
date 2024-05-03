@@ -28,7 +28,7 @@ public class AuthenticationService {
 //    private PasswordEncoder passwordEncoder;
 
     public boolean checkCredentials(String email, String password) {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmailAndStatus(email, "Onboarded");
         if (user != null && (password.equals(user.getPassword())) && ("Onboarded".equalsIgnoreCase(user.getStatus()))) {
             logger.info("Credentials are valid for email: {}", email);
             return true;
@@ -38,7 +38,11 @@ public class AuthenticationService {
     }
 
     public void generateAndSendOtp(String email) {
-        User user = userRepository.findByEmailAndStatus(email, "Onboarded");
+        User user = userRepository.findByEmail(email);
+        if( user == null) {
+            user = new User();
+            user.setEmail(email);
+        }
         String otp = String.valueOf(new Random().nextInt(900000) + 100000);
         user.setOtp(otp);
         user.setOtpExpiry(LocalDateTime.now().plusMinutes(10));
@@ -59,16 +63,21 @@ public class AuthenticationService {
         return null;
     }
 
-    public void createUser(String email, String password, String role) {
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRole(role);
-        user.setStatus("Review Pending");
-        userRepository.save(user);
+    public boolean isDuplicateUser(String email) {
+        User user = userRepository.findByEmailAndStatus(email, "Onboarded") ;
+        return user != null;
         //need to write logic to send the request Email to admin
     }
 
+    public void createUser(String email, String password, String role) {
+        User user = userRepository.findByEmail(email);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setRole(role);
+        user.setStatus("Pending");
+        userRepository.save(user);
+    }
+;
     public List<User> getOnboardingPendingUsers() {
         return userRepository.findByStatus("Review Pending");
     }

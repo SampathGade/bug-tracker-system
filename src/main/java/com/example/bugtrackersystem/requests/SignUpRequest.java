@@ -15,4 +15,5 @@ public class SignUpRequest {
     private String password;
     @NonNull
     private String role;
+    private String otp;
 }

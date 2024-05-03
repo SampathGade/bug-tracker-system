@@ -10,6 +10,8 @@ import com.example.bugtrackersystem.entity.User;
 public interface UserRepository extends MongoRepository<User, String> {
     User findByEmail(String email);
 
+    User findByEmailAndStatus(String email, String status);
+
     List<User> findByStatus(String  status);
 
     List<User> findByStatusAndProjectManager(String status, String projectManager);

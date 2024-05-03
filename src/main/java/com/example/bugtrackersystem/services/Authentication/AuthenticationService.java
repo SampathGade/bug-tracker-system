@@ -38,7 +38,7 @@ public class AuthenticationService {
     }
 
     public void generateAndSendOtp(String email) {
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmailAndStatus(email, "Onboarded");
         String otp = String.valueOf(new Random().nextInt(900000) + 100000);
         user.setOtp(otp);
         user.setOtpExpiry(LocalDateTime.now().plusMinutes(10));

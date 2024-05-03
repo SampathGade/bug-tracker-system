@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Login.css'
+import './Login.css';
 
 const ForgotPasswordComponent = () => {
     const [email, setEmail] = useState('');
@@ -14,15 +14,23 @@ const ForgotPasswordComponent = () => {
 
     const handleEmailSubmit = async (event) => {
         event.preventDefault();
-        // API call to send OTP
-        // Uncomment and modify URL to integrate with real API
-        // const response = await fetch('/api/forgot-password', {
-        //     method: 'POST',
-        //     headers: {'Content-Type': 'application/json'},
-        //     body: JSON.stringify({ email })
-        // });
-        // Assume response is successful for demonstration
-        setShowResetForm(true);
+        await sendOtpRequest();
+    };
+
+    const sendOtpRequest = async () => {
+        const response = await fetch('http://localhost:3000/auth/verify-email-password', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ email })
+        });
+
+        if (response.status === 200) {
+            setShowResetForm(true);
+        } else if (response.status === 401) {
+            alert('No user found with that email.');
+        } else {
+            alert('Error sending OTP, please try again later.');
+        }
     };
 
     const handleResetSubmit = async (event) => {
@@ -31,9 +39,28 @@ const ForgotPasswordComponent = () => {
             alert('Passwords do not match.');
             return;
         }
-        // API call to reset password
-        navigate('/login');
+        const response = await fetch('http://localhost:3000/auth/reset-password', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ email, otp, password })
+        });
+
+        if (response.status === 200) {
+            alert('Password reset successfully.');
+            navigate('/login');
+        } else if (response.status === 401) {
+            alert('Invalid OTP.');
+        } else {
+            alert('Error resetting password, please try again later.');
+        }
     };
+
+    const handleResendOtp = async () => {
+        setOtp(''); // Clear current OTP input
+        await sendOtpRequest(); // Resend OTP
+    };
+
+    const isResetEnabled = otp && password && confirmPassword && password === confirmPassword;
 
     return (
         <div className="login-container">
@@ -54,6 +81,13 @@ const ForgotPasswordComponent = () => {
                 ) : (
                     <form onSubmit={handleResetSubmit}>
                         <input
+                            type="text"
+                            value={otp}
+                            onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
+                            placeholder="OTP"
+                            required
+                        />
+                        <input
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -67,14 +101,8 @@ const ForgotPasswordComponent = () => {
                             placeholder="Confirm New Password"
                             required
                         />
-                        <input
-                            type="text"
-                            value={otp}
-                            onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
-                            placeholder="OTP"
-                            required
-                        />
-                        <button type="submit">Reset Password</button>
+                        <button type="submit" disabled={!isResetEnabled}>Reset Password</button>
+                        <button type="button" onClick={handleResendOtp}>Resend OTP</button>
                     </form>
                 )}
             </div>

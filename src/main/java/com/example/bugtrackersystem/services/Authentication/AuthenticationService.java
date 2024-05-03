@@ -77,6 +77,12 @@ public class AuthenticationService {
         user.setStatus("Pending");
         userRepository.save(user);
     }
+
+    public void resetPassword(String email , String password) {
+        User user = userRepository.findByEmail(email);
+        user.setPassword(password);
+        userRepository.save(user);
+    }
 ;
     public List<User> getOnboardingPendingUsers() {
         return userRepository.findByStatus("Review Pending");

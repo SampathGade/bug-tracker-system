@@ -71,6 +71,20 @@ public class AuthenticationController {
             return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
         }
     }
+    @PostMapping("/verify-email-password")
+    public ResponseEntity<String> validEmailPassword(@RequestBody SignUpRequest signUpRequest) {
+        try {
+            boolean isDuplicate = authService.isDuplicateUser(signUpRequest.getEmail());
+            if(isDuplicate) {
+                authService.generateAndSendOtp(signUpRequest.getEmail());
+                return ResponseEntity.ok("Email validating successful");
+            }
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Onboarding request pending or already an user");
+        } catch (Exception e) {
+            logger.error("Internal server error during sing-up process for user: {}, error: {}", signUpRequest.getEmail(), e.getMessage());
+            return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
+        }
+    }
 
     @PostMapping("/create-user")
     public ResponseEntity<?> createUser(@RequestBody SignUpRequest signUpRequest) {
@@ -79,6 +93,24 @@ public class AuthenticationController {
             if (user != null) {
                 authService.createUser(signUpRequest.getEmail(),
                         signUpRequest.getPassword(), signUpRequest.getRole());
+                return ResponseEntity.ok("user created successfully");
+            } else {
+                logger.error("Unauthorized OTP attempt for user: {}", signUpRequest.getEmail());
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized: Invalid or expired OTP.");
+            }
+
+        } catch (Exception e) {
+            logger.error("Internal server error during sing-up process for user: {}, error: {}", signUpRequest.getEmail(), e.getMessage());
+            return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody SignUpRequest signUpRequest) {
+        try {
+            User user = authService.validateOtp(signUpRequest.getEmail(), signUpRequest.getOtp());
+            if (user != null) {
+                authService.resetPassword(signUpRequest.getEmail(), signUpRequest.getPassword());
                 return ResponseEntity.ok("user created successfully");
             } else {
                 logger.error("Unauthorized OTP attempt for user: {}", signUpRequest.getEmail());

@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Dashboard.css'
+import './Dashboard.css';
 
 // Import sub-components
 import BugComponent from './ViewBug/ViewBug';
-// import UserProfile from '';
 import OnboardingComponent from './OnBoarding/OnboardingComponent';
 import ViewPeopleComponent from './ViewUsers/Users';
 import ProjectComponent from './ViewProjects/ViewProjects';
 
 const Dashboard = () => {
-    const [activeComponent, setActiveComponent] = useState('bugs');
     const navigate = useNavigate();
+
+    // Initialize activeComponent from localStorage or default to 'bugs'
+    const [activeComponent, setActiveComponent] = useState(localStorage.getItem('activeComponent') || 'bugs');
 
     useEffect(() => {
         if (!localStorage.getItem('userEmail')) {
@@ -19,14 +20,19 @@ const Dashboard = () => {
         }
     }, [navigate]);
 
+    // Effect to store activeComponent in localStorage
+    useEffect(() => {
+        localStorage.setItem('activeComponent', activeComponent);
+    }, [activeComponent]);
+
     const handleLogout = () => {
         localStorage.clear();
         navigate('/login');
     };
 
     const getUserInitials = () => {
-        // const user = JSON.parse(localStorage.getItem('userEmail'));
-        return `ys`;
+        // Placeholder for actual initials fetching logic
+        return `YS`;
     };
 
     const renderComponent = () => {

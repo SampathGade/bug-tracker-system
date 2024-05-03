@@ -14,6 +14,7 @@ import com.example.bugtrackersystem.requests.GetUsersRequest;
 import com.example.bugtrackersystem.services.BugService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RequestMapping("/bug")
 public class BugController {
 
@@ -26,7 +27,7 @@ public class BugController {
     @PostMapping("/getBugsByUser")
     public ResponseEntity<?> getBugs(@RequestBody GetUsersRequest getUsersRequest) {
         try {
-            List<Bug> bugList = bugService.getBugs(getUsersRequest.getRole(), getUsersRequest.getEmail());
+            List<Bug> bugList = bugService.getBugs(getUsersRequest.getRole(), getUsersRequest.getEmail(), getUsersRequest.getProject(), getUsersRequest.getAssignee());
             return ResponseEntity.ok().body(bugList);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");

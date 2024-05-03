@@ -13,9 +13,13 @@ public class BugService {
     @Autowired
     BugRepository bugRepository;
 
-    public List<Bug> getBugs(String role , String email) {
+    public List<Bug> getBugs(String role , String email, String project, List<String> assignee) {
         if("admin".equalsIgnoreCase(role)) {
-            return bugRepository.findAll();
+            if(assignee != null && assignee.size()>0) {
+                return bugRepository.findByProjectAndAssigneeIn(project, assignee);
+            } else {
+               return bugRepository.findByProject(project);
+            }
         } else if ("projectManager".equalsIgnoreCase(role)) {
             return bugRepository.findByProjectManager(email);
         } else if ("developer".equalsIgnoreCase(role)) {

@@ -19,7 +19,7 @@ const BugsBoard = ({ filters, onEditBug }) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({email: email,role : role}) // Send filters as POST body
+                body: JSON.stringify({email: email,role : role, project:filters.project, assignee: filters.assignee}) // Send filters as POST body
             });
             if (response.ok) {
                 const fetchedBugs = await response.json();

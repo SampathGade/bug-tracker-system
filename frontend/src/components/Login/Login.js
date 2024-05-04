@@ -14,24 +14,30 @@ const LoginComponent = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // Uncomment and modify URL to integrate with real API
+
+        try {
         const response = await fetch('http://localhost:8080/auth/login', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ email, password })
         });
-        // Mock response for demonstration
-        // const response = { status: 200 }; // Mocking a successful login
-//        console.log(response)
+
         if (response.status === 200) {
             setShowOtpInput(true);
         } else if(response.status === 401) {
             alert('Invalid credentials or other authentication error.');
+        } else {
+            alert('Issue Validating credentials, Please try again')
         }
+    } catch {
+        alert('Issue Validating credentials, Please try again')
+    }
+
     };
 
     const handleOtpSubmit = async (event) => {
         event.preventDefault();
+        try {
         const response = await fetch('http://localhost:8080/auth/verify-otp', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -49,6 +55,9 @@ const LoginComponent = () => {
         } else {
             alert('Error validating OTP, please try again later.');
         }
+    }catch {
+        alert('Error validating OTP, please try again later.');
+    }
     };
 
     return (

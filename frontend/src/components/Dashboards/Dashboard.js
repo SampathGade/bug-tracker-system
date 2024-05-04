@@ -5,7 +5,7 @@ import './Dashboard.css';
 // Import sub-components
 import BugComponent from './ViewBug/ViewBug';
 import OnboardingComponent from './OnBoarding/OnboardingComponent';
-import ViewPeopleComponent from './ViewUsers/Users';
+import ViewPeopleComponent from './ViewUsers/ViewPeopleComponent';
 import ProjectComponent from './ViewProjects/ViewProjects';
 
 const Dashboard = () => {

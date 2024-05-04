@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 
 const EditUserOverlay = ({ user, onClose, onStatusChange }) => {
     const [role, setRole] = useState(user.role);
-    const [projectManager, setManager] = useState('');
-
     const managers = ['Manager A', 'Manager B', 'Manager C']; // Static data for now
+
+    // Initialize projectManager state with the first manager from the list or an existing value
+    const [projectManager, setManager] = useState(user.projectManager || managers[0]);
 
     const handleSubmit = async (status) => {
         const payload = { email: user.email, role, projectManager, status };

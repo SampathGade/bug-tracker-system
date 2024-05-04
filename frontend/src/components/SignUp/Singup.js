@@ -48,7 +48,7 @@ const SignUpComponent = () => {
             alert('Passwords do not match.');
             return;
         }
-
+        try {
         const response = await fetch('http://localhost:8080/auth/create-user', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -61,6 +61,9 @@ const SignUpComponent = () => {
         } else {
             alert('Error validating OTP, please try again later');
         }
+    }catch {
+        alert('Error validating OTP, please try again later');
+    }
     };
 
     return (

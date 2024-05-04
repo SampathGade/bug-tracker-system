@@ -11,7 +11,6 @@ import ProjectComponent from './ViewProjects/ViewProjectComponent';
 const Dashboard = () => {
     const navigate = useNavigate();
 
-    // Initialize activeComponent from localStorage or default to 'bugs'
     const [activeComponent, setActiveComponent] = useState(localStorage.getItem('activeComponent') || 'bugs');
 
     useEffect(() => {
@@ -20,7 +19,6 @@ const Dashboard = () => {
         }
     }, [navigate]);
 
-    // Effect to store activeComponent in localStorage
     useEffect(() => {
         localStorage.setItem('activeComponent', activeComponent);
     }, [activeComponent]);
@@ -31,7 +29,6 @@ const Dashboard = () => {
     };
 
     const getUserInitials = () => {
-        // Placeholder for actual initials fetching logic
         return `YS`;
     };
 

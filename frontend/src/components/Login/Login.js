@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
@@ -9,55 +9,59 @@ const LoginComponent = () => {
     const [showOtpInput, setShowOtpInput] = useState(false);
     const navigate = useNavigate();
 
+    // Redirect to dashboard if user is already logged in
+    useEffect(() => {
+        if (localStorage.getItem('userEmail')) {
+            navigate('/dashboard');
+        }
+    }, [navigate]);
+
     const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     const isFormValid = email && password && validateEmail(email);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
         try {
-        const response = await fetch('http://localhost:8080/auth/login', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ email, password })
-        });
+            const response = await fetch('http://localhost:8080/auth/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ email, password })
+            });
 
-        if (response.status === 200) {
-            setShowOtpInput(true);
-        } else if(response.status === 401) {
-            alert('Invalid credentials or other authentication error.');
-        } else {
-            alert('Issue Validating credentials, Please try again')
+            if (response.status === 200) {
+                setShowOtpInput(true);
+            } else if (response.status === 401) {
+                alert('Invalid credentials or other authentication error.');
+            } else {
+                alert('Issue Validating credentials, Please try again');
+            }
+        } catch {
+            alert('Issue Validating credentials, Please try again');
         }
-    } catch {
-        alert('Issue Validating credentials, Please try again')
-    }
-
     };
 
     const handleOtpSubmit = async (event) => {
         event.preventDefault();
         try {
-        const response = await fetch('http://localhost:8080/auth/verify-otp', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ email, otp })
-        });
-//        console.log(response)
-        if (response.status === 200) {
-            const data = await response.json();
-            console.log(data)
-            localStorage.setItem('userRole', data.role);
-            localStorage.setItem('userEmail', email);
-            navigate('/dashboard');
-        } else if (response.status === 401) {
-            alert('Invalid OTP.');
-        } else {
+            const response = await fetch('http://localhost:8080/auth/verify-otp', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ email, otp })
+            });
+
+            if (response.status === 200) {
+                const data = await response.json();
+                localStorage.setItem('userRole', data.role);
+                localStorage.setItem('userEmail', email);
+                navigate('/dashboard');
+            } else if (response.status === 401) {
+                alert('Invalid OTP.');
+            } else {
+                alert('Error validating OTP, please try again later.');
+            }
+        } catch {
             alert('Error validating OTP, please try again later.');
         }
-    }catch {
-        alert('Error validating OTP, please try again later.');
-    }
     };
 
     return (

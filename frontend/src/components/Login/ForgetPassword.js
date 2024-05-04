@@ -18,6 +18,7 @@ const ForgotPasswordComponent = () => {
     };
 
     const sendOtpRequest = async () => {
+        try {
         const response = await fetch('http://localhost:3000/auth/verify-email-password', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -31,6 +32,9 @@ const ForgotPasswordComponent = () => {
         } else {
             alert('Error sending OTP, please try again later.');
         }
+    }catch{
+        alert('Error sending OTP, please try again later.');
+    }
     };
 
     const handleResetSubmit = async (event) => {
@@ -39,6 +43,7 @@ const ForgotPasswordComponent = () => {
             alert('Passwords do not match.');
             return;
         }
+        try {
         const response = await fetch('http://localhost:3000/auth/reset-password', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -53,6 +58,9 @@ const ForgotPasswordComponent = () => {
         } else {
             alert('Error resetting password, please try again later.');
         }
+    }catch {
+        alert('Error resetting password, please try again later.');
+    }
     };
 
     const handleResendOtp = async () => {

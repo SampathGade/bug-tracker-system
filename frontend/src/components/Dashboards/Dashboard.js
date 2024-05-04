@@ -6,7 +6,7 @@ import './Dashboard.css';
 import BugComponent from './ViewBug/ViewBug';
 import OnboardingComponent from './OnBoarding/OnboardingComponent';
 import ViewPeopleComponent from './ViewUsers/ViewPeopleComponent';
-import ProjectComponent from './ViewProjects/ViewProjects';
+import ProjectComponent from './ViewProjects/ViewProjectComponent';
 
 const Dashboard = () => {
     const navigate = useNavigate();

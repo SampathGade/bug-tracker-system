@@ -1,14 +1,10 @@
-// src/components/Projects/ProjectCell.js
-
 import React from 'react';
-import './Project.css';
+import './ViewProjectsComponent.css'; // Make sure to create appropriate CSS
 
-const ProjectCell = ({ project, onSelect }) => {
+
+const ProjectCell = ({ project, onSelectProject }) => {
     return (
-        <div className="project-cell" onClick={(e) => {
-            e.stopPropagation();
-            onSelect(project);
-        }}>
+        <div className="project-cell" onClick={() => onSelectProject(project)}>
             <h3>{project.name}</h3>
             <p>{project.description}</p>
         </div>

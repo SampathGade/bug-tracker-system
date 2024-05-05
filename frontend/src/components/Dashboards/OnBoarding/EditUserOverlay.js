@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const EditUserOverlay = ({ user, onClose, onStatusChange }) => {
     const [role, setRole] = useState(user.role);
-    const managers = ['Manager A', 'Manager B', 'Manager C']; // Static data for now
+    const [managers, setManagers] = useState([]); // Initialize managers as an empty array
+    const [projectManager, setManager] = useState(user.projectManager);
 
-    // Initialize projectManager state with the first manager from the list or an existing value
-    const [projectManager, setManager] = useState(user.projectManager || managers[0]);
+    useEffect(() => {
+        const fetchManagers = async () => {
+            const response = await fetch('http://localhost:8080/users/getProjectManagers'); // Adjust URL as needed
+            if (response.ok) {
+                const data = await response.json();
+                setManagers(data);
+                // Initialize projectManager with the email of the first manager or an existing value
+                setManager(user.projectManager || (data.length > 0 && data[0].email));
+            }
+        };
+
+        fetchManagers();
+    }, [user.projectManager]); // Ensure this effect runs only once or when user.projectManager changes
 
     const handleSubmit = async (status) => {
         const payload = { email: user.email, role, projectManager, status };
@@ -42,7 +54,9 @@ const EditUserOverlay = ({ user, onClose, onStatusChange }) => {
                 <label>
                     Project Manager:
                     <select value={projectManager} onChange={e => setManager(e.target.value)}>
-                        {managers.map(m => <option key={m} value={m}>{m}</option>)}
+                        {managers.map(manager => (
+                            <option key={manager.email} value={manager.email}>{manager.email}</option>
+                        ))}
                     </select>
                 </label>
                 <button onClick={() => handleSubmit('accepted')}>Accept</button>

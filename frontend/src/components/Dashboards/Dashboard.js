@@ -12,6 +12,7 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     const [activeComponent, setActiveComponent] = useState(localStorage.getItem('activeComponent') || 'bugs');
+    const userRole = localStorage.getItem('userRole');
 
     useEffect(() => {
         if (!localStorage.getItem('userEmail')) {
@@ -52,8 +53,12 @@ const Dashboard = () => {
             <nav>
                 <ul>
                     <li onClick={() => setActiveComponent('bugs')}>Bugs</li>
-                    <li onClick={() => setActiveComponent('onboarding')}>Onboarding</li>
-                    <li onClick={() => setActiveComponent('people')}>View People</li>
+                    {['admin'].includes(userRole) && (
+                        <li onClick={() => setActiveComponent('onboarding')}>Onboarding</li>
+                    )}
+                    {['admin', 'projectManager'].includes(userRole) && (
+                        <li onClick={() => setActiveComponent('people')}>View People</li>
+                    )}
                     <li onClick={() => setActiveComponent('projects')}>Projects</li>
                     <li className="profile-icon" onClick={() => setActiveComponent('profile')}>
                         {getUserInitials()}

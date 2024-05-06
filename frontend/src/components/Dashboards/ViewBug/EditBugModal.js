@@ -26,8 +26,10 @@ const EditBugModal = ({ bug, onClose }) => {
                         Description:
                         <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
                     </label>
+                    <div className='form-actions'>
                     <button type="submit">Update Bug</button>
                     <button type="button" onClick={onClose}>Cancel</button>
+                    </div>
                 </form>
             </div>
         </div>

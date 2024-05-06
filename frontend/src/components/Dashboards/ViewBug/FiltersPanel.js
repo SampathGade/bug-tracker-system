@@ -19,7 +19,7 @@ const FiltersPanel = ({ filters, onFilterChange, projects }) => {
 
     return (
         <div className="filters-panel">
-            <select onChange={handleProjectChange} value={filters.project}>
+            <select className='select-filter' onChange={handleProjectChange} value={filters.project}>
                 {projects.map(project => (
                     <option key={project} value={project}>{project}</option>
                 ))}

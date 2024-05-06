@@ -1,20 +1,28 @@
 /* General styling for the entire login area */
 .login-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #0052cc; /* JIRA-like blue background for overall background */
-  font-family: Arial, sans-serif;
+  font-family: "Poppins", sans-serif;
+  background-color: #ffffff;
+}
+.login-detail-sec {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 50%;
+}
+.login-img {
+  background: url(../../images/img1.png) lightgray 50% / cover no-repeat;
+  width: 50%;
+  min-height: 100vh;
+  flex-shrink: 0;
 }
 
 /* Individual form container styling */
 .form-container {
-  background-color: #ffffff; /* White background for the form */
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adding subtle shadow for depth */
   width: 350px; /* Fixed width for the form */
   text-align: center; /* Centering the form contents */
 }
@@ -22,47 +30,146 @@
 .login-container h1 {
   color: #ffffff; /* White color for contrast against the blue background */
   margin-bottom: 20px; /* Spacing for visual separation */
+  color: #030303;
+  text-align: center;
+  font-family: "Poppins";
+  font-size: 34px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 1.02px;
+  text-transform: uppercase;
 }
 
 .form-container h2 {
   color: #0052cc; /* Using the theme blue for internal heading */
   margin-bottom: 15px; /* Consistent spacing below the heading */
 }
-
+.form-container .input-field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.form-container .input-field label {
+  color: #181818;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.42px;
+}
 /* Styling for input fields */
 input {
   width: 100%;
   padding: 10px;
   margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
   box-sizing: border-box; /* Makes sure padding doesn't affect the width */
+  font-family: "Poppins";
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: rgba(196, 196, 196, 0);
+  /* box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25); */
 }
-
-/* Styling for buttons */
-button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  background-color: #0052cc; /* JIRA-like blue background for buttons */
-  color: white;
+.btn-block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+button.btn-frgt-pass {
+  color: #181818;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.36px;
+  background-color: transparent;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  box-shadow: none;
+  padding: 0;
+  height: auto;
+  display: block;
+}
+.btn-sign-up {
+  color: #595959;
+  text-align: center;
+  font-family: "Poppins";
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.3px;
+}
+.btn-sign-up .btn-sign-up-text {
+  color: #ea454c;
+  font-family: "Poppins";
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.3px;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  height: auto;
+  display: inline-block;
+}
+/* Styling for buttons */
+button.btn-login,button {
+  color: #fff;
+  text-align: center;
+  font-family: "Poppins";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.42px;
+  border-radius: 12px;
+  background: #ea454c;
+  border: 1px solid #ea454c ;
+  height: 42px;
+  box-shadow: 0px 4px 10px 0px rgba(233, 68, 75, 0.25);
   transition: background-color 0.3s; /* Smooth transition for hover effect */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
 }
 
-button:hover {
-  background-color: #003380; /* Darker shade on hover */
+button.btn-login:hover {
+  background-color: #ee545f; /* Darker shade on hover */
 }
 
-button:disabled {
+button.btn-login:disabled {
   background-color: #ccc; /* Grey out disabled buttons */
   cursor: default;
+  border: none;
+  box-shadow: none;
+}
+.btn-reset-pass-block{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
 }
 
 /* Special styling for error messages or hints */
 .error-message {
   color: #d32f2f; /* Red color for errors */
   margin: 5px 0;
+}
+select.custm-select{
+  cursor: pointer;
+  border: 1px solid #ed9fa4;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  font-family: 'Poppins';
+  transition:all 1s ease-in;
 }

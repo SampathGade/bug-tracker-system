@@ -30,8 +30,10 @@ const CreateProjectOverlay = ({ onClose }) => {
                     Description:
                     <textarea value={description} onChange={e => setDescription(e.target.value)} />
                 </label>
+                <div className='form-actions'>
                 <button onClick={handleCreateProject}>Create</button>
                 <button onClick={onClose}>Cancel</button>
+                </div>
             </div>
         </div>
     );

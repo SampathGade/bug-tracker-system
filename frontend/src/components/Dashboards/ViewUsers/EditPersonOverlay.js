@@ -46,8 +46,10 @@ const EditPersonOverlay = ({ person, onClose }) => {
                         {managers.map(m => <option key={m} value={m}>{m}</option>)}
                     </select>
                 </label>
+                <div className='form-actions'>
                 <button onClick={handleUpdatePerson}>Update</button>
                 <button onClick={onClose}>Cancel</button>
+                </div>
             </div>
         </div>
     );

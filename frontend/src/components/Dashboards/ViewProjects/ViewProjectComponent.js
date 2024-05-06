@@ -48,7 +48,9 @@ const ViewProjectsComponent = () => {
 
     return (
         <div className="projects-container">
-            <button onClick={handleOpenCreateProject}>Create Project</button>
+            <div>
+            <button onClick={handleOpenCreateProject}>Create Project</button></div>
+            <div className='projects-card-list'>
             {projects.map(project => (
                 <ProjectCell key={project.id} project={project} onSelectProject={handleSelectProject} />
             ))}
@@ -58,6 +60,7 @@ const ViewProjectsComponent = () => {
             {creatingProject && (
                 <CreateProjectOverlay onClose={handleCloseOverlay} />
             )}
+            </div>
         </div>
     );
 };

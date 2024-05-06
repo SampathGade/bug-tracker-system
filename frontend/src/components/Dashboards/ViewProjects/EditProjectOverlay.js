@@ -54,7 +54,7 @@ const EditProjectOverlay = ({ project, onClose }) => {
                         </label>
                     </div>
                     <div>
-                        <h4>Developers:</h4>
+                        <label>Developers:</label>
                         {developers.map(dev => (
                             <div key={dev} className="developer-cell">
                                 {dev}
@@ -71,8 +71,10 @@ const EditProjectOverlay = ({ project, onClose }) => {
                         </div>
                     </div>
                 </div>
+                <div className='form-actions'>
                 <button onClick={handleUpdateProject}>Update</button>
                 <button onClick={onClose}>Cancel</button>
+                </div>
             </div>
         </div>
     );

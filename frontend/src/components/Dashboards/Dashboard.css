@@ -6,8 +6,6 @@
 
 nav {
   width: 100%;
-  background-color: #34495e; /* Darker shade for a more professional look */
-  padding: 10px 20px;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -16,42 +14,79 @@ nav {
 nav ul {
   list-style: none;
   display: flex;
+  align-items: center;
   margin: 0;
-  padding: 0;
+  padding: 16px;
   width: 100%;
+  gap: 12px;
+  background: white;
 }
 
 nav ul li {
   flex-grow: 1;
   text-align: center;
-  padding: 8px;
-  margin: 0 5px;
-  background-color: #2c3e50; /* Slightly lighter than nav background */
-  color: #ecf0f1;
-  border-radius: 4px;
+  background: linear-gradient(
+    178deg,
+    rgba(201, 234, 252, 0.51) 14.9%,
+    rgba(139, 192, 216, 0.73) 80%
+  );
+  color: #1d1a1a;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-family: "Poppins";
+  font-weight: 500;
   transition: background-color 0.3s;
 }
-
-nav ul li:hover {
-  background-color: #3498db; /* A light blue for hover */
+nav ul li.selected {
+  color: #ecf0f1;
+  background: radial-gradient(
+    circle at 10% 20%,
+    rgb(0, 107, 141) 0%,
+    rgb(0, 69, 91) 90%
+  );
 }
 
-.content {
+.content-block {
   flex: 1; /* Ensure it takes full height */
   display: flex;
   flex-direction: column; /* Stack vertically */
   overflow: hidden;
+  background: #ffffff;
+  padding: 24px;
 }
 
-.profile-icon, .dropdown-content {
+.profile-icon {
   border-radius: 4px; /* Consistent border-radius */
   transition: all 0.3s ease;
+  background: none;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
 }
-
-.dropdown-content {
-  background-color: #f8f9fa; /* Very light background for the dropdown */
+.user-initial {
+  height: 36px;
+  width: 36px;
+  line-height: 18px;
+  font-size: 14.4px;
+  background-color: #efefef;
+  text-align: center;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  border-radius: 50%;
+  color: #2245d9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-.dropdown-content a:hover {
-  background-color: #3498db; /* Matching hover effect with nav */
+.select-filter {
+  height: 32px;
+  width: 200px;
+  cursor: pointer;
+  border: 2px solid #3498db;
+  font-family: "Poppins";
+  border-radius: 12px;
+  padding: 4px;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
 }

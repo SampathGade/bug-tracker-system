@@ -22,4 +22,6 @@ public class Bug {
     private List<Comment> comments;
     private String createdBy;
     private String status;
+    private Integer sprint;
+    private Integer storyPoint;
 }

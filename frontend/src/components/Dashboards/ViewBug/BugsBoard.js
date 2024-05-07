@@ -1,35 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import BugCard from './BugCard';
+import StatisticsOverlay from './StatisticsOverlay';
 import './BugComponent.css';
 
 const BugsBoard = ({ filters, onEditBug }) => {
     const [bugs, setBugs] = useState([]);
+    const [showStats, setShowStats] = useState(false);
     const role = localStorage.getItem("userRole");
     const email = localStorage.getItem("userEmail");
 
     useEffect(() => {
-        fetchBugs();
-    }, [filters]); // Re-run when filters change
-
-    const fetchBugs = async () => {
-        try {
-            const response = await fetch('http://localhost:8080/bug/getBugsByUser', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, role, project: filters.project, assignee: filters.assignee })
-            });
-            if (response.ok) {
-                const fetchedBugs = await response.json();
-                setBugs(fetchedBugs);
-            } else {
-                console.error('Failed to fetch bugs');
+        const fetchBugs = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/bug/getBugsByUser', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, role, project: filters.project, assignee: filters.assignee })
+                });
+                if (response.ok) {
+                    const fetchedBugs = await response.json();
+                    setBugs(fetchedBugs);
+                } else {
+                    console.error('Failed to fetch bugs');
+                }
+            } catch (error) {
+                console.error('Error fetching bugs:', error);
             }
-        } catch (error) {
-            console.error('Error fetching bugs:', error);
-        }
-    };
+        };
+
+        fetchBugs();
+    }, [filters]);
 
     const handleDragEnd = async (bugId, newStatus) => {
         const updatedBugs = bugs.map(bug => {
@@ -46,11 +48,11 @@ const BugsBoard = ({ filters, onEditBug }) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ status : newStatus, id : bugId })
+                body: JSON.stringify({ status: newStatus, id: bugId })
             });
             if (!response.ok) {
                 console.error('Failed to update bug status');
-                fetchBugs(); // Optionally refetch to sync state
+                // fetchBugs(); // Optionally refetch to sync state
             }
         } catch (error) {
             console.error('Error updating bug status:', error);
@@ -68,6 +70,8 @@ const BugsBoard = ({ filters, onEditBug }) => {
 
     return (
         <div className="bugs-board">
+            <button onClick={() => setShowStats(true)} className="view-stats-button">View Statistics</button>
+            {showStats && <StatisticsOverlay data={{ bugs }} onClose={() => setShowStats(false)} />}
             {['To Do', 'In Progress', 'Done'].map(status => (
                 <div key={status} className="bug-column"
                      onDragOver={handleDragOver}

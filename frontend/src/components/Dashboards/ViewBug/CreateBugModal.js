@@ -31,10 +31,7 @@ const CreateBugModal = ({ onClose }) => {
                 }
             }
         };
-
-        if (userRole !== 'external') {
             fetchProjects();
-        }
     }, [userEmail, userRole]);
 
     useEffect(() => {
@@ -96,8 +93,6 @@ const CreateBugModal = ({ onClose }) => {
                         Description:
                         <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
                     </label>
-                    {userRole !== 'external' && (
-                        <>
                             <label>
                                 Project:
                                 <select value={selectedProject} onChange={(e) => setSelectedProject(e.target.value)}>
@@ -118,8 +113,6 @@ const CreateBugModal = ({ onClose }) => {
                                     ))}
                                 </select>
                             </label>
-                        </>
-                    )}
                     <label>
                         Type:
                         <select value={type} onChange={(e) => setType(e.target.value)}>

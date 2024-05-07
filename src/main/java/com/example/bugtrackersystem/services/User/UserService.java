@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.bugtrackersystem.entity.Project;
 import com.example.bugtrackersystem.entity.User;
+import com.example.bugtrackersystem.repository.ProjectRepository;
 import com.example.bugtrackersystem.repository.UserRepository;
 
 @Service
@@ -14,6 +16,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
     public List<User> getUserDetails(String role, String email) {
         if ("admin".equalsIgnoreCase(role)) {
@@ -48,6 +53,15 @@ public class UserService {
             userList = new ArrayList<>();
         }
         return userList;
+    }
+
+    public List<String> getDevelopersByProject(String name) {
+        List<String> developers = new ArrayList<>();
+        Project project = projectRepository.findByName(name);
+        if(project != null) {
+            developers = project.getDevelopers()==null ? new ArrayList<>():project.getDevelopers();
+        }
+        return developers;
     }
 
 }

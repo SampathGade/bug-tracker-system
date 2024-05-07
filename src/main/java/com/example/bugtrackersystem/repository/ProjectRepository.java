@@ -11,7 +11,7 @@ import com.example.bugtrackersystem.entity.Project;
 public interface ProjectRepository extends MongoRepository<Project, String> {
     List<Project> findByProjectManager(String projectManager);
 
-    List<Project> findByUsers(String user);
+    List<Project> findByDevelopers(String user);
 
     Project findByName(String name);
 }

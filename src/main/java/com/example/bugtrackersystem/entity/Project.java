@@ -23,8 +23,10 @@ public class Project {
 
     private String projectManager;
 
-    private List<String> users;
+    private List<String> tester;
 
+    private List<String> developers;
+    
     @CreatedDate
     private Date createdDate;
 

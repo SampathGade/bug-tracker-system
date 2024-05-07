@@ -24,7 +24,7 @@ public class ProjectService {
         bugList.add("Frontend");
         bugList.add("Backend");
         project.setBugTypes(bugList);
-        project.setUsers(users);
+        project.setDevelopers(users);
         projectRepository.save(project);
     }
 
@@ -35,7 +35,7 @@ public class ProjectService {
         } else if ("productManager".equalsIgnoreCase(role)) {
             projectList = projectRepository.findByProjectManager(email);
         } else {
-            projectList = projectRepository.findByUsers(email);
+            projectList = projectRepository.findByDevelopers(email);
         }
         return projectList;
     }
@@ -44,7 +44,7 @@ public class ProjectService {
                               List<String> users) {
         Project project = projectRepository.findByName(projectName);
         project.setDescription(projectDescription);
-        project.setUsers(users);
+        project.setDevelopers(users);
         project.setProjectManager(productManager);
         projectRepository.save(project);
     }

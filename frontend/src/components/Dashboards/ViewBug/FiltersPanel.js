@@ -1,21 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './BugComponent.css';
 
 const FiltersPanel = ({ filters, onFilterChange, projects }) => {
-    const assignees = ['User 1', 'User 2', 'User 3', 'User 4'];
+    const [assignees, setAssignees] = useState([]);
 
-    const getInitials = (name) => name.split(' ').map(n => n[0]).join('').toUpperCase();
+    useEffect(() => {
+        const fetchAssignees = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/users/getDevelopersByProject', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: filters.project
+                });
+                if (response.ok) {
+                    const assigneesData = await response.json();
+                    setAssignees(assigneesData);
+                } else {
+                    console.error('Failed to fetch assignees');
+                }
+            } catch (error) {
+                console.error('Error fetching assignees:', error);
+            }
+        };
+
+        if (filters.project) {
+            fetchAssignees();
+        }
+    }, [filters.project]); // Dependency on project filter to re-fetch assignees
 
     const handleProjectChange = (e) => {
         onFilterChange({ ...filters, project: e.target.value });
     };
 
-    const handleAssigneeChange = (assignee, isChecked) => {
+    const handleAssigneeChange = (assigneeEmail, isChecked) => {
         const newAssignees = isChecked
-            ? [...filters.assignee, assignee]
-            : filters.assignee.filter(a => a !== assignee);
+            ? [...filters.assignee, assigneeEmail]
+            : filters.assignee.filter(a => a !== assigneeEmail);
         onFilterChange({ ...filters, assignee: newAssignees });
     };
+
+    const getInitials = (email) => email.substr(0, 2).toUpperCase();
 
     return (
         <div className="filters-panel">

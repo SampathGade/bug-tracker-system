@@ -10,16 +10,19 @@ const BugComponent = () => {
     const [filters, setFilters] = useState({ project: '', assignee: [] }); // Default filters
     const [showCreateBugModal, setShowCreateBugModal] = useState(false);
     const [editBugData, setEditBugData] = useState(null);
+    const [userRole, setUserRole] = useState('');
 
     useEffect(() => {
+        const userEmail = localStorage.getItem("userEmail");
+        const role = localStorage.getItem("userRole");
+        setUserRole(role); // Set user role state
+
         const fetchProjects = async () => {
-            const userEmail = localStorage.getItem("userEmail");
-            const userRole = localStorage.getItem("userRole");
             try {
                 const response = await fetch('http://localhost:8080/project/getProjects', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: userEmail, role: userRole })  // Adjusted payload keys
+                    body: JSON.stringify({ email: userEmail, role })  // Adjusted payload keys
                 });
                 if (response.ok) {
                     const projectsData = await response.json();
@@ -54,7 +57,9 @@ const BugComponent = () => {
 
     return (
       <div>
-          <button onClick={toggleCreateBugModal} className="create-bug-button">Create Bug</button>
+          {userRole !== 'developer' && (
+              <button onClick={toggleCreateBugModal} className="create-bug-button">Create Bug</button>
+          )}
           <FiltersPanel projects={projects} filters={filters} onFilterChange={handleFilterChange} />
           {showCreateBugModal && <CreateBugModal onClose={toggleCreateBugModal} projects={projects} />}
           {editBugData && <EditBugModal bug={editBugData} onClose={closeEditBugModal} />}

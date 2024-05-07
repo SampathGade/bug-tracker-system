@@ -32,7 +32,8 @@ const Dashboard = () => {
   };
 
   const getUserInitials = () => {
-    return `YS`;
+    const email = localStorage.getItem("userEmail") || "";
+    return email.substr(0, 2).toUpperCase();
   };
 
   const renderComponent = () => {
@@ -55,7 +56,7 @@ const Dashboard = () => {
       <nav>
         <ul>
           <li
-            className={` cls-c-p ${
+            className={`cls-c-p ${
               activeComponent === "bugs" ? "selected" : ""
             }`}
             onClick={() => setActiveComponent("bugs")}
@@ -64,7 +65,7 @@ const Dashboard = () => {
           </li>
           {["admin"].includes(userRole) && (
             <li
-              className={` cls-c-p ${
+              className={`cls-c-p ${
                 activeComponent === "onboarding" ? "selected" : ""
               }`}
               onClick={() => setActiveComponent("onboarding")}
@@ -74,7 +75,7 @@ const Dashboard = () => {
           )}
           {["admin", "projectManager"].includes(userRole) && (
             <li
-              className={` cls-c-p ${
+              className={`cls-c-p ${
                 activeComponent === "people" ? "selected" : ""
               }`}
               onClick={() => setActiveComponent("people")}
@@ -83,7 +84,7 @@ const Dashboard = () => {
             </li>
           )}
           <li
-            className={` cls-c-p ${
+            className={`cls-c-p ${
               activeComponent === "projects" ? "selected" : ""
             }`}
             onClick={() => setActiveComponent("projects")}

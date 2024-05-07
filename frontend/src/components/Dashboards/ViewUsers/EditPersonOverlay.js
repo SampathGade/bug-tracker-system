@@ -2,17 +2,30 @@ import React, { useState, useEffect } from 'react';
 
 const EditPersonOverlay = ({ person, onClose }) => {
     const [role, setRole] = useState(person.role);
-    const [projectManager, setProjectManager] = useState(person.projectManager || 'Manager A'); // Default to first manager if none is set
-
-    // Managers list could also come from props if they are dynamic or fetched from a backend
-    const managers = ['Manager A', 'Manager B', 'Manager C']; 
+    const [managers, setManagers] = useState([]);
+    const [projectManager, setProjectManager] = useState(person.projectManager || '');
 
     useEffect(() => {
-        // Initialize project manager to the first one if not set
-        if (!person.projectManager) {
-            setProjectManager(managers[0]);
-        }
-    }, [person.projectManager, managers]);
+        const fetchManagers = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/users/getProjectManagers');
+                if (response.ok) {
+                    const managerData = await response.json();
+                    setManagers(managerData.map(manager => manager.email));
+                    // Initialize project manager to the existing value or the first one if not set
+                    if (!person.projectManager && managerData.length > 0) {
+                        setProjectManager(managerData[0].email);
+                    }
+                } else {
+                    throw new Error('Failed to fetch managers');
+                }
+            } catch (error) {
+                console.error('Error fetching managers:', error);
+            }
+        };
+
+        fetchManagers();
+    }, [person.projectManager]);
 
     const handleUpdatePerson = async () => {
         const updatedDetails = { email: person.email, role, projectManager };
@@ -43,12 +56,16 @@ const EditPersonOverlay = ({ person, onClose }) => {
                 <label>
                     Project Manager:
                     <select value={projectManager} onChange={e => setProjectManager(e.target.value)}>
-                        {managers.map(m => <option key={m} value={m}>{m}</option>)}
+                        {managers.map(email => (
+                            <option key={email} value={email}>
+                                {email}
+                            </option>
+                        ))}
                     </select>
                 </label>
                 <div className='form-actions'>
-                <button onClick={handleUpdatePerson}>Update</button>
-                <button onClick={onClose}>Cancel</button>
+                    <button onClick={handleUpdatePerson}>Update</button>
+                    <button onClick={onClose}>Cancel</button>
                 </div>
             </div>
         </div>

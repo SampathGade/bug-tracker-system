@@ -50,8 +50,10 @@ public class ProjectService {
             Project existingProject = projectOptional.get();
             existingProject.setName(projectName);
             existingProject.setDescription(projectDescription);
-            existingProject.setProjectManager(productManager);
-            existingProject.setDevelopers(developers);
+            if(productManager != null)
+                existingProject.setProjectManager(productManager);
+            if(developers != null)
+                existingProject.setDevelopers(developers);
             projectRepository.save(existingProject);
         } else {
             throw new RuntimeException("Project not found with id: " + id);  // Or handle this case as you see fit

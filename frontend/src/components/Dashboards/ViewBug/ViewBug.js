@@ -6,23 +6,24 @@ import EditBugModal from './EditBugModal';
 import './BugComponent.css';
 
 const BugComponent = () => {
-    const [projects, setProjects] = useState([]); // Dynamic projects list
-    const [filters, setFilters] = useState({ project: '', assignee: [] }); // Default filters
+    const [projects, setProjects] = useState([]);
+    const [filters, setFilters] = useState({ project: '', assignee: [] });
     const [showCreateBugModal, setShowCreateBugModal] = useState(false);
     const [editBugData, setEditBugData] = useState(null);
     const [userRole, setUserRole] = useState('');
+    const [forceUpdate, setForceUpdate] = useState(false);  // State to trigger re-renders
 
     useEffect(() => {
         const userEmail = localStorage.getItem("userEmail");
         const role = localStorage.getItem("userRole");
-        setUserRole(role); // Set user role state
+        setUserRole(role);
 
         const fetchProjects = async () => {
             try {
                 const response = await fetch('http://localhost:8080/project/getProjects', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: userEmail, role })  // Adjusted payload keys
+                    body: JSON.stringify({ email: userEmail, role })
                 });
                 if (response.ok) {
                     const projectsData = await response.json();
@@ -37,7 +38,7 @@ const BugComponent = () => {
         };
 
         fetchProjects();
-    }, []);
+    }, [forceUpdate]); // Re-fetch projects on forceUpdate change
 
     const handleFilterChange = (newFilters) => {
         setFilters(newFilters);
@@ -45,6 +46,7 @@ const BugComponent = () => {
 
     const toggleCreateBugModal = () => {
         setShowCreateBugModal(!showCreateBugModal);
+        setForceUpdate(f => !f);  // Toggle to trigger re-render
     };
 
     const openEditBugModal = (bug) => {
@@ -53,18 +55,19 @@ const BugComponent = () => {
 
     const closeEditBugModal = () => {
         setEditBugData(null);
+        setForceUpdate(f => !f);  // Toggle to trigger re-render
     };
 
     return (
-      <div>
-          {userRole !== 'developer' && (
-              <button onClick={toggleCreateBugModal} className="create-bug-button">Create Bug</button>
-          )}
-          <FiltersPanel projects={projects} filters={filters} onFilterChange={handleFilterChange} />
-          {showCreateBugModal && <CreateBugModal onClose={toggleCreateBugModal} projects={projects} />}
-          {editBugData && <EditBugModal bug={editBugData} onClose={closeEditBugModal} />}
-          <BugsBoard filters={filters} onEditBug={openEditBugModal} />
-      </div>
+        <div>
+            {userRole !== 'developer' && (
+                <button onClick={toggleCreateBugModal} className="create-bug-button">Create Bug</button>
+            )}
+            <FiltersPanel projects={projects} filters={filters} onFilterChange={handleFilterChange} />
+            {showCreateBugModal && <CreateBugModal onClose={toggleCreateBugModal} projects={projects} />}
+            {editBugData && <EditBugModal bug={editBugData} onClose={closeEditBugModal} />}
+            <BugsBoard filters={filters} onEditBug={openEditBugModal} />
+        </div>
     );
 };
 

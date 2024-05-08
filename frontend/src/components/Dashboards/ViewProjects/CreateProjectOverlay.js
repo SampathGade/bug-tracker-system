@@ -6,7 +6,7 @@ const CreateProjectOverlay = ({ onClose }) => {
 
     const handleCreateProject = async () => {
         const newProjectDetails = { name, description };
-        const response = await fetch('http://localhost:8080/project/create/createProject', {
+        const response = await fetch('http://localhost:8080/project/createProject', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newProjectDetails)

@@ -69,22 +69,35 @@
     font-size: 14px;
 }
 .overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Dimmed background */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 20px;  /* Add padding to ensure content does not touch the edges */
+}
+
+.overlay-content {
+  position: relative;  /* Ensure it's positioned relatively within the overlay */
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;  /* Adjust width as necessary */
+  max-height: 80vh;  /* Max height to 80% of the viewport height */
+  overflow-y: auto;  /* Enable vertical scrolling */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);  /* Optional: adds shadow for better depth perception */
 }
 
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
   .overlay-content {
-    width: 90%; /* Adjusts width for smaller screens */
+    width: 90%;  /* Ensure it remains accessible on smaller devices */
+    max-height: 90vh;  /* Slightly more space for smaller devices */
   }
 }
 

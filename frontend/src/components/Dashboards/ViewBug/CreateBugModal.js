@@ -10,6 +10,7 @@ const CreateBugModal = ({ onClose }) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [projectManager, setProjectManager] = useState('');
+    const [expectedOutcome, setExpectedOutcome] = useState('');
     const [assignee, setAssignee] = useState('');
     const [type, setType] = useState(types[0]);
     const userRole = localStorage.getItem("userRole");
@@ -120,6 +121,10 @@ const CreateBugModal = ({ onClose }) => {
                                 <option key={t} value={t}>{t}</option>
                             ))}
                         </select>
+                    </label>
+                    <label>
+                        Expected Outcome:
+                        <textarea value={expectedOutcome} onChange={(e) => setExpectedOutcome(e.target.value)} required />
                     </label>
                     <div className="form-actions">
                         <button type="submit">Create Bug</button>

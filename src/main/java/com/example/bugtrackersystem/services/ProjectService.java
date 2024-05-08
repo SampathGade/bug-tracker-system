@@ -2,8 +2,10 @@ package com.example.bugtrackersystem.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.bugtrackersystem.entity.Project;
@@ -40,12 +42,19 @@ public class ProjectService {
         return projectList;
     }
 
-    public void updateProject(String projectName , String projectDescription , String productManager,
-                              List<String> users) {
-        Project project = projectRepository.findByName(projectName);
-        project.setDescription(projectDescription);
-        project.setDevelopers(users);
-        project.setProjectManager(productManager);
-        projectRepository.save(project);
+    public void updateProject(String id, String projectName, String projectDescription, String productManager,
+                              List<String> developers) {
+        Optional<Project> projectOptional = projectRepository.findById(id);
+
+        if (projectOptional.isPresent()) {
+            Project existingProject = projectOptional.get();
+            existingProject.setName(projectName);
+            existingProject.setDescription(projectDescription);
+            existingProject.setProjectManager(productManager);
+            existingProject.setDevelopers(developers);
+            projectRepository.save(existingProject);
+        } else {
+            throw new RuntimeException("Project not found with id: " + id);  // Or handle this case as you see fit
+        }
     }
 }

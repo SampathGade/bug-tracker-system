@@ -10,8 +10,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateProjectRequest {
+    private String id;
     private String name;
     private String description;
     private String productManager;
-    private List<String> users;
+    private List<String> developers;
 }

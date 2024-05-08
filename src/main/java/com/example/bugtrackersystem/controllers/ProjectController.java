@@ -45,8 +45,8 @@ public class ProjectController {
     @PostMapping("/updateProject")
     public ResponseEntity<?> updateProject(@RequestBody UpdateProjectRequest updateProjectRequest) {
         try {
-            projectService.updateProject(updateProjectRequest.getName(), updateProjectRequest.getDescription(),updateProjectRequest.getProductManager(),
-                    updateProjectRequest.getUsers());
+            projectService.updateProject(updateProjectRequest.getId(), updateProjectRequest.getName(), updateProjectRequest.getDescription(),updateProjectRequest.getProductManager(),
+                    updateProjectRequest.getDevelopers());
             return ResponseEntity.ok().body("updated project");
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");

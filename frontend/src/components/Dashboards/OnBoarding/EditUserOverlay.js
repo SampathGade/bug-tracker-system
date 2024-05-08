@@ -48,7 +48,8 @@ const EditUserOverlay = ({ user, onClose, onStatusChange }) => {
                     <select value={role} onChange={e => setRole(e.target.value)}>
                         <option value="Developer">Developer</option>
                         <option value="Tester">Tester</option>
-                        <option value="Project Manager">Project Manager</option>
+                        <option value="projectManager">Project Manager</option>
+                        <option value="External User">External User</option>
                     </select>
                 </label>
                 <label>

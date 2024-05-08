@@ -8,6 +8,8 @@ const ViewProjectsComponent = () => {
     const [projects, setProjects] = useState([]);
     const [selectedProject, setSelectedProject] = useState(null);
     const [creatingProject, setCreatingProject] = useState(false);
+    const [refreshProjects, setRefreshProjects] = useState(false);
+
 
     useEffect(() => {
         const email = localStorage.getItem('userEmail');
@@ -29,7 +31,8 @@ const ViewProjectsComponent = () => {
             }
         };
         fetchProjects();
-    }, []);
+    }, [refreshProjects]);
+
 
     const handleSelectProject = (project) => {
         setSelectedProject(project);
@@ -39,6 +42,7 @@ const ViewProjectsComponent = () => {
     const handleCloseOverlay = () => {
         setSelectedProject(null);
         setCreatingProject(false);
+        setRefreshProjects(prev => !prev); // Toggle to trigger useEffect
     };
 
     const handleOpenCreateProject = () => {

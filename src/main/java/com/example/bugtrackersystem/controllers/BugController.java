@@ -55,10 +55,6 @@ public class BugController {
                bugRepository.save(existingBug);
                return ResponseEntity.ok().body("Bug status updated successfully");
            }).orElseGet(() -> ResponseEntity.notFound().build());
-//           updateBug.setAssignee(bug.getAssignee());
-//           updateBug.setProjectManager(bug.getProjectManager());
-//           updateBug.setComments(bug.getComments());
-//            return ResponseEntity.ok().body("bug created succesfully");
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
         }

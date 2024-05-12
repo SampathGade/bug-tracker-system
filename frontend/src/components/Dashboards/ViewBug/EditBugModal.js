@@ -5,13 +5,10 @@ const EditBugModal = ({ bug, onClose, projects }) => {
     const [name, setName] = useState(bug.name);
     const [description, setDescription] = useState(bug.description);
     const [status, setStatus] = useState(bug.status);
-    // const [priority, setPriority] = useState(bug.priority);
     const [assignee, setAssignee] = useState(bug.assignee);
     const [assignees, setAssignees] = useState([]);
-    // const [comments, setComments] = useState(bug.comments || "");
     const [isLoading, setIsLoading] = useState(false);
     const userRole = localStorage.getItem("userRole");
-
 
     useEffect(() => {
         const fetchAssignees = async () => {
@@ -19,7 +16,7 @@ const EditBugModal = ({ bug, onClose, projects }) => {
                 const response = await fetch(`http://localhost:8080/users/getDevelopersByProject`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: bug.project 
+                    body: JSON.stringify({ project: bug.project }) // Ensure you send a valid JSON body
                 });
                 if (response.ok) {
                     const assigneesData = await response.json();
@@ -33,7 +30,13 @@ const EditBugModal = ({ bug, onClose, projects }) => {
         };
 
         fetchAssignees();
-    }, [bug.project]); // Only re-run when bug.project changes
+    }, [bug.project]);
+
+    const handleOverlayClick = (e) => {
+        if (e.target === e.currentTarget) {
+            onClose();
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -41,12 +44,10 @@ const EditBugModal = ({ bug, onClose, projects }) => {
 
         const updateData = {
             id: bug.id,
-            name: name,
-            description: description,
-            status: status,
-            // priority: priority,
-            assignee: assignee,
-            // comments: comments
+            name,
+            description,
+            status,
+            assignee
         };
 
         try {
@@ -87,7 +88,7 @@ const EditBugModal = ({ bug, onClose, projects }) => {
     };
 
     return (
-        <div className="overlay">
+        <div className="overlay" onClick={handleOverlayClick}>
             <div className="overlay-content" onClick={e => e.stopPropagation()}>
                 <form onSubmit={handleSubmit} className="edit-bug-form">
                     <div className="left-section">
@@ -100,10 +101,6 @@ const EditBugModal = ({ bug, onClose, projects }) => {
                             Description:
                             <textarea value={description} onChange={(e) => setDescription(e.target.value)} required disabled={isLoading} />
                         </label>
-                        {/* <label>
-                            Comments:
-                            <textarea value={comments} onChange={(e) => setComments(e.target.value)} disabled={isLoading} />
-                        </label> */}
                     </div>
                     <div className="right-section">
                         <label>
@@ -118,14 +115,6 @@ const EditBugModal = ({ bug, onClose, projects }) => {
                                 <option value="Done">Done</option>
                             </select>
                         </label>
-                        {/* <label>
-                            Priority:
-                            <select value={priority} onChange={(e) => setPriority(e.target.value)} disabled={isLoading}>
-                                <option value="High">High</option>
-                                <option value="Medium">Medium</option>
-                                <option value="Low">Low</option>
-                            </select>
-                        </label> */}
                         <label>
                             Assignee:
                             <select value={assignee} onChange={(e) => setAssignee(e.target.value)} disabled={isLoading}>

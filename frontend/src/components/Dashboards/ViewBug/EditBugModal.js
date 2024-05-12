@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './BugComponent.css';
-import ImageUploader from './ImageUploader';  // Assume this is the path to your ImageUploader component
+import CommentSection from './CommentSection';  // Ensure this is the path to your CommentSection component
 
-const EditBugModal = ({ bug, onClose, projects }) => {
+const EditBugModal = ({ bug, onClose }) => {
     const [name, setName] = useState(bug.name);
     const [description, setDescription] = useState(bug.description);
     const [status, setStatus] = useState(bug.status);
@@ -55,7 +55,7 @@ const EditBugModal = ({ bug, onClose, projects }) => {
 
             if (response.ok) {
                 console.log('Bug updated successfully');
-                onClose();
+                onClose(); // Optionally refresh the list or parent component
             } else {
                 const errorData = await response.json();
                 console.error('Error details:', errorData);
@@ -137,37 +137,3 @@ const EditBugModal = ({ bug, onClose, projects }) => {
 };
 
 export default EditBugModal;
-
-function CommentSection({ bugId, comments }) {
-    const [newComment, setNewComment] = useState('');
-    const [commentList, setCommentList] = useState(comments);
-    const [imageUrls, setImageUrls] = useState([]);
-
-    const handleAddComment = async () => {
-        const response = await fetch(`/api/comments/${bugId}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: newComment, author: 'currentUserName', imageUrls }) // Include image URLs in the payload
-        });
-        const updatedBug = await response.json();
-        setCommentList(updatedBug.comments);
-        setNewComment('');
-        setImageUrls([]);
-    };
-
-    return (
-        <div>
-            <textarea value={newComment} onChange={(e) => setNewComment(e.target.value)} />
-            <ImageUploader onUpload={(urls) => setImageUrls(urls)} />
-            <button onClick={handleAddComment}>Add Comment</button>
-            <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                {commentList.map((comment) => (
-                    <div key={comment.id}>
-                        <p>{comment.author}: {comment.text}</p>
-                        {comment.imageUrls.map(url => <img key={url} src={url} alt="Comment" />)}
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-}

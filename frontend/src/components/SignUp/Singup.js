@@ -8,6 +8,7 @@ const SignUpComponent = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("");
   const [showOtpForm, setShowOtpForm] = useState(false);
+  const [isExternalUser, setIsExternalUser] = useState(false);
   const navigate = useNavigate();
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -17,7 +18,7 @@ const SignUpComponent = () => {
     const response = await fetch("http://localhost:8080/auth/verify-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email, isExternalUser }),
     });
     if (response.status === 200) {
       setShowOtpForm(true);
@@ -42,6 +43,17 @@ const SignUpComponent = () => {
     }
   };
 
+  const handleExternalUserChange = (e) => {
+    const checked = e.target.checked;
+    setIsExternalUser(checked);
+  };
+
+  const toggleExternalUser = () => {
+    setIsExternalUser(!isExternalUser);
+    setRole("");
+    setShowOtpForm(true)
+  };
+
   const handleSubmitDetails = async (event) => {
     event.preventDefault();
     if (password !== confirmPassword) {
@@ -59,10 +71,10 @@ const SignUpComponent = () => {
       } else if (response.status === 401) {
         alert("Invalid OTP");
       } else {
-        alert("Error validating OTP, please try again later");
+        alert("Error creating account, please try again later");
       }
-    } catch {
-      alert("Error validating OTP, please try again later");
+    } catch (error) {
+      alert("Network error, please try again later");
     }
   };
 
@@ -72,7 +84,7 @@ const SignUpComponent = () => {
         <h2>Sign Up</h2>
         <div className="form-container">
           {!showOtpForm ? (
-            <form className=" cls-d-f cls-flex-column" onSubmit={handleSubmitEmail}>
+            <form className="cls-d-f cls-flex-column" onSubmit={handleSubmitEmail}>
               <input
                 type="email"
                 value={email}
@@ -80,38 +92,45 @@ const SignUpComponent = () => {
                 placeholder="Email Address"
                 required
               />
+              <label>
+                <input
+                  type="checkbox"
+                  checked={isExternalUser}
+                  onChange={handleExternalUserChange}
+                /> I'm an external user
+              </label>
               <button
                 className="btn-login cls-c-p"
                 type="submit"
                 disabled={!validateEmail(email)}
               >
-                Register
+                Verify Email
               </button>
             </form>
           ) : (
-            <form onSubmit={handleSubmitDetails}>
-              <input
-                type="text"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ""))}
-                placeholder="OTP"
-                required
-              />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
-                required
-              />
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirm Password"
-                required
-              />
-              <div className="btn-reset-pass-block">
+            <>
+              <form className="cls-d-f cls-flex-column" onSubmit={handleSubmitDetails}>
+                <input
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ""))}
+                  placeholder="OTP"
+                  required
+                />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  required
+                />
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm Password"
+                  required
+                />
                 <select
                   className="custm-select"
                   value={role}
@@ -119,36 +138,35 @@ const SignUpComponent = () => {
                   required
                 >
                   <option value="">Select Role</option>
-                  <option value="admin">Admin</option>
-                  <option value="projectManager">Project Manager</option>
-                  <option value="developer">Developer</option>
-                  <option value="tester">Tester</option>
-                  <option value="external user">External User</option>
+                  {isExternalUser ? (
+                    <option value="external user">External User</option>
+                  ) : (
+                    <>
+                      <option value="admin">Admin</option>
+                      <option value="projectManager">Project Manager</option>
+                      <option value="developer">Developer</option>
+                      <option value="tester">Tester</option>
+                    </>
+                  )}
                 </select>
-                <button
-                  className="btn-login cls-c-p"
-                  type="submit"
-                  disabled={
-                    !otp || !password || password !== confirmPassword || !role
-                  }
-                >
-                  Complete Registration
-                </button>
-                <button
-                  className="btn-login cls-c-p"
-                  type="button"
-                  onClick={handleRegenerateOTP}
-                >
-                  Regenerate OTP
-                </button>
-              </div>
-            </form>
+                {isExternalUser && <p>Not an external user? <button onClick={toggleExternalUser}>Click here</button></p>}
+                {!isExternalUser && <p>Are you an external user? <button onClick={toggleExternalUser}>Click here</button></p>}
+                <div className="btn-group">
+                  <button className="btn-login cls-c-p" type="submit" disabled={!otp || !password || password !== confirmPassword || !role}>
+                    Complete Registration
+                  </button>
+                  <button className="btn-login cls-c-p" type="button" onClick={handleRegenerateOTP}>
+                    Regenerate OTP
+                  </button>
+                </div>
+              </form>
+            </>
           )}
         </div>
       </div>
-      <div className="login-img"></div>
     </div>
   );
 };
 
 export default SignUpComponent;
+

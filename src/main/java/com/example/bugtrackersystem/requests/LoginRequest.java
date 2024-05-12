@@ -13,4 +13,5 @@ public class LoginRequest {
     private String email;
     @NonNull
     private String password;
+    private String ip;
 }

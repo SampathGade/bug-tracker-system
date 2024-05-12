@@ -13,4 +13,5 @@ public class OtpVerificationRequest {
     private String email;
     @NonNull
     private String otp;
+    private String ip;
 }

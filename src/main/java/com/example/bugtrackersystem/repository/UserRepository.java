@@ -1,5 +1,6 @@
 package com.example.bugtrackersystem.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -20,5 +21,8 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     @Query("{'role': {$in: ?0}}")
     List<User> findByRoles(List<String> roles);
+
+    @Query("{ 'email': ?2, 'sessions': { '$elemMatch': { 'ip': ?0, 'validUpTo': { '$gte': ?1 }, 'otpValidated': true } } }")
+    User findBySessionIpAndSessionValidUpToAndEmail(String ip, Date validUpTo, String email);
 }
 

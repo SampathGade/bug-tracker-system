@@ -25,12 +25,18 @@ public class AuthenticationController {
     private AuthenticationService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             boolean isValid = authService.checkCredentials(loginRequest.getEmail(), loginRequest.getPassword());
             if (isValid) {
-                authService.generateAndSendOtp(loginRequest.getEmail());
-                return ResponseEntity.ok("OTP sent to your email. Please verify to log in.");
+                User sessionExists = authService.checkSession(loginRequest.getEmail(), loginRequest.getIp());
+                if(sessionExists==null) {
+                    authService.createSession(loginRequest.getEmail(), loginRequest.getIp());
+                    authService.generateAndSendOtp(loginRequest.getEmail());
+                    return ResponseEntity.ok("OTP sent to your email. Please verify to log in.");
+                } else {
+                    return ResponseEntity.status(HttpStatus.MULTI_STATUS).body(sessionExists);
+                }
             } else {
                 logger.error("Unauthorized access attempt for user: {}", loginRequest.getEmail());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized: Invalid email or password.");
@@ -44,7 +50,7 @@ public class AuthenticationController {
     @PostMapping("/verify-otp")
     public ResponseEntity<?> verifyOtp(@RequestBody OtpVerificationRequest otpRequest) {
         try {
-            User user = authService.validateOtp(otpRequest.getEmail(), otpRequest.getOtp());
+            User user = authService.validateOtp(otpRequest.getEmail(), otpRequest.getOtp(), otpRequest.getIp());
             if (user != null) {
                 return ResponseEntity.ok(user);
             } else {
@@ -89,7 +95,7 @@ public class AuthenticationController {
     @PostMapping("/create-user")
     public ResponseEntity<?> createUser(@RequestBody SignUpRequest signUpRequest) {
         try {
-            User user = authService.validateOtp(signUpRequest.getEmail(), signUpRequest.getOtp());
+            User user = authService.validateOtp(signUpRequest.getEmail(), signUpRequest.getOtp(), null);
             if (user != null) {
                 authService.createUser(signUpRequest.getEmail(),
                         signUpRequest.getPassword(), signUpRequest.getRole());
@@ -108,7 +114,7 @@ public class AuthenticationController {
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody SignUpRequest signUpRequest) {
         try {
-            User user = authService.validateOtp(signUpRequest.getEmail(), signUpRequest.getOtp());
+            User user = authService.validateOtp(signUpRequest.getEmail(), signUpRequest.getOtp(), null);
             if (user != null) {
                 authService.resetPassword(signUpRequest.getEmail(), signUpRequest.getPassword());
                 return ResponseEntity.ok("user created successfully");

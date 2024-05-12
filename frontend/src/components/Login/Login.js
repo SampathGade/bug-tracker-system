@@ -19,19 +19,47 @@ const LoginComponent = () => {
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const isFormValid = email && password && validateEmail(email);
 
+  const fetchIpAddress = async () => {
+    try {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const data = await response.json();
+      return data.ip;
+    } catch (error) {
+      console.error('Failed to fetch IP address:', error);
+      return null;
+    }
+  };
+
+  
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const ip = await fetchIpAddress(); // Fetch the IP address
+    if (!ip) {
+      alert("Unable to fetch IP address. Please try again later.");
+    return;
+  }
     try {
       const response = await fetch("http://localhost:8080/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password , ip}),
       });
+
+      console.log(response.status)
 
       if (response.status === 200) {
         setShowOtpInput(true);
       } else if (response.status === 401) {
         alert("Invalid credentials or other authentication error.");
+      } else if(response.status === 207) {
+        const data = await response.json();
+        console.log('in 207')
+        console.log(data)
+        localStorage.setItem("userRole", data.role);
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("userId", data.id);
+        navigate("/dashboard")
       } else {
         alert("Issue Validating credentials, Please try again");
       }
@@ -42,11 +70,16 @@ const LoginComponent = () => {
 
   const handleOtpSubmit = async (event) => {
     event.preventDefault();
+    const ip = await fetchIpAddress(); // Fetch the IP address
+    if (!ip) {
+      alert("Unable to fetch IP address. Please try again later.");
+    return;
+    }
     try {
       const response = await fetch("http://localhost:8080/auth/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp }),
+        body: JSON.stringify({ email, otp, ip }),
       });
 
       if (response.status === 200) {

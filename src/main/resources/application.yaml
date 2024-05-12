@@ -28,5 +28,7 @@ logging:
     level:
       org.springframework.mail: DEBUG
       com.sun.mail: DEBUG
+      org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+      org.springframework.data.mongodb.core.ReactiveMongoTemplate: DEBUG
 server:
   port: 8080

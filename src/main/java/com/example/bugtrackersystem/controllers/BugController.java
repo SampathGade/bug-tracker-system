@@ -51,6 +51,8 @@ public class BugController {
            return bugRepository.findById(bug.getId()).map(existingBug -> {
                existingBug.setName(bug.getName());
                existingBug.setDescription(bug.getDescription());
+               existingBug.setStatus(bug.getStatus());
+               existingBug.setAssignee(bug.getAssignee());
                // Save the updated bug
                bugRepository.save(existingBug);
                return ResponseEntity.ok().body("Bug status updated successfully");

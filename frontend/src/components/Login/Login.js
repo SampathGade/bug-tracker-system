@@ -53,6 +53,7 @@ const LoginComponent = () => {
         const data = await response.json();
         localStorage.setItem("userRole", data.role);
         localStorage.setItem("userEmail", email);
+        localStorage.setItem("userId", data.id);
         navigate("/dashboard");
       } else if (response.status === 401) {
         alert("Invalid OTP.");

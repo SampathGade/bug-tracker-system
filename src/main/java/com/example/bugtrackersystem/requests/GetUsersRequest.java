@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetUsersRequest {
+    private String id;
     private String role;
     private String email;
     private String project;

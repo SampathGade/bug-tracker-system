@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
+import com.example.bugtrackersystem.entity.Assignee;
 import com.example.bugtrackersystem.entity.Bug;
 import com.example.bugtrackersystem.entity.User;
 import com.example.bugtrackersystem.repository.BugRepository;
@@ -46,13 +48,19 @@ public class BugController {
     }
 
     @PostMapping("/updateBug")
-    public ResponseEntity<?> updateBug(@RequestBody Bug bug) {
+    public ResponseEntity<?> updateBug(@RequestBody Bug bug, @RequestBody GetUsersRequest usersRequest) {
         try {
            return bugRepository.findById(bug.getId()).map(existingBug -> {
                existingBug.setName(bug.getName());
                existingBug.setDescription(bug.getDescription());
                existingBug.setStatus(bug.getStatus());
                existingBug.setAssignee(bug.getAssignee());
+               Assignee createBy = new Assignee();
+               createBy.setEmail(usersRequest.getEmail());
+               createBy.setId(usersRequest.getId());
+               Date date = new Date();
+               createBy.setCreateAt(date);
+               existingBug.setCreatedBy(createBy);
                // Save the updated bug
                bugRepository.save(existingBug);
                return ResponseEntity.ok().body("Bug status updated successfully");

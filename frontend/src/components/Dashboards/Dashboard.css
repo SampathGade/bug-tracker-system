@@ -47,10 +47,10 @@ nav ul li.selected {
 }
 
 .content-block {
-  flex: 1; /* Ensure it takes full height */
+  flex: 1; /* Ensures it takes full height of its flex container minus any other elements like nav */
   display: flex;
   flex-direction: column; /* Stack vertically */
-  overflow: hidden;
+  overflow-y: auto; /* Enables vertical scrolling */
   background: #ffffff;
   padding: 24px;
 }

@@ -42,14 +42,17 @@
   justify-content: space-between;
   padding: 48px 0px;
   gap: 10px;
+  overflow-y: auto; /* Enables vertical scrolling when content overflows */
+  max-height: calc(100vh - 120px); /* Adjust this value based on your nav and any other headers' total height */
 }
 
 .bug-column {
-  flex: 1;
   background-color: #f0f0f0;
   padding: 10px;
   border-radius: 12px;
   min-height: 300px;
+  flex: 1;
+  overflow-y: auto; /* Makes individual columns scrollable if their content overflows */
 }
 
 .bug-card {

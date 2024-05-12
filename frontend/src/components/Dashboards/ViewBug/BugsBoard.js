@@ -70,11 +70,11 @@ const BugsBoard = ({ filters, onEditBug }) => {
             {showStats && <StatisticsOverlay data={{ bugs }} onClose={() => setShowStats(false)} />}
             {['To Do', 'In Progress', 'Done'].map(status => (
                 <div key={status} className="bug-column"
-                     onDragOver={(event) => event.preventDefault()}
-                     onDrop={(event) => {
-                         const bugId = event.dataTransfer.getData("bugId");
-                         handleDragEnd(bugId, status);
-                     }}>
+                    onDragOver={(event) => event.preventDefault()}
+                    onDrop={(event) => {
+                        const bugId = event.dataTransfer.getData("bugId");
+                        handleDragEnd(bugId, status);
+                    }}>
                     <h2>{status}</h2>
                     {bugs.filter(bug => bug.status === status).map(bug => (
                         <BugCard key={bug.id} bug={bug} onEdit={() => onEditBug(bug)} />

@@ -20,8 +20,8 @@ public class Bug {
     private String projectManager;
     private String assignee;
     private List<Comment> comments;
-    private String createdBy;
     private String status;
     private String sprint;
     private Integer storyPoints;
+    private Assignee createdBy;
 }

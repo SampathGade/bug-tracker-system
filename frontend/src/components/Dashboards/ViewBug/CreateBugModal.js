@@ -18,6 +18,7 @@ const CreateBugModal = ({ onClose }) => {
     const [storyPoints, setStoryPoints] = useState('');
     const userRole = localStorage.getItem("userRole");
     const userEmail = localStorage.getItem("userEmail");
+    const userId = localStorage.getItem("userId");
 
     const sprintOptions = Array.from({ length: 27 }, (_, i) => ({ value: i + 1, label: `Sprint ${i + 1}` }))
         .concat({ value: 'Backlog', label: 'Backlog' });
@@ -76,8 +77,10 @@ const CreateBugModal = ({ onClose }) => {
             project: selectedProject,
             assignee,
             type,
-            sprint, // New field
-            storyPoints // New field
+            sprint, 
+            storyPoints,
+            email:userEmail,
+            id:userId
         };
         const response = await fetch('http://localhost:8080/bug/createBug', {
             method: 'POST',

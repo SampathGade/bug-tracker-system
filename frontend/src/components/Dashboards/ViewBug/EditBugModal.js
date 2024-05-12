@@ -10,6 +10,8 @@ const EditBugModal = ({ bug, onClose, projects }) => {
     const [assignees, setAssignees] = useState([]);
     // const [comments, setComments] = useState(bug.comments || "");
     const [isLoading, setIsLoading] = useState(false);
+    const userRole = localStorage.getItem("userRole");
+
 
     useEffect(() => {
         const fetchAssignees = async () => {
@@ -70,6 +72,20 @@ const EditBugModal = ({ bug, onClose, projects }) => {
         }
     };
 
+    const handleDeleteBug = async () => {
+        const response = await fetch(`http://localhost:8080/bug/deleteBug/${bug.id}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            console.log('Bug deleted successfully');
+            onClose(); // close the modal and refresh the list
+        } else {
+            console.error('Failed to delete bug');
+            alert('Failed to delete the bug. Please try again.');
+        }
+    };
+
     return (
         <div className="overlay">
             <div className="overlay-content" onClick={e => e.stopPropagation()}>
@@ -122,6 +138,9 @@ const EditBugModal = ({ bug, onClose, projects }) => {
                     <div className='form-actions'>
                         <button type="submit" disabled={isLoading}>{isLoading ? 'Updating...' : 'Update Bug'}</button>
                         <button type="button" onClick={onClose} disabled={isLoading}>Cancel</button>
+                        {(userRole === 'projectManager' || userRole === 'admin' ) && (
+                            <button type="button" onClick={handleDeleteBug} disabled={isLoading}>Delete Bug</button>
+                        )}
                     </div>
                 </form>
             </div>

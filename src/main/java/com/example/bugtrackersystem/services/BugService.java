@@ -36,4 +36,8 @@ public class BugService {
             return bugRepository.findByCreatedBy(email);
         }
     }
+
+    public void deleteBug(String bugId) {
+        bugRepository.deleteById(bugId);
+    }
 }

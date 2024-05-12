@@ -79,6 +79,14 @@ public class BugController {
         }
     }
 
-
+    @DeleteMapping("/deleteBug/{bugId}")
+    public ResponseEntity<String> deleteBug(@PathVariable String bugId) {
+        try {
+             bugService.deleteBug(bugId);
+             return ResponseEntity.ok("Bug deleted successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Failed to delete bug due to server error.");
+        }
+    }
 
 }

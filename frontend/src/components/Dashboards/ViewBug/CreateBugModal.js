@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Select from 'react-select';
 import './BugComponent.css';
 
 const CreateBugModal = ({ onClose }) => {
@@ -13,8 +14,13 @@ const CreateBugModal = ({ onClose }) => {
     const [expectedOutcome, setExpectedOutcome] = useState('');
     const [assignee, setAssignee] = useState('');
     const [type, setType] = useState(types[0]);
+    const [sprint, setSprint] = useState('Backlog');
+    const [storyPoints, setStoryPoints] = useState('');
     const userRole = localStorage.getItem("userRole");
     const userEmail = localStorage.getItem("userEmail");
+
+    const sprintOptions = Array.from({ length: 27 }, (_, i) => ({ value: i + 1, label: `Sprint ${i + 1}` }))
+        .concat({ value: 'Backlog', label: 'Backlog' });
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -32,7 +38,7 @@ const CreateBugModal = ({ onClose }) => {
                 }
             }
         };
-            fetchProjects();
+        fetchProjects();
     }, [userEmail, userRole]);
 
     useEffect(() => {
@@ -63,13 +69,23 @@ const CreateBugModal = ({ onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const bugData = {
+            name,
+            description,
+            projectManager,
+            project: selectedProject,
+            assignee,
+            type,
+            sprint, // New field
+            storyPoints // New field
+        };
         const response = await fetch('http://localhost:8080/bug/createBug', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ name, description, projectManager, project: selectedProject, assignee, type })
+            body: JSON.stringify(bugData)
         });
         if (response.ok) {
-            onClose();
+            onClose(); // Close the modal
         } else {
             alert('Error in creating Bugs. Please try again');
         }
@@ -94,26 +110,40 @@ const CreateBugModal = ({ onClose }) => {
                         Description:
                         <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
                     </label>
-                            <label>
-                                Project:
-                                <select value={selectedProject} onChange={(e) => setSelectedProject(e.target.value)}>
-                                    {projects.map(proj => (
-                                        <option key={proj.name} value={proj.name}>{proj.name}</option>
-                                    ))}
-                                </select>
-                            </label>
-                            <label>
-                                Project Manager:
-                                <input type="text" value={projectManager} readOnly />
-                            </label>
-                            <label>
-                                Assignee:
-                                <select value={assignee} onChange={(e) => setAssignee(e.target.value)}>
-                                    {assignees.map(user => (
-                                        <option key={user} value={user}>{user}</option>
-                                    ))}
-                                </select>
-                            </label>
+                    <label>
+                        Project:
+                        <select value={selectedProject} onChange={(e) => setSelectedProject(e.target.value)}>
+                            {projects.map(proj => (
+                                <option key={proj.name} value={proj.name}>{proj.name}</option>
+                            ))}
+                        </select>
+                    </label>
+                    <label>
+                        Project Manager:
+                        <input type="text" value={projectManager} readOnly />
+                    </label>
+                    <label>
+                        Assignee:
+                        <select value={assignee} onChange={(e) => setAssignee(e.target.value)}>
+                            {assignees.map(user => (
+                                <option key={user} value={user}>{user}</option>
+                            ))}
+                        </select>
+                    </label>
+                    <label>
+                        Sprint:
+                        <Select
+                            options={sprintOptions}
+                            onChange={option => setSprint(option.value)}
+                            placeholder="Select or type a sprint"
+                            isSearchable
+                            value={sprintOptions.find(option => option.value === sprint)}
+                        />
+                    </label>
+                    <label>
+                        Story Points:
+                        <input type="number" value={storyPoints} onChange={(e) => setStoryPoints(e.target.value)} required />
+                    </label>
                     <label>
                         Type:
                         <select value={type} onChange={(e) => setType(e.target.value)}>

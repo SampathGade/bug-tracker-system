@@ -24,10 +24,10 @@ public class BugController {
     @Autowired
     private BugRepository bugRepository;
 
-    @PostMapping("/getBugsByUser")
+    @PostMapping("/getBugsByUserAndSprint")
     public ResponseEntity<?> getBugs(@RequestBody GetUsersRequest getUsersRequest) {
         try {
-            List<Bug> bugList = bugService.getBugs(getUsersRequest.getRole(), getUsersRequest.getEmail(), getUsersRequest.getProject(), getUsersRequest.getAssignee());
+            List<Bug> bugList = bugService.getBugs(getUsersRequest.getRole(), getUsersRequest.getEmail(), getUsersRequest.getProject(), getUsersRequest.getAssignee(), getUsersRequest.getSprint());
             return ResponseEntity.ok().body(bugList);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");

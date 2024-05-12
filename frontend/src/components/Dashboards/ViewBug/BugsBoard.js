@@ -6,18 +6,23 @@ import './BugComponent.css';
 const BugsBoard = ({ filters, onEditBug }) => {
     const [bugs, setBugs] = useState([]);
     const [showStats, setShowStats] = useState(false);
-    const role = localStorage.getItem("userRole");
-    const email = localStorage.getItem("userEmail");
+    const currentSprint = localStorage.getItem("currentSprint") || '1'; // Fetch current sprint, defaulting to 'Backlog' if not set
 
     useEffect(() => {
         const fetchBugs = async () => {
             try {
-                const response = await fetch('http://localhost:8080/bug/getBugsByUser', {
+                const response = await fetch('http://localhost:8080/bug/getBugsByUserAndSprint', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ email, role, project: filters.project, assignee: filters.assignee })
+                    body: JSON.stringify({
+                        email: localStorage.getItem("userEmail"), 
+                        role: localStorage.getItem("userRole"), 
+                        project: filters.project, 
+                        assignee: filters.assignee,
+                        sprint: currentSprint // Add sprint to the API request
+                    })
                 });
                 if (response.ok) {
                     const fetchedBugs = await response.json();
@@ -31,7 +36,7 @@ const BugsBoard = ({ filters, onEditBug }) => {
         };
 
         fetchBugs();
-    }, [filters]);
+    }, [filters, currentSprint]); // Add currentSprint to the dependency array
 
     const handleDragEnd = async (bugId, newStatus) => {
         const updatedBugs = bugs.map(bug => {
@@ -59,23 +64,17 @@ const BugsBoard = ({ filters, onEditBug }) => {
         }
     };
 
-    const handleDragOver = (event) => {
-        event.preventDefault(); // Necessary to allow the drop
-    };
-
-    const handleDrop = (event, newStatus) => {
-        const bugId = event.dataTransfer.getData("bugId");
-        handleDragEnd(bugId, newStatus);
-    };
-
     return (
         <div className="bugs-board">
             <button onClick={() => setShowStats(true)} className="view-stats-button">View Statistics</button>
             {showStats && <StatisticsOverlay data={{ bugs }} onClose={() => setShowStats(false)} />}
             {['To Do', 'In Progress', 'Done'].map(status => (
                 <div key={status} className="bug-column"
-                     onDragOver={handleDragOver}
-                     onDrop={(e) => handleDrop(e, status)}>
+                     onDragOver={(event) => event.preventDefault()}
+                     onDrop={(event) => {
+                         const bugId = event.dataTransfer.getData("bugId");
+                         handleDragEnd(bugId, status);
+                     }}>
                     <h2>{status}</h2>
                     {bugs.filter(bug => bug.status === status).map(bug => (
                         <BugCard key={bug.id} bug={bug} onEdit={() => onEditBug(bug)} />

@@ -10,10 +10,10 @@ import com.example.bugtrackersystem.entity.Bug;
 public interface BugRepository extends MongoRepository<Bug, String> {
     List<Bug> findByProjectManager(String projectManager);
 
-    List<Bug> findByProject(String project);
+    List<Bug> findByProjectAndSprint(String project, String sprint);
 
-    @Query("{ 'project' : ?0, 'assignee' : { $in : ?1 } }")
-    List<Bug> findByProjectAndAssigneeIn(String project, List<String> assignees);
+    @Query("{ 'project' : ?0, 'assignee' : { $in : ?1 }, 'sprint' : ?2 }")
+    List<Bug> findByProjectAndAssigneeAndSprint(String project, List<String> assignees, String sprint);
 
     List<Bug> findByAssignee(String assignee);
 

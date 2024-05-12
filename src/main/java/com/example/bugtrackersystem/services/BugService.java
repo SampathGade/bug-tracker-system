@@ -13,17 +13,25 @@ public class BugService {
     @Autowired
     BugRepository bugRepository;
 
-    public List<Bug> getBugs(String role , String email, String project, List<String> assignee) {
+    public List<Bug> getBugs(String role , String email, String project, List<String> assignee, String sprint) {
         if("admin".equalsIgnoreCase(role)) {
             if(assignee != null && assignee.size()>0) {
-                return bugRepository.findByProjectAndAssigneeIn(project, assignee);
+                return bugRepository.findByProjectAndAssigneeAndSprint(project, assignee, sprint);
             } else {
-               return bugRepository.findByProject(project);
+               return bugRepository.findByProjectAndSprint(project, sprint);
             }
         } else if ("projectManager".equalsIgnoreCase(role)) {
-            return bugRepository.findByProjectManager(email);
+            if(assignee != null && assignee.size()>0) {
+                return bugRepository.findByProjectAndAssigneeAndSprint(project, assignee, sprint);
+            } else {
+                return bugRepository.findByProjectAndSprint(project, sprint);
+            }
         } else if ("developer".equalsIgnoreCase(role)) {
-            return bugRepository.findByAssignee(email);
+            if(assignee != null && assignee.size()>0) {
+                return bugRepository.findByProjectAndAssigneeAndSprint(project, assignee, sprint);
+            } else {
+                return bugRepository.findByProjectAndSprint(project, sprint);
+            }
         } else {
             return bugRepository.findByCreatedBy(email);
         }

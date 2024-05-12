@@ -13,5 +13,6 @@ public class GetUsersRequest {
     private String role;
     private String email;
     private String project;
+    private String sprint;
     private List<String> assignee;
 }

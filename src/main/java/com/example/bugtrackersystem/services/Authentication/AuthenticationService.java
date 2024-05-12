@@ -1,6 +1,8 @@
 package com.example.bugtrackersystem.services.Authentication;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDateTime;
@@ -25,12 +27,13 @@ public class AuthenticationService {
     @Autowired
     private EmailSender emailService;
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     public boolean checkCredentials(String email, String password) {
         User user = userRepository.findByEmailAndStatus(email, "Onboarded");
-        if (user != null && (password.equals(user.getPassword())) && ("Onboarded".equalsIgnoreCase(user.getStatus()))) {
+        if (user != null && ((passwordEncoder.matches(password,user.getPassword()))
+                ||password.equals(user.getPassword())) && ("Onboarded".equalsIgnoreCase(user.getStatus()))) {
             logger.info("Credentials are valid for email: {}", email);
             return true;
         }
@@ -135,7 +138,7 @@ public class AuthenticationService {
     public void createUser(String email, String password, String role) {
         User user = userRepository.findByEmail(email);
         user.setEmail(email);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         user.setRole(role);
         user.setStatus("Pending");
         userRepository.save(user);
@@ -143,7 +146,7 @@ public class AuthenticationService {
 
     public void resetPassword(String email , String password) {
         User user = userRepository.findByEmail(email);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
     }
 ;

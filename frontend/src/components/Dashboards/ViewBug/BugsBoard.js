@@ -66,8 +66,8 @@ const BugsBoard = ({ filters, onEditBug }) => {
 
     return (
         <div className="bugs-board">
-            <button onClick={() => setShowStats(true)} className="view-stats-button">View Statistics</button>
-            {showStats && <StatisticsOverlay data={{ bugs }} onClose={() => setShowStats(false)} />}
+            {/* <button onClick={() => setShowStats(true)} className="view-stats-button">View Statistics</button> */}
+            {/* {showStats && <StatisticsOverlay data={{ bugs }} onClose={() => setShowStats(false)} />} */}
             {['To Do', 'In Progress', 'Done'].map(status => (
                 <div key={status} className="bug-column"
                     onDragOver={(event) => event.preventDefault()}

@@ -9,7 +9,6 @@ const LoginComponent = () => {
   const [showOtpInput, setShowOtpInput] = useState(false);
   const navigate = useNavigate();
 
-  // Redirect to dashboard if user is already logged in
   useEffect(() => {
     if (localStorage.getItem("userEmail")) {
       navigate("/dashboard");
@@ -30,50 +29,63 @@ const LoginComponent = () => {
     }
   };
 
-  
+  const fetchCurrentSprint = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/sprint/current');
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('currentSprint', data.sprint);
+      } else {
+        console.error('Failed to fetch current sprint');
+      }
+    } catch (error) {
+      console.error('Error fetching current sprint:', error);
+    }
+  };
+
+  const handleNavigation = async () => {
+    await fetchCurrentSprint();
+    navigate("/dashboard");
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const ip = await fetchIpAddress(); // Fetch the IP address
+    const ip = await fetchIpAddress();
     if (!ip) {
       alert("Unable to fetch IP address. Please try again later.");
-    return;
-  }
+      return;
+    }
     try {
       const response = await fetch("http://localhost:8080/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password , ip}),
+        body: JSON.stringify({ email, password, ip }),
       });
 
-      console.log(response.status)
-
-      if (response.status === 200) {
-        setShowOtpInput(true);
-      } else if (response.status === 401) {
-        alert("Invalid credentials or other authentication error.");
-      } else if(response.status === 207) {
+      if (response.status === 207) {
         const data = await response.json();
-        console.log('in 207')
-        console.log(data)
         localStorage.setItem("userRole", data.role);
         localStorage.setItem("userEmail", email);
         localStorage.setItem("userId", data.id);
-        navigate("/dashboard")
+        handleNavigation();
+      } else if (response.status === 200) {
+        setShowOtpInput(true);
+      } else if (response.status === 401) {
+        alert("Invalid credentials or other authentication error.");
       } else {
         alert("Issue Validating credentials, Please try again");
       }
     } catch {
-      alert("Issue Validating credentials, Please try again");
+      alert("Network error, please try again.");
     }
   };
 
   const handleOtpSubmit = async (event) => {
     event.preventDefault();
-    const ip = await fetchIpAddress(); // Fetch the IP address
+    const ip = await fetchIpAddress();
     if (!ip) {
       alert("Unable to fetch IP address. Please try again later.");
-    return;
+      return;
     }
     try {
       const response = await fetch("http://localhost:8080/auth/verify-otp", {
@@ -87,14 +99,14 @@ const LoginComponent = () => {
         localStorage.setItem("userRole", data.role);
         localStorage.setItem("userEmail", email);
         localStorage.setItem("userId", data.id);
-        navigate("/dashboard");
+        handleNavigation();
       } else if (response.status === 401) {
         alert("Invalid OTP.");
       } else {
         alert("Error validating OTP, please try again later.");
       }
     } catch {
-      alert("Error validating OTP, please try again later.");
+      alert("Network error, please try again.");
     }
   };
 
@@ -103,7 +115,6 @@ const LoginComponent = () => {
       <div className="login-detail-sec">
         <h1>Bug Tracker</h1>
         <div className="form-container">
-          {/* <h2>Login</h2> */}
           {!showOtpInput ? (
             <form onSubmit={handleSubmit}>
               <div className="input-field">
@@ -127,16 +138,16 @@ const LoginComponent = () => {
                 />
               </div>
               <div className="btn-block">
-              <button className="btn-frgt-pass cls-c-p" onClick={() => navigate("/forgot-password")}>
-                Forgot Password
-              </button>
-              <button className="btn-login cls-c-p" type="submit" disabled={!isFormValid}>
-                Login
-              </button>
-              <div className="btn-sign-up ">
-                <span>Don’t have an account?</span>
-              <button className="btn-sign-up-text cls-c-p" onClick={() => navigate("/signup")}>Sign Up</button>
-              </div>
+                <button className="btn-frgt-pass cls-c-p" onClick={() => navigate("/forgot-password")}>
+                  Forgot Password
+                </button>
+                <button className="btn-login cls-c-p" type="submit" disabled={!isFormValid}>
+                  Login
+                </button>
+                <div className="btn-sign-up">
+                  <span>Don’t have an account?</span>
+                  <button className="btn-sign-up-text cls-c-p" onClick={() => navigate("/signup")}>Sign Up</button>
+                </div>
               </div>
             </form>
           ) : (
@@ -149,12 +160,12 @@ const LoginComponent = () => {
                 required
               />
               <div className="btn-reset-pass-block">
-              <button className="btn-login cls-c-p" type="submit" disabled={!otp}>
-                Validate OTP
-              </button>
-              <button className="btn-login cls-c-p" onClick={() => setShowOtpInput(false)}>
-                Regenerate OTP
-              </button>
+                <button className="btn-login cls-c-p" type="submit" disabled={!otp}>
+                  Validate OTP
+                </button>
+                <button className="btn-login cls-c-p" onClick={() => setShowOtpInput(false)}>
+                  Regenerate OTP
+                </button>
               </div>
             </form>
           )}

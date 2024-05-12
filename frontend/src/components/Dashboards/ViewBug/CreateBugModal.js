@@ -14,7 +14,7 @@ const CreateBugModal = ({ onClose }) => {
     const [expectedOutcome, setExpectedOutcome] = useState('');
     const [assignee, setAssignee] = useState('');
     const [type, setType] = useState(types[0]);
-    const [sprint, setSprint] = useState('1');
+    const [sprint, setSprint] = useState(localStorage.getItem('currentSprint') || '1');
     const [storyPoints, setStoryPoints] = useState('');
     const userRole = localStorage.getItem("userRole");
     const userEmail = localStorage.getItem("userEmail");

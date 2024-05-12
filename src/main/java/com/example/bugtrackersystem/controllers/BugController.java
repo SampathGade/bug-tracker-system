@@ -12,7 +12,9 @@ import com.example.bugtrackersystem.entity.Assignee;
 import com.example.bugtrackersystem.entity.Bug;
 import com.example.bugtrackersystem.entity.User;
 import com.example.bugtrackersystem.repository.BugRepository;
+import com.example.bugtrackersystem.requests.CreateBugRequest;
 import com.example.bugtrackersystem.requests.GetUsersRequest;
+import com.example.bugtrackersystem.requests.UserDetails;
 import com.example.bugtrackersystem.services.BugService;
 
 @RestController
@@ -37,9 +39,17 @@ public class BugController {
     }
 
     @PostMapping("/createBug")
-    public ResponseEntity<?> createBug(@RequestBody Bug bug) {
+    public ResponseEntity<?> createBug(@RequestBody CreateBugRequest createBugRequest) {
         try {
+            Bug bug = createBugRequest.getBug();
+            UserDetails userDetails = createBugRequest.getUserDetails();
             bug.setStatus("To Do");
+            Assignee createBy = new Assignee();
+            createBy.setEmail(userDetails.getEmail());
+            createBy.setId(userDetails.getId());
+            Date date = new Date();
+            createBy.setCreateAt(date);
+            bug.setCreatedBy(createBy);
             bugRepository.save(bug);
             return ResponseEntity.ok().body("bug created succesfully");
         } catch (Exception e) {
@@ -48,19 +58,14 @@ public class BugController {
     }
 
     @PostMapping("/updateBug")
-    public ResponseEntity<?> updateBug(@RequestBody Bug bug, @RequestBody GetUsersRequest usersRequest) {
+    public ResponseEntity<?> updateBug(@RequestBody Bug bug) {
         try {
            return bugRepository.findById(bug.getId()).map(existingBug -> {
                existingBug.setName(bug.getName());
                existingBug.setDescription(bug.getDescription());
                existingBug.setStatus(bug.getStatus());
                existingBug.setAssignee(bug.getAssignee());
-               Assignee createBy = new Assignee();
-               createBy.setEmail(usersRequest.getEmail());
-               createBy.setId(usersRequest.getId());
-               Date date = new Date();
-               createBy.setCreateAt(date);
-               existingBug.setCreatedBy(createBy);
+
                // Save the updated bug
                bugRepository.save(existingBug);
                return ResponseEntity.ok().body("Bug status updated successfully");

@@ -71,16 +71,20 @@ const CreateBugModal = ({ onClose }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const bugData = {
-            name,
-            description,
-            projectManager,
-            project: selectedProject,
-            assignee,
-            type,
-            sprint, 
-            storyPoints,
-            email:userEmail,
-            id:userId
+            bug: {
+                name,
+                description,
+                projectManager,
+                project: selectedProject,
+                assignee,
+                type,
+                sprint, 
+                storyPoints,
+            },
+            userDetails: {
+                email: userEmail,
+                id: userId
+            }
         };
         const response = await fetch('http://localhost:8080/bug/createBug', {
             method: 'POST',

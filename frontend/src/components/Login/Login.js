@@ -34,6 +34,7 @@ const LoginComponent = () => {
       const response = await fetch('http://localhost:8080/sprint/current');
       if (response.ok) {
         const data = await response.json();
+        console.log(data)
         localStorage.setItem('currentSprint', data.sprint);
       } else {
         console.error('Failed to fetch current sprint');

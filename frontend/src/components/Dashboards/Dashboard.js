@@ -7,6 +7,7 @@ import BugComponent from "./ViewBug/ViewBug";
 import OnboardingComponent from "./OnBoarding/OnboardingComponent";
 import ViewPeopleComponent from "./ViewUsers/ViewPeopleComponent";
 import ProjectComponent from "./ViewProjects/ViewProjectComponent";
+import SprintMetrics from "./SprintManagament/SprintMetrics";  // Import the Sprint Metrics component
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -59,6 +60,8 @@ const Dashboard = () => {
         return <ViewPeopleComponent />;
       case "projects":
         return <ProjectComponent />;
+      case "metrics":
+        return <SprintMetrics />;
       default:
         return <BugComponent />;
     }
@@ -85,6 +88,9 @@ const Dashboard = () => {
           )}
           <li className={`cls-c-p ${activeComponent === "projects" ? "selected" : ""}`} onClick={() => setActiveComponent("projects")}>
             Projects
+          </li>
+          <li className={`cls-c-p ${activeComponent === "metrics" ? "selected" : ""}`} onClick={() => setActiveComponent("metrics")}>
+            Sprint Metrics
           </li>
           <li className="profile-icon" onClick={toggleDropdown}>
             <span className="user-initial">{getUserInitials()}</span>

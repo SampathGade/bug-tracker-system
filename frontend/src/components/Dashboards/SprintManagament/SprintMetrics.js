@@ -83,10 +83,10 @@ const SprintMetrics = () => {
     const handleSprintClose = async () => {
         closeModal();
         try {
-            const response = await fetch('http://localhost:8080/api/sprint/close');
+            const response = await fetch('http://localhost:8080/sprint/close');
             if (response.ok) {
                 const newSprint = await response.json();
-                localStorage.setItem('currentSprint', newSprint.sprintId);
+                localStorage.setItem('currentSprint', newSprint.sprint);
                 window.location.reload();
             } else {
                 throw new Error('Failed to close the sprint');

@@ -1,32 +1,33 @@
 .projects-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
   flex-direction: column;
+  gap: 10px;
 }
-.projects-card-list{
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    height: 40px;
+
+.projects-card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px; 
 }
 
 
 .project-cell {
-    padding: 16px;
-    min-width: 30%;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    border-radius: 12px;
-    background: linear-gradient(to top, #dfe9f3 0%, white 100%);
-    box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
-    text-transform: capitalize;
+  padding: 16px;
+  min-width: 30%;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  border-radius: 12px;
+  background: linear-gradient(to top, #dfe9f3 0%, white 100%);
+  box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
+  text-transform: capitalize;
 }
-.project-cell h3{
-    font-weight: 500;
+.project-cell h3 {
+  font-weight: 500;
 }
-.project-cell p{
-    font-weight: 400;
+
+.project-cell p {
+  font-weight: 400;
 }
 
 .overlay {
@@ -117,3 +118,33 @@
   justify-content: flex-end;
   gap: 24px;
 }
+
+.pagination {
+  width: 100%; /* Ensures the pagination bar spans the width of the container */
+  display: flex;
+  justify-content: center;
+  margin-top: auto; /* Pushes the pagination bar to the bottom */
+}
+
+.pagination button {
+  padding: 8px 16px;
+  margin: 0 5px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination button:hover {
+  background-color: #0056b3;
+}
+
+
+
+
+
+
+
+
+

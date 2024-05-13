@@ -34,3 +34,25 @@
     width: 60%;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
+
+.pagination {
+    width: 100%; /* Ensures the pagination bar spans the width of the container */
+    display: flex;
+    justify-content: center;
+    margin-top: auto; /* Pushes the pagination bar to the bottom */
+}
+
+.pagination button {
+    padding: 8px 16px;
+    margin: 0 5px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pagination button:hover {
+    background-color: #0056b3;
+}
+

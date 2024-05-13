@@ -6,9 +6,10 @@ import './ViewPeopleComponent.css'; // Import the CSS for styling
 const ViewPeopleComponent = () => {
     const [people, setPeople] = useState([]);
     const [selectedPerson, setSelectedPerson] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [peoplePerPage] = useState(5);
 
     useEffect(() => {
-        // Retrieve user details from localStorage
         const userEmail = localStorage.getItem('userEmail');
         const userRole = localStorage.getItem('userRole');
 
@@ -18,7 +19,7 @@ const ViewPeopleComponent = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email: userEmail, role: userRole }) // Include current user's email and role
+                body: JSON.stringify({ email: userEmail, role: userRole }) 
             });
             if (response.ok) {
                 const data = await response.json();
@@ -36,12 +37,25 @@ const ViewPeopleComponent = () => {
         setSelectedPerson(null);
     };
 
+    const indexOfLastPerson = currentPage * peoplePerPage;
+    const indexOfFirstPerson = indexOfLastPerson - peoplePerPage;
+    const currentPeople = people.slice(indexOfFirstPerson, indexOfLastPerson);
+
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+
     return (
         <div className="people-container">
-            {people.map(person => (
+            {currentPeople.map(person => (
                 <PersonCell key={person.email} person={person} onSelectPerson={handleSelectPerson} />
             ))}
             {selectedPerson && <EditPersonOverlay person={selectedPerson} onClose={handleCloseOverlay} />}
+            <div className="pagination">
+                {[...Array(Math.ceil(people.length / peoplePerPage)).keys()].map(number => (
+                    <button key={number + 1} onClick={() => paginate(number + 1)}>
+                        {number + 1}
+                    </button>
+                ))}
+            </div>
         </div>
     );
 };

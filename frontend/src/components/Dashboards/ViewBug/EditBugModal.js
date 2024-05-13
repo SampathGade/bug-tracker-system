@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './BugComponent.css';
 import CommentSection from './CommentSection';  // Ensure this is the path to your CommentSection component
+import ImageUploader from './ImageUploader'; // Assuming this handles multiple uploads and returns URLs
 
 const EditBugModal = ({ bug, onClose }) => {
     const [name, setName] = useState(bug.name);
@@ -8,6 +9,8 @@ const EditBugModal = ({ bug, onClose }) => {
     const [status, setStatus] = useState(bug.status);
     const [assignee, setAssignee] = useState(bug.assignee);
     const [assignees, setAssignees] = useState([]);
+    const [expectedOutcome, setExpectedOutcome] = useState(bug.expectedOutcome || { text: '', images: [] });
+    const [actualOutcome, setActualOutcome] = useState(bug.actualOutcome || { text: '', images: [] });
     const [isLoading, setIsLoading] = useState(false);
     const userRole = localStorage.getItem("userRole");
 
@@ -44,6 +47,8 @@ const EditBugModal = ({ bug, onClose }) => {
             description,
             status,
             assignee,
+            expectedOutcome,
+            actualOutcome
         };
 
         try {
@@ -121,6 +126,22 @@ const EditBugModal = ({ bug, onClose }) => {
                                 <option key={assignee} value={assignee}>{assignee}</option>
                             ))}
                         </select>
+                    </label>
+                    <label>
+                        Expected Outcome:
+                        <textarea value={expectedOutcome.text} onChange={(e) => setExpectedOutcome({ ...expectedOutcome, text: e.target.value })} disabled={isLoading} />
+                        {expectedOutcome.images.map((img, index) => (
+                            <img key={index} src={img} alt="Expected outcome" style={{ width: '100px', height: 'auto', margin: '5px' }} />
+                        ))}
+                        <ImageUploader onUpload={(urls) => setExpectedOutcome({ ...expectedOutcome, images: urls })} disabled={isLoading} />
+                    </label>
+                    <label>
+                        Actual Outcome:
+                        <textarea value={actualOutcome.text} onChange={(e) => setActualOutcome({ ...actualOutcome, text: e.target.value })} disabled={isLoading} />
+                        {actualOutcome.images.map((img, index) => (
+                            <img key={index} src={img} alt="Actual outcome" style={{ width: '100px', height: 'auto', margin: '5px' }} />
+                        ))}
+                        <ImageUploader onUpload={(urls) => setActualOutcome({ ...actualOutcome, images: urls })} disabled={isLoading} />
                     </label>
                     <div className='form-actions'>
                         <button type="submit" disabled={isLoading}>{isLoading ? 'Updating...' : 'Update Bug'}</button>

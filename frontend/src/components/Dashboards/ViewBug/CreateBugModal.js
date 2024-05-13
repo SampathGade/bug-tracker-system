@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
+import ImageUploader from './ImageUploader'; // Ensure this handles multiple uploads and returns URLs
 import './BugComponent.css';
 
 const CreateBugModal = ({ onClose }) => {
     const [projects, setProjects] = useState([]);
-    const [projectManagers, setProjectManagers] = useState([]);
     const [assignees, setAssignees] = useState([]);
     const [types, setTypes] = useState(['Bug', 'Feature', 'Task']);
     const [selectedProject, setSelectedProject] = useState('');
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [projectManager, setProjectManager] = useState('');
-    const [expectedOutcome, setExpectedOutcome] = useState('');
+    const [expectedOutcome, setExpectedOutcome] = useState({ text: '', images: [] });
+    const [actualOutcome, setActualOutcome] = useState({ text: '', images: [] });
     const [assignee, setAssignee] = useState('');
     const [type, setType] = useState(types[0]);
     const [sprint, setSprint] = useState(localStorage.getItem('currentSprint') || '1');
@@ -49,10 +50,10 @@ const CreateBugModal = ({ onClose }) => {
                 setProjectManager(project.projectManager);
 
                 const fetchAssignees = async () => {
-                    const response = await fetch('http://localhost:8080/users/getDevelopersByProject', {
+                    const response = await fetch(`http://localhost:8080/users/getDevelopersByProject`, {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: project.name
+                        body:  selectedProject 
                     });
                     if (response.ok) {
                         const data = await response.json();
@@ -70,31 +71,37 @@ const CreateBugModal = ({ onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+    
         const bugData = {
             bug: {
                 name,
                 description,
-                projectManager,
                 project: selectedProject,
+                projectManager,
                 assignee,
                 type,
-                sprint, 
+                sprint,
                 storyPoints,
+                expectedOutcome,
+                actualOutcome
             },
             userDetails: {
                 email: userEmail,
                 id: userId
             }
         };
+    
         const response = await fetch('http://localhost:8080/bug/createBug', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(bugData)
         });
+    
         if (response.ok) {
             onClose(); // Close the modal
         } else {
-            alert('Error in creating Bugs. Please try again');
+            const errorData = await response.json();
+            alert(`Error in creating bug: ${errorData.message || 'Please try again'}.`);
         }
     };
 
@@ -161,7 +168,13 @@ const CreateBugModal = ({ onClose }) => {
                     </label>
                     <label>
                         Expected Outcome:
-                        <textarea value={expectedOutcome} onChange={(e) => setExpectedOutcome(e.target.value)} required />
+                        <textarea value={expectedOutcome.text} onChange={(e) => setExpectedOutcome({ ...expectedOutcome, text: e.target.value })} required />
+                        <ImageUploader onUpload={(urls) => setExpectedOutcome({ ...expectedOutcome, images: urls })} />
+                    </label>
+                    <label>
+                        Actual Outcome:
+                        <textarea value={actualOutcome.text} onChange={(e) => setActualOutcome({ ...actualOutcome, text: e.target.value })} required />
+                        <ImageUploader onUpload={(urls) => setActualOutcome({ ...actualOutcome, images: urls })} />
                     </label>
                     <div className="form-actions">
                         <button type="submit">Create Bug</button>

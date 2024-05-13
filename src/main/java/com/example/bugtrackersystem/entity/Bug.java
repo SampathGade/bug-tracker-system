@@ -24,4 +24,6 @@ public class Bug {
     private String sprint;
     private Integer storyPoints;
     private Assignee createdBy;
+    private Outcome expectedOutcome;
+    private Outcome actualOutcome;
 }

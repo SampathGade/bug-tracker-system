@@ -9,15 +9,16 @@ function CommentSection({ bugId, comments }) {
     const [isLoading, setIsLoading] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [editingComment, setEditingComment] = useState(null);
+    const [editText, setEditText] = useState('');
+    const [editImageUrls, setEditImageUrls] = useState([]);
 
     const handleAddComment = async () => {
-        const size = commentList.length; // Use length to get the number of comments
-
         setIsLoading(true);
         const response = await fetch(`/api/comments/${bugId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: newComment, author: 'currentUserName', imageUrls, id: size })
+            body: JSON.stringify({ text: newComment, author: 'currentUserName', imageUrls, id: commentList.length })
         });
         if (response.ok) {
             const updatedBug = await response.json();
@@ -30,8 +31,46 @@ function CommentSection({ bugId, comments }) {
         setIsLoading(false);
     };
 
+    const handleUpdateComment = async (commentId) => {
+        setIsLoading(true);
+        const response = await fetch(`/api/comments/${bugId}/${commentId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: editText, imageUrls: editImageUrls })
+        });
+        if (response.ok) {
+            const updatedBug = await response.json();
+            setCommentList(updatedBug.comments);
+            setEditingComment(null);
+            setEditText('');
+            setEditImageUrls([]);
+        } else {
+            alert('Failed to update comment');
+        }
+        setIsLoading(false);
+    };
+
+    const handleDeleteComment = async (commentId) => {
+        setIsLoading(true);
+        const response = await fetch(`/api/comments/${bugId}/${commentId}`, {
+            method: 'DELETE'
+        });
+        if (response.ok) {
+            const updatedBug = await response.json();
+            setCommentList(updatedBug.comments);
+        } else {
+            alert('Failed to delete comment');
+        }
+        setIsLoading(false);
+    };
+
     const handleImageUpload = (urls) => {
         setImageUrls(urls);
+        setIsUploading(false);
+    };
+
+    const handleEditImageUpload = (urls) => {
+        setEditImageUrls([...editImageUrls, ...urls]);
         setIsUploading(false);
     };
 
@@ -49,6 +88,16 @@ function CommentSection({ bugId, comments }) {
 
     const handleCloseOverlay = () => {
         setSelectedImage(null);
+    };
+
+    const startEditing = (comment) => {
+        setEditingComment(comment.id);
+        setEditText(comment.text);
+        setEditImageUrls(comment.imageUrls);
+    };
+
+    const handleDeleteEditImage = (url) => {
+        setEditImageUrls(editImageUrls.filter(imageUrl => imageUrl !== url));
     };
 
     return (
@@ -77,16 +126,60 @@ function CommentSection({ bugId, comments }) {
             <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
                 {commentList.map((comment, index) => (
                     <div key={comment.id || index}>
-                        <p>{comment.author}: {comment.text}</p>
-                        {comment.imageUrls && comment.imageUrls.map((url, idx) => (
-                            <img 
-                                key={idx} 
-                                src={url} 
-                                alt="Comment" 
-                                style={{ width: '100px', height: 'auto', margin: '5px', cursor: 'pointer' }} 
-                                onClick={() => handleImageClick(url)}
-                            />
-                        ))}
+                        {editingComment === comment.id ? (
+                            <div>
+                                <textarea 
+                                    value={editText}
+                                    onChange={(e) => setEditText(e.target.value)}
+                                    style={{ width: '100%', marginBottom: '10px' }}
+                                    required
+                                />
+                                <div>
+                                    {editImageUrls.map((url, idx) => (
+                                        <div key={idx} style={{ position: 'relative', display: 'inline-block' }}>
+                                            <img 
+                                                src={url} 
+                                                alt="Edit" 
+                                                style={{ width: '100px', height: 'auto', margin: '5px', cursor: 'pointer' }}
+                                                onClick={() => handleImageClick(url)}
+                                            />
+                                            <button 
+                                                onClick={() => handleDeleteEditImage(url)}
+                                                style={{ position: 'absolute', top: '0', right: '0', backgroundColor: 'red', color: 'white', border: 'none', borderRadius: '50%', cursor: 'pointer' }}
+                                            >
+                                                X
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                                <ImageUploader 
+                                    onUpload={(urls) => handleEditImageUpload(urls)}
+                                    onUploadStart={handleImageUploadStart}
+                                    resetUploader={editImageUrls.length === 0} // Pass a prop to reset the uploader
+                                />
+                                <button onClick={() => handleUpdateComment(comment.id)} disabled={isLoading || isUploading}>
+                                    {isLoading ? 'Updating Comment...' : 'Update Comment'}
+                                </button>
+                                <button onClick={() => setEditingComment(null)} disabled={isLoading}>
+                                    Cancel
+                                </button>
+                            </div>
+                        ) : (
+                            <div>
+                                <p>{comment.author}: {comment.text}</p>
+                                {comment.imageUrls && comment.imageUrls.map((url, idx) => (
+                                    <img 
+                                        key={idx} 
+                                        src={url} 
+                                        alt="Comment" 
+                                        style={{ width: '100px', height: 'auto', margin: '5px', cursor: 'pointer' }} 
+                                        onClick={() => handleImageClick(url)}
+                                    />
+                                ))}
+                                <button onClick={() => startEditing(comment)}>Edit</button>
+                                <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>

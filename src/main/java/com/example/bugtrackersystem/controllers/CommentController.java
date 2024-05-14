@@ -50,6 +50,7 @@ public class CommentController {
         return null;
     }
 
+    // Delete a comment
     @DeleteMapping("/{bugId}/{commentId}")
     public Bug deleteComment(@PathVariable String bugId, @PathVariable String commentId) {
         Optional<Bug> bugOptional = bugRepository.findById(bugId);

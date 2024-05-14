@@ -55,14 +55,11 @@ const CreateBugModal = ({ onClose }) => {
                     const response = await fetch(`http://localhost:8080/users/getDevelopersByProject`, {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body:  selectedProject
+                        body: selectedProject
                     });
                     if (response.ok) {
                         const data = await response.json();
                         setAssignees(data);
-                        if (data.length > 0) {
-                            setAssignee(data[0]);
-                        }
                     }
                 };
 
@@ -135,6 +132,14 @@ const CreateBugModal = ({ onClose }) => {
         setIsUploading(true);
     };
 
+    const handleAssigneeChange = (newValue) => {
+        setAssignee(newValue ? newValue.value : '');
+    };
+
+    const assigneeOptions = [{ value: 'Auto', label: 'Auto Assign' }].concat(
+        assignees.map(user => ({ value: user, label: user }))
+    );
+
     return (
         <div className="overlay" onClick={handleOverlayClick}>
             <div className="overlay-content" onClick={e => e.stopPropagation()}>
@@ -162,11 +167,13 @@ const CreateBugModal = ({ onClose }) => {
                     </label>
                     <label>
                         Assignee:
-                        <select value={assignee} onChange={(e) => setAssignee(e.target.value)}>
-                            {assignees.map(user => (
-                                <option key={user} value={user}>{user}</option>
-                            ))}
-                        </select>
+                        <Select
+                            options={assigneeOptions}
+                            onChange={handleAssigneeChange}
+                            placeholder="Select or type an assignee"
+                            isClearable
+                            value={assignee ? { value: assignee, label: assignee } : null}
+                        />
                     </label>
                     <label>
                         Sprint:

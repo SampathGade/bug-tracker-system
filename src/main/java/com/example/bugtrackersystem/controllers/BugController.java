@@ -16,6 +16,7 @@ import com.example.bugtrackersystem.requests.CreateBugRequest;
 import com.example.bugtrackersystem.requests.GetUsersRequest;
 import com.example.bugtrackersystem.requests.UserDetails;
 import com.example.bugtrackersystem.services.BugService;
+import com.example.bugtrackersystem.services.DeveloperSelectionService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
@@ -24,6 +25,9 @@ public class BugController {
 
     @Autowired
     private BugService bugService;
+
+    @Autowired
+    private DeveloperSelectionService developerSelectionService;
 
     @Autowired
     private BugRepository bugRepository;
@@ -44,6 +48,11 @@ public class BugController {
             Bug bug = createBugRequest.getBug();
             UserDetails userDetails = createBugRequest.getUserDetails();
             bug.setStatus("To Do");
+            String assignee = bug.getAssignee();
+            if(assignee.equalsIgnoreCase("auto")) {
+                assignee = developerSelectionService.findBestFitDeveloper(bug.getSprint(), bug.getProject());
+                bug.setAssignee(assignee);
+            }
             Assignee createBy = new Assignee();
             createBy.setEmail(userDetails.getEmail());
             createBy.setId(userDetails.getId());

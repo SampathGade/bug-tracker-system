@@ -24,4 +24,6 @@ public interface BugRepository extends MongoRepository<Bug, String> {
     @Query("{ 'status' : { $ne : ?1 }, 'sprint' : ?0 }")
     List<Bug>findBySprintAndStatus(String sprint, String status);
 
+    List<Bug>findByAssigneeAndSprint(String sprint, String Assignee);
+
 }

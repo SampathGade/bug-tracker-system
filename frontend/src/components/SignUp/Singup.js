@@ -1,5 +1,15 @@
+import {
+  Checkbox,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SignUpComponent = () => {
   const [email, setEmail] = useState("");
@@ -23,9 +33,9 @@ const SignUpComponent = () => {
     if (response.status === 200) {
       setShowOtpForm(true);
     } else if (response.status === 409) {
-      alert("User already exists.");
+      toast("User already exists.");
     } else {
-      alert("Error validating email.");
+      toast("Error validating email.");
     }
   };
 
@@ -36,10 +46,10 @@ const SignUpComponent = () => {
       body: JSON.stringify({ email }),
     });
     if (response.status === 200) {
-      alert("OTP regenerated. Please check your email.");
+      toast("OTP regenerated. Please check your email.");
       setOtp(""); // Clear the OTP field to allow the user to enter the new OTP
     } else {
-      alert("Error regenerating OTP.");
+      toast("Error regenerating OTP.");
     }
   };
 
@@ -51,13 +61,13 @@ const SignUpComponent = () => {
   const toggleExternalUser = () => {
     setIsExternalUser(!isExternalUser);
     setRole("");
-    setShowOtpForm(true)
+    setShowOtpForm(true);
   };
 
   const handleSubmitDetails = async (event) => {
     event.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords do not match.");
+      toast("Passwords do not match.");
       return;
     }
     try {
@@ -69,12 +79,12 @@ const SignUpComponent = () => {
       if (response.status === 200) {
         navigate("/login", { replace: true });
       } else if (response.status === 401) {
-        alert("Invalid OTP");
+        toast("Invalid OTP");
       } else {
-        alert("Error creating account, please try again later");
+        toast("Error validating OTP, please try again later");
       }
-    } catch (error) {
-      alert("Network error, please try again later");
+    } catch {
+      toast("Error validating OTP, please try again later");
     }
   };
 
@@ -84,81 +94,119 @@ const SignUpComponent = () => {
         <h2>Sign Up</h2>
         <div className="form-container">
           {!showOtpForm ? (
-            <form className="cls-d-f cls-flex-column" onSubmit={handleSubmitEmail}>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email Address"
+            <form
+              className=" cls-d-f cls-flex-column"
+              onSubmit={handleSubmitEmail}>
+              <TextField
+                id="outlined-basic"
+                label="Email Address"
+                variant="outlined"
                 required
+                onChange={(e) => setEmail(e.target.value)}
+                style={{
+                  width: "100%",
+                  marginBottom: "20px",
+                }}
               />
-              <label>
-                <input
-                  type="checkbox"
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginLeft: "10px",
+                }}>
+                <Checkbox
                   checked={isExternalUser}
                   onChange={handleExternalUserChange}
-                /> I'm an external user
-              </label>
+                />
+                <Typography>I'm an external user</Typography>
+              </div>
               <button
                 className="btn-login cls-c-p"
                 type="submit"
-                disabled={!validateEmail(email)}
-              >
-                Verify Email
+                disabled={!validateEmail(email)}>
+                Register
               </button>
             </form>
           ) : (
             <>
-              <form className="cls-d-f cls-flex-column" onSubmit={handleSubmitDetails}>
-                <input
-                  type="text"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ""))}
-                  placeholder="OTP"
+              <form
+                className="cls-d-f cls-flex-column"
+                onSubmit={handleSubmitDetails}>
+                <TextField
+                  label="OTP"
+                  variant="outlined"
                   required
+                  value={otp}
+                  onChange={(e) =>
+                    setOtp(e.target.value.replace(/[^0-9]/g, ""))
+                  }
+                  style={{
+                    width: "100%",
+                    marginBottom: "10px",
+                  }}
                 />
-                <input
+                <TextField
+                  label="Password"
+                  variant="outlined"
                   type="password"
+                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
-                  required
+                  style={{
+                    width: "100%",
+                    marginBottom: "10px",
+                  }}
                 />
-                <input
+                <TextField
+                  label="Confirm Password"
+                  variant="outlined"
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm Password"
                   required
+                  style={{
+                    width: "100%",
+                    marginBottom: "10px",
+                  }}
                 />
-                <select
-                  className="custm-select"
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  required
-                >
-                  <option value="">Select Role</option>
-                  {isExternalUser ? (
-                    <option value="external user">External User</option>
-                  ) : (
-                    <>
-                      <option value="admin">Admin</option>
-                      <option value="projectManager">Project Manager</option>
-                      <option value="developer">Developer</option>
-                      <option value="tester">Tester</option>
-                    </>
-                  )}
-                </select>
-                {isExternalUser && <p>Not an external user? <button onClick={toggleExternalUser}>Click here</button></p>}
-                {!isExternalUser && <p>Are you an external user? <button onClick={toggleExternalUser}>Click here</button></p>}
-                <div className="btn-group">
-                  <button className="btn-login cls-c-p" type="submit" disabled={!otp || !password || password !== confirmPassword || !role}>
-                    Complete Registration
-                  </button>
-                  <button className="btn-login cls-c-p" type="button" onClick={handleRegenerateOTP}>
-                    Regenerate OTP
-                  </button>
-                </div>
+                <FormControl required sx={{ m: 0, width: "100%" }}>
+                  <InputLabel id="demo-simple-select-required-label">
+                    Select Role
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={role}
+                    style={{
+                      marginBottom: "10px",
+                      textAlign: "left",
+                      width: "100%",
+                    }}
+                    placeholder="Select Role"
+                    label="Select Role"
+                    onChange={(e) => setRole(e.target.value)}>
+                    <MenuItem value="admin">Admin</MenuItem>
+                    <MenuItem value="projectManager">Project Manager</MenuItem>
+                    <MenuItem value="developer">Developer</MenuItem>
+                    <MenuItem value="tester">Tester</MenuItem>
+                  </Select>
+                </FormControl>
+                <button
+                  className="btn-login cls-c-p bg-cyan-200"
+                  type="submit"
+                  disabled={
+                    !otp || !password || password !== confirmPassword || !role
+                  }
+                  style={{ marginBottom: "10px" }}>
+                  Complete Registration
+                </button>
+                <button
+                  className="btn-login cls-c-p"
+                  type="button"
+                  onClick={handleRegenerateOTP}>
+                  Regenerate OTP
+                </button>
               </form>
             </>
           )}
@@ -169,4 +217,3 @@ const SignUpComponent = () => {
 };
 
 export default SignUpComponent;
-

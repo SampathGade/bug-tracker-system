@@ -1,10 +1,11 @@
 /* General styling for the entire login area */
+
 .login-container {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   background-color: #ffffff;
 }
 .login-detail-sec {
@@ -32,7 +33,7 @@
   margin-bottom: 20px; /* Spacing for visual separation */
   color: #030303;
   text-align: center;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-size: 34px;
   font-style: normal;
   font-weight: 500;
@@ -66,7 +67,7 @@ input {
   padding: 10px;
   margin: 10px 0;
   box-sizing: border-box; /* Makes sure padding doesn't affect the width */
-  font-family: "Poppins";
+  font-family: 'Poppins';
   border-radius: 12px;
   border: 1px solid rgba(0, 0, 0, 0.25);
   background: rgba(196, 196, 196, 0);
@@ -96,7 +97,7 @@ button.btn-frgt-pass {
 .btn-sign-up {
   color: #595959;
   text-align: center;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-size: 10px;
   font-style: normal;
   font-weight: 500;
@@ -105,7 +106,7 @@ button.btn-frgt-pass {
 }
 .btn-sign-up .btn-sign-up-text {
   color: #ea454c;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-size: 10px;
   font-style: normal;
   font-weight: 500;
@@ -117,12 +118,14 @@ button.btn-frgt-pass {
   padding: 0;
   height: auto;
   display: inline-block;
+  margin-left: 4px;
 }
 /* Styling for buttons */
-button.btn-login,button {
+button.btn-login,
+button {
   color: #fff;
   text-align: center;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -130,7 +133,7 @@ button.btn-login,button {
   letter-spacing: 0.42px;
   border-radius: 12px;
   background: #ea454c;
-  border: 1px solid #ea454c ;
+  border: 1px solid #ea454c;
   height: 42px;
   box-shadow: 0px 4px 10px 0px rgba(233, 68, 75, 0.25);
   transition: background-color 0.3s; /* Smooth transition for hover effect */
@@ -151,11 +154,10 @@ button.btn-login:disabled {
   border: none;
   box-shadow: none;
 }
-.btn-reset-pass-block{
+.btn-reset-pass-block {
   display: flex;
   flex-direction: column;
   gap: 16px;
-
 }
 
 /* Special styling for error messages or hints */
@@ -163,7 +165,7 @@ button.btn-login:disabled {
   color: #d32f2f; /* Red color for errors */
   margin: 5px 0;
 }
-select.custm-select{
+select.custm-select {
   cursor: pointer;
   border: 1px solid #ed9fa4;
   border-radius: 12px;
@@ -171,5 +173,5 @@ select.custm-select{
   display: flex;
   align-items: center;
   font-family: 'Poppins';
-  transition:all 1s ease-in;
+  transition: all 1s ease-in;
 }

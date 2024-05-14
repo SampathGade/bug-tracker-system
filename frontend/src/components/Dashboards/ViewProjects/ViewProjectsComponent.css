@@ -14,7 +14,7 @@
 
 .project-cell {
   padding: 16px;
-  min-width: 30%;
+  flex-basis: 28%;
   border: 1px solid #ccc;
   cursor: pointer;
   border-radius: 12px;
@@ -139,12 +139,3 @@
 .pagination button:hover {
   background-color: #0056b3;
 }
-
-
-
-
-
-
-
-
-

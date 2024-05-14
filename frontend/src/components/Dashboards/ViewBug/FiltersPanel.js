@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './BugComponent.css';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 const FiltersPanel = ({ filters, onFilterChange, projects }) => {
     const [assignees, setAssignees] = useState([]);
@@ -43,11 +44,25 @@ const FiltersPanel = ({ filters, onFilterChange, projects }) => {
 
     return (
         <div className="filters-panel">
-            <select className='select-filter' onChange={handleProjectChange} value={filters.project}>
+                <FormControl required sx={{ m: 1, minWidth: 220 }}>
+                  <InputLabel id="demo-simple-select-required-label">
+                  Select Project
+                  </InputLabel>
+                <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={filters.project}
+                    style={{
+                      textAlign: "left",
+                    }}
+                    placeholder="Select Project"
+                    label="Select Project"
+                onChange={handleProjectChange}>
                 {projects.map(project => (
-                    <option key={project} value={project}>{project}</option>
+                    <MenuItem  value={project}>{project}</MenuItem>
                 ))}
-            </select>
+                </Select>
+                </FormControl>
             <div className="assignee-icons">
                 {assignees.map(assignee => (
                     <div key={assignee} className="assignee-icon">

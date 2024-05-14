@@ -7,13 +7,19 @@ import BugComponent from "./ViewBug/ViewBug";
 import OnboardingComponent from "./OnBoarding/OnboardingComponent";
 import ViewPeopleComponent from "./ViewUsers/ViewPeopleComponent";
 import ProjectComponent from "./ViewProjects/ViewProjectComponent";
-import SprintMetrics from "./SprintManagament/SprintMetrics";  // Import the Sprint Metrics component
+import SprintMetrics from "./SprintManagament/SprintMetrics"; // Import the Sprint Metrics component
+import ResponsiveAppBar from "./AppBar";
+import { Grid } from "@mui/material";
+import LeftPanel from "./LeftPanel";
+import Container from "../Container";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [activeComponent, setActiveComponent] = useState(localStorage.getItem("activeComponent") || "bugs");
+  const [activeComponent, setActiveComponent] = useState(
+    localStorage.getItem("activeComponent") || "bugs"
+  );
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const dropdownRef = useRef(null);  // Reference to the dropdown for click outside logic
+  const dropdownRef = useRef(null); // Reference to the dropdown for click outside logic
   const userRole = localStorage.getItem("userRole");
 
   useEffect(() => {
@@ -45,11 +51,6 @@ const Dashboard = () => {
     navigate("/login");
   };
 
-  const getUserInitials = () => {
-    const email = localStorage.getItem("userEmail") || "";
-    return email.substr(0, 2).toUpperCase();
-  };
-
   const renderComponent = () => {
     switch (activeComponent) {
       case "bugs":
@@ -71,7 +72,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <nav>
+      {/* <nav>
         <ul>
           <li className={`cls-c-p ${activeComponent === "bugs" ? "selected" : ""}`} onClick={() => setActiveComponent("bugs")}>
             Bugs
@@ -103,8 +104,14 @@ const Dashboard = () => {
             )}
           </li>
         </ul>
-      </nav>
-      <div className="content-block">{renderComponent()}</div>
+      </nav> */}
+      <Container
+        bodyStyles={{
+          padding: "0px",
+        }}>
+        {/* {renderComponent()} */}
+        <BugComponent />
+      </Container>
     </div>
   );
 };

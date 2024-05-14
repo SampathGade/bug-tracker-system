@@ -1,5 +1,6 @@
 import React from 'react';
 import './BugComponent.css'
+import { Card } from '@mui/material';
 
 
 const BugCard = ({ bug, onEdit }) => {
@@ -8,11 +9,15 @@ const BugCard = ({ bug, onEdit }) => {
     };
 
     return (
-        <div className="bug-card" draggable="true"
-             onDragStart={handleDragStart} onClick={onEdit}>
+        <Card className="bug-card"
+        draggable="true"
+        onDragStart={handleDragStart} onClick={onEdit}
+        >
+        <div  >
             <h3>{bug.name}</h3>
             <p>Status: {bug.status}</p>
-        </div>
+            </div>
+            </Card>
     );
 };
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ImageUploader from './ImageUploader';  // Assuming you have this component set up for Cloudinary uploads
+import ImageOverlay from './ImageOverlay';  // Import the ImageOverlay component
 
 function CommentSection({ bugId, comments }) {
     const [newComment, setNewComment] = useState('');
@@ -7,6 +8,7 @@ function CommentSection({ bugId, comments }) {
     const [imageUrls, setImageUrls] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const handleAddComment = async () => {
         const size = commentList.length; // Use length to get the number of comments
@@ -41,6 +43,14 @@ function CommentSection({ bugId, comments }) {
         setImageUrls([]);  // Reset image URLs after posting
     };
 
+    const handleImageClick = (url) => {
+        setSelectedImage(url);
+    };
+
+    const handleCloseOverlay = () => {
+        setSelectedImage(null);
+    };
+
     return (
         <div>
             <form onSubmit={(e) => {
@@ -69,11 +79,18 @@ function CommentSection({ bugId, comments }) {
                     <div key={comment.id || index}>
                         <p>{comment.author}: {comment.text}</p>
                         {comment.imageUrls && comment.imageUrls.map((url, idx) => (
-                            <img key={idx} src={url} alt="Comment" style={{ width: '100px', height: 'auto', margin: '5px' }} />
+                            <img 
+                                key={idx} 
+                                src={url} 
+                                alt="Comment" 
+                                style={{ width: '100px', height: 'auto', margin: '5px', cursor: 'pointer' }} 
+                                onClick={() => handleImageClick(url)}
+                            />
                         ))}
                     </div>
                 ))}
             </div>
+            {selectedImage && <ImageOverlay image={selectedImage} onClose={handleCloseOverlay} />}
         </div>
     );
 }

@@ -50,7 +50,7 @@ public class DeveloperSelectionService {
             if (totalStoryPoints < 10) {
                 User user = userRepository.findByEmail(developer);
                 Performance performance = null;
-                if(user !=null) {
+                if (user != null) {
                     // Retrieve performance details
                     performance = user.getPerformances();
                 }
@@ -63,13 +63,14 @@ public class DeveloperSelectionService {
                         lastPerformancePercentage = calculatePerformancePercentage(performance.getLastPerformance());
                     }
                 }
-            }
 
-            double finalPerformance = (lastPerformancePercentage * 0.7) + (pastPerformancePercentage * 0.3);
 
-            if (finalPerformance > bestPerformance) {
-                bestPerformance = finalPerformance;
-                bestDeveloper = developer;
+                double finalPerformance = (lastPerformancePercentage * 0.7) + (pastPerformancePercentage * 0.3);
+
+                if (finalPerformance > bestPerformance) {
+                    bestPerformance = finalPerformance;
+                    bestDeveloper = developer;
+                }
             }
         }
 

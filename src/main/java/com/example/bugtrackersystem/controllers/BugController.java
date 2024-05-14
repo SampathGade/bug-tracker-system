@@ -65,6 +65,8 @@ public class BugController {
                existingBug.setDescription(bug.getDescription());
                existingBug.setStatus(bug.getStatus());
                existingBug.setAssignee(bug.getAssignee());
+               existingBug.setActualOutcome(bug.getActualOutcome());
+               existingBug.setExpectedOutcome(bug.getExpectedOutcome());
 
                // Save the updated bug
                bugRepository.save(existingBug);

@@ -1,35 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const EditProjectOverlay = ({ project, onClose }) => {
     const [name, setName] = useState(project.name);
     const [description, setDescription] = useState(project.description);
-    const [projectManager, setProjectManager] = useState(project.projectManager);
+    const [projectManager, setProjectManager] = useState(project.projectManager || '');
     const [developers, setDevelopers] = useState(project.developers || []);
+    const [managers, setManagers] = useState([]);
+    const [allDevelopers, setAllDevelopers] = useState([]);
 
-    // Static data for Project Managers and potential developers
-    const managers = ['Manager A', 'Manager B', 'Manager C'];
-    const allDevelopers = ['Dev A', 'Dev B', 'Dev C', 'Dev D']; // Example developer list
+    useEffect(() => {
+        const fetchData = async () => {
+            const managersResponse = await fetch('http://localhost:8080/users/getProjectManagers');
+            const developersResponse = await fetch('http://localhost:8080/users/getDevelopers');
+            const managersData = await managersResponse.json();
+            const developersData = await developersResponse.json();
+            setManagers(managersData);
+            setAllDevelopers(developersData);
+            setProjectManager(project.projectManager);
+        };
+        fetchData();
+    }, [project.projectManager]);
 
     const handleUpdateProject = async () => {
-        const updatedDetails = { id: project.id, name, description, projectManager, developers };
+        const updatedDetails = {
+            id: project.id,
+            name,
+            description,
+            projectManager,
+            developers
+        };
         const response = await fetch(`http://localhost:8080/project/updateProject`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedDetails)
         });
         if (response.ok) {
-            onClose(); // Close the overlay and potentially refresh the list
+            onClose();
         }
     };
 
-    const handleAddDeveloper = (developer) => {
-        if (!developers.includes(developer)) {
-            setDevelopers([...developers, developer]);
+    const handleAddDeveloper = (event) => {
+        const selectedDeveloper = event.target.value;
+        if (selectedDeveloper && !developers.includes(selectedDeveloper)) {
+            setDevelopers([...developers, selectedDeveloper]);
         }
     };
 
-    const handleRemoveDeveloper = (developer) => {
-        setDevelopers(developers.filter(dev => dev !== developer));
+    const handleRemoveDeveloper = (developerEmail) => {
+        setDevelopers(developers.filter(dev => dev !== developerEmail));
     };
 
     return (
@@ -48,8 +66,14 @@ const EditProjectOverlay = ({ project, onClose }) => {
                         </label>
                         <label>
                             Project Manager:
-                            <select value={projectManager} onChange={e => setProjectManager(e.target.value)}>
-                                {managers.map(m => <option key={m} value={m}>{m}</option>)}
+                            <select 
+                                value={projectManager} 
+                                onChange={e => setProjectManager(e.target.value)}
+                            >
+                                <option value="" disabled>Select a manager</option>
+                                {managers.map(m => (
+                                    <option key={m.id} value={m.email}>{m.email}</option>
+                                ))}
                             </select>
                         </label>
                     </div>
@@ -61,19 +85,17 @@ const EditProjectOverlay = ({ project, onClose }) => {
                                 <button onClick={() => handleRemoveDeveloper(dev)}>Remove</button>
                             </div>
                         ))}
-                        <div>
-                            <select onChange={e => handleAddDeveloper(e.target.value)}>
-                                <option value="">Add Developer</option>
-                                {allDevelopers.filter(dev => !developers.includes(dev)).map(dev => (
-                                    <option key={dev} value={dev}>{dev}</option>
-                                ))}
-                            </select>
-                        </div>
+                        <select onChange={handleAddDeveloper} defaultValue="">
+                            <option value="" disabled>Select a developer to add</option>
+                            {allDevelopers.map(dev => (
+                                <option key={dev.id} value={dev.email}>{dev.email}</option>
+                            ))}
+                        </select>
                     </div>
                 </div>
                 <div className='form-actions'>
-                <button onClick={handleUpdateProject}>Update</button>
-                <button onClick={onClose}>Cancel</button>
+                    <button onClick={handleUpdateProject}>Update</button>
+                    <button onClick={onClose}>Cancel</button>
                 </div>
             </div>
         </div>

@@ -10,6 +10,7 @@ const ViewProjectsComponent = () => {
     const [creatingProject, setCreatingProject] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [projectsPerPage] = useState(5); // You can adjust the number of projects per page
+    const [refreshKey, setRefreshKey] = useState(0); // State variable to trigger re-renders
 
     useEffect(() => {
         const email = localStorage.getItem('userEmail');
@@ -31,7 +32,7 @@ const ViewProjectsComponent = () => {
             }
         };
         fetchProjects();
-    }, [currentPage]); // Depend on currentPage to refetch when page changes
+    }, [currentPage, refreshKey]); // Depend on currentPage and refreshKey to refetch when page or refreshKey changes
 
     const handleSelectProject = (project) => {
         setSelectedProject(project);
@@ -42,6 +43,7 @@ const ViewProjectsComponent = () => {
         setSelectedProject(null);
         setCreatingProject(false);
         setCurrentPage(1); // Reset to first page or refresh as needed
+        setRefreshKey(oldKey => oldKey + 1); // Change refreshKey to trigger re-render
     };
 
     const handleOpenCreateProject = () => {

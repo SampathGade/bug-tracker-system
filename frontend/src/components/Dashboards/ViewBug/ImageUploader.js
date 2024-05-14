@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function ImageUploader({ onUpload }) {
+function ImageUploader({ onUpload, onUploadStart }) {
     const [imageFiles, setImageFiles] = useState([]);
 
     const uploadImage = async (file) => {
@@ -19,6 +19,7 @@ function ImageUploader({ onUpload }) {
 
     const handleFileChange = async (event) => {
         const files = event.target.files;
+        onUploadStart(); // Notify that the upload process has started
         const urls = await Promise.all(Array.from(files).map(file => uploadImage(file)));
         setImageFiles(urls);
         onUpload(urls);

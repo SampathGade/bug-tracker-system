@@ -17,6 +17,8 @@ const CreateBugModal = ({ onClose }) => {
     const [type, setType] = useState(types[0]);
     const [sprint, setSprint] = useState(localStorage.getItem('currentSprint') || '1');
     const [storyPoints, setStoryPoints] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
     const userRole = localStorage.getItem("userRole");
     const userEmail = localStorage.getItem("userEmail");
     const userId = localStorage.getItem("userId");
@@ -53,7 +55,7 @@ const CreateBugModal = ({ onClose }) => {
                     const response = await fetch(`http://localhost:8080/users/getDevelopersByProject`, {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body:  selectedProject 
+                        body:  selectedProject
                     });
                     if (response.ok) {
                         const data = await response.json();
@@ -71,6 +73,8 @@ const CreateBugModal = ({ onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+    
+        setIsLoading(true);
     
         const bugData = {
             bug: {
@@ -103,12 +107,32 @@ const CreateBugModal = ({ onClose }) => {
             const errorData = await response.json();
             alert(`Error in creating bug: ${errorData.message || 'Please try again'}.`);
         }
+    
+        setIsLoading(false);
     };
 
     const handleOverlayClick = (e) => {
         if (e.target === e.currentTarget) {
             onClose();
         }
+    };
+
+    const handleExpectedImageUpload = (urls) => {
+        setExpectedOutcome({ ...expectedOutcome, images: urls });
+        setIsUploading(false);
+    };
+
+    const handleExpectedImageUploadStart = () => {
+        setIsUploading(true);
+    };
+
+    const handleActualImageUpload = (urls) => {
+        setActualOutcome({ ...actualOutcome, images: urls });
+        setIsUploading(false);
+    };
+
+    const handleActualImageUploadStart = () => {
+        setIsUploading(true);
     };
 
     return (
@@ -169,15 +193,17 @@ const CreateBugModal = ({ onClose }) => {
                     <label>
                         Expected Outcome:
                         <textarea value={expectedOutcome.text} onChange={(e) => setExpectedOutcome({ ...expectedOutcome, text: e.target.value })} required />
-                        <ImageUploader onUpload={(urls) => setExpectedOutcome({ ...expectedOutcome, images: urls })} />
+                        <ImageUploader onUpload={handleExpectedImageUpload} onUploadStart={handleExpectedImageUploadStart} />
                     </label>
                     <label>
                         Actual Outcome:
                         <textarea value={actualOutcome.text} onChange={(e) => setActualOutcome({ ...actualOutcome, text: e.target.value })} required />
-                        <ImageUploader onUpload={(urls) => setActualOutcome({ ...actualOutcome, images: urls })} />
+                        <ImageUploader onUpload={handleActualImageUpload} onUploadStart={handleActualImageUploadStart} />
                     </label>
                     <div className="form-actions">
-                        <button type="submit">Create Bug</button>
+                        <button type="submit" disabled={isLoading || isUploading}>
+                            {isLoading ? 'Creating Bug...' : 'Create Bug'}
+                        </button>
                         <button type="button" onClick={onClose}>Cancel</button>
                     </div>
                 </form>

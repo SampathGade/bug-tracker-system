@@ -12,13 +12,14 @@ function CommentSection({ bugId, comments }) {
     const [editingComment, setEditingComment] = useState(null);
     const [editText, setEditText] = useState('');
     const [editImageUrls, setEditImageUrls] = useState([]);
+    const userEmail = localStorage.getItem('userEmail')
 
     const handleAddComment = async () => {
         setIsLoading(true);
         const response = await fetch(`/api/comments/${bugId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: newComment, author: 'currentUserName', imageUrls, id: commentList.length })
+            body: JSON.stringify({ text: newComment, author: userEmail, imageUrls, id: commentList.length })
         });
         if (response.ok) {
             const updatedBug = await response.json();

@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function ImageUploader({ onUpload, onUploadStart }) {
+function ImageUploader({ onUpload, onUploadStart, resetUploader }) {
     const [imageFiles, setImageFiles] = useState([]);
     const [progress, setProgress] = useState(0);
     const [isUploading, setIsUploading] = useState(false);
+
+    useEffect(() => {
+        if (resetUploader) {
+            setImageFiles([]);
+        }
+    }, [resetUploader]);
 
     const uploadImage = async (file) => {
         const formData = new FormData();

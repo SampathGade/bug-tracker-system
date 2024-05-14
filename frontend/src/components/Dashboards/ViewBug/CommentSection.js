@@ -37,11 +37,16 @@ function CommentSection({ bugId, comments }) {
         setIsUploading(true);
     };
 
+    const handleImageUploadReset = () => {
+        setImageUrls([]);  // Reset image URLs after posting
+    };
+
     return (
         <div>
             <form onSubmit={(e) => {
                 e.preventDefault();
                 handleAddComment();
+                handleImageUploadReset();  // Reset image uploader
             }}>
                 <textarea 
                     placeholder="Enter your comment here..."
@@ -53,6 +58,7 @@ function CommentSection({ bugId, comments }) {
                 <ImageUploader 
                     onUpload={(urls) => handleImageUpload(urls)}
                     onUploadStart={handleImageUploadStart}
+                    resetUploader={imageUrls.length === 0} // Pass a prop to reset the uploader
                 />
                 <button type="submit" disabled={isLoading || isUploading}>
                     {isLoading ? 'Adding Comment...' : 'Add Comment'}

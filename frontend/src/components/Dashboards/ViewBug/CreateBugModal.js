@@ -34,11 +34,19 @@ const CreateBugModal = ({ onClose }) => {
   const userRole = localStorage.getItem("userRole");
   const userEmail = localStorage.getItem("userEmail");
   const userId = localStorage.getItem("userId");
+  const currentSprint = localStorage.getItem("currentSprint");
+  const [slaDate, setSlaDate] = useState("");
 
-  const sprintOptions = Array.from({ length: 27 }, (_, i) => ({
-    value: i + 1,
-    label: `Sprint ${i + 1}`,
-  })).concat({ value: "Backlog", label: "Backlog" });
+  const sprintOptions = [
+    { value: currentSprint, label: `Current Sprint (${currentSprint})` },
+  ]
+    .concat(
+      Array.from({ length: 27 }, (_, i) => ({
+        value: (i + 1).toString(),
+        label: `Sprint ${i + 1}`,
+      }))
+    )
+    .concat({ value: "Backlog", label: "Backlog" });
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -90,7 +98,6 @@ const CreateBugModal = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setIsLoading(true);
 
     const bugData = {
@@ -105,6 +112,7 @@ const CreateBugModal = ({ onClose }) => {
         storyPoints,
         expectedOutcome,
         actualOutcome,
+        slaDate,
       },
       userDetails: {
         email: userEmail,
@@ -161,6 +169,10 @@ const CreateBugModal = ({ onClose }) => {
   const assigneeOptions = [{ value: "Auto", label: "Auto Assign" }].concat(
     assignees.map((user) => ({ value: user, label: user }))
   );
+
+  const handleSlaDateChange = (e) => {
+    setSlaDate(e.target.value);
+  };
 
   return (
     <div
@@ -398,7 +410,16 @@ const CreateBugModal = ({ onClose }) => {
             onUpload={handleActualImageUpload}
             onUploadStart={handleActualImageUploadStart}
           />
-
+          <label>
+            SLA Date:
+            <input
+              type="date"
+              value={slaDate}
+              onChange={handleSlaDateChange}
+              min={today}
+              required
+            />
+          </label>
           <div className="form-actions">
             <button type="submit" disabled={isLoading || isUploading}>
               {isLoading ? "Creating Bug..." : "Create Bug"}

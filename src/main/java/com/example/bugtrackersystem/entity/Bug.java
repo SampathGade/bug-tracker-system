@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
 import java.util.List;
 
 @Document(collection = "bugDetails")
@@ -26,4 +27,5 @@ public class Bug {
     private Assignee createdBy;
     private Outcome expectedOutcome;
     private Outcome actualOutcome;
+    private Date slaDate;
 }

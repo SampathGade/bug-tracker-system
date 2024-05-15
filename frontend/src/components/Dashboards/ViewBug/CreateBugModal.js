@@ -23,10 +23,12 @@ const CreateBugModal = ({ onClose }) => {
     const userRole = localStorage.getItem("userRole");
     const userEmail = localStorage.getItem("userEmail");
     const userId = localStorage.getItem("userId");
+    const currentSprint = localStorage.getItem('currentSprint');
 
     const today = new Date().toISOString().split('T')[0]; // format today's date as YYYY-MM-DD
 
-    const sprintOptions = Array.from({ length: 27 }, (_, i) => ({ value: i + 1, label: `Sprint ${i + 1}` }))
+    const sprintOptions = [{ value: currentSprint, label: `Current Sprint (${currentSprint})` }]
+        .concat(Array.from({ length: 27 }, (_, i) => ({ value: (i + 1).toString(), label: `Sprint ${i + 1}` })))
         .concat({ value: 'Backlog', label: 'Backlog' });
 
     useEffect(() => {

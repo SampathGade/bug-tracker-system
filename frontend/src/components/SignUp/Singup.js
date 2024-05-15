@@ -186,7 +186,6 @@ const SignUpComponent = () => {
                     placeholder="Select Role"
                     label="Select Role"
                     onChange={(e) => setRole(e.target.value)}>
-                    <MenuItem value="admin">Admin</MenuItem>
                     <MenuItem value="projectManager">Project Manager</MenuItem>
                     <MenuItem value="developer">Developer</MenuItem>
                     <MenuItem value="tester">Tester</MenuItem>

@@ -7,47 +7,45 @@ import { saveAs } from "file-saver";
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const SprintMetrics = () => {
-  const [projects, setProjects] = useState([]);
-  const [selectedProject, setSelectedProject] = useState("");
+const SprintMetrics = ({ sprint, selectedProject }) => {
+  // const [projects, setProjects] = useState([]);
   const [metrics, setMetrics] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(
-          "http://localhost:8080/project/getProjects",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: localStorage.getItem("userEmail"),
-              role: localStorage.getItem("userRole"),
-            }),
-          }
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setProjects(data.map((p) => p.name));
-          setSelectedProject(data[0]?.name || "");
-        } else {
-          throw new Error("Failed to fetch projects");
-        }
-      } catch (error) {
-        setError("Failed to load projects. Please try again.");
-        console.error(error);
-      }
-      setLoading(false);
-    };
-    fetchProjects();
-  }, []);
+  // useEffect(() => {
+  //   const fetchProjects = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const response = await fetch(
+  //         "http://localhost:8080/project/getProjects",
+  //         {
+  //           method: "POST",
+  //           headers: { "Content-Type": "application/json" },
+  //           body: JSON.stringify({
+  //             email: localStorage.getItem("userEmail"),
+  //             role: localStorage.getItem("userRole"),
+  //           }),
+  //         }
+  //       );
+  //       if (response.ok) {
+  //         const data = await response.json();
+  //         setProjects(data.map((p) => p.name));
+  //         setSelectedProject(data[0]?.name || "");
+  //       } else {
+  //         throw new Error("Failed to fetch projects");
+  //       }
+  //     } catch (error) {
+  //       setError("Failed to load projects. Please try again.");
+  //       console.error(error);
+  //     }
+  //     setLoading(false);
+  //   };
+  //   fetchProjects();
+  // }, []);
 
   useEffect(() => {
-    const currentSprint = localStorage.getItem("currentSprint");
     if (selectedProject) {
       const fetchMetrics = async () => {
         setLoading(true);
@@ -59,7 +57,7 @@ const SprintMetrics = () => {
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 project: selectedProject,
-                sprint: currentSprint,
+                sprint: Number(sprint),
               }),
             }
           );
@@ -77,11 +75,11 @@ const SprintMetrics = () => {
       };
       fetchMetrics();
     }
-  }, [selectedProject]);
+  }, [sprint, selectedProject]);
 
-  const handleProjectChange = (e) => {
-    setSelectedProject(e.target.value);
-  };
+  // const handleProjectChange = (e) => {
+  //   setSelectedProject(e.target.value);
+  // };
 
   const closeModal = () => {
     setModalIsOpen(false);
@@ -162,13 +160,15 @@ const SprintMetrics = () => {
           alignItems: "center",
           marginBottom: "20px",
         }}>
-        <select onChange={handleProjectChange} value={selectedProject || ""}>
+        <div>
+          {/* <select onChange={handleProjectChange} value={selectedProject || ""}>
           {projects.map((project) => (
             <option key={project} value={project}>
               {project}
             </option>
           ))}
-        </select>
+        </select> */}
+        </div>
         <button onClick={() => setModalIsOpen(true)}>Close Sprint</button>
       </div>
       <Modal

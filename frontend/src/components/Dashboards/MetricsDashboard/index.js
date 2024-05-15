@@ -12,8 +12,10 @@ import {
   Typography,
 } from "@mui/material";
 import MyIssues from "./MyIssues";
+import { useNavigate } from "react-router-dom";
 
 const MetricsDashboard = () => {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [filters, setFilters] = useState({ project: "", assignee: [] });
   const [bugs, setBugs] = useState([]);
@@ -159,7 +161,8 @@ const MetricsDashboard = () => {
                   transition: "transform 0.15s ease-in-out",
                   transform: "scale3d(1.05, 1.05, 1)",
                 },
-              }}>
+              }}
+              onClick={() => navigate("/bugs")}>
               <Box>
                 <Typography
                   sx={{
@@ -217,93 +220,83 @@ const MetricsDashboard = () => {
               </Box>
             </Card>
           </Grid>
-          <Grid
-            item
-            xs={5.8}
-            sm={5.8}
-            md={3}
-            lg={3}
-            sx={{
-              textAlign: "end",
-            }}>
-            <FormControl
-              required
+          <Grid item xs={5.8} sm={5.8} md={5.7} lg={5.7}>
+            <Box
               sx={{
-                m: 1,
-                width: "100%",
-                maxWidth: "150px",
-                marginLeft: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "end",
               }}>
-              <InputLabel
-                id="demo-simple-select-required-label"
+              <FormControl
+                required
                 sx={{
-                  color: "#0B65E4",
-                }}>
-                Select Project
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={selectedProject}
-                style={{
-                  marginBottom: "10px",
-                  textAlign: "left",
+                  m: 1,
                   width: "100%",
-                  backgroundColor: "#E9F2FF",
-                  borderColor: "#0B65E4",
-                }}
-                placeholder="Select Project"
-                label="Select Project"
-                onChange={(e) => setSelectedProject(e.target.value)}>
-                {projects?.map((proj) => (
-                  <MenuItem key={proj} value={proj}>
-                    {proj}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid
-            item
-            xs={5.8}
-            sm={5.8}
-            md={2.5}
-            lg={2.5}
-            sx={{
-              textAlign: "end",
-            }}>
-            <FormControl
-              required
-              sx={{ m: 1, width: "100%", maxWidth: "150px", marginLeft: 0 }}>
-              <InputLabel
-                id="demo-simple-select-required-label"
-                sx={{
-                  color: "#0B65E4",
+                  maxWidth: "200px",
+                  marginLeft: 0,
                 }}>
-                Select Sprint
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={sprint}
-                style={{
-                  marginBottom: "10px",
-                  textAlign: "left",
-                  width: "100%",
-                  backgroundColor: "#E9F2FF",
-                }}
-                placeholder="Select Sprint"
-                label="Select Sprint"
-                onChange={(e) => setSprint(e.target.value)}>
-                {sprintOptions?.map((proj) => (
-                  <MenuItem key={proj?.label} value={proj.value}>
-                    {proj?.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                <InputLabel
+                  id="demo-simple-select-required-label"
+                  sx={{
+                    color: "#0B65E4",
+                  }}>
+                  Select Project
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={selectedProject}
+                  style={{
+                    marginBottom: "10px",
+                    textAlign: "left",
+                    width: "100%",
+                    backgroundColor: "#E9F2FF",
+                    borderColor: "#0B65E4",
+                  }}
+                  placeholder="Select Project"
+                  label="Select Project"
+                  onChange={(e) => setSelectedProject(e.target.value)}>
+                  {projects?.map((proj) => (
+                    <MenuItem key={proj} value={proj}>
+                      {proj}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl
+                required
+                sx={{ m: 1, width: "100%", maxWidth: "200px", marginLeft: 0 }}>
+                <InputLabel
+                  id="demo-simple-select-required-label"
+                  sx={{
+                    color: "#0B65E4",
+                  }}>
+                  Select Sprint
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={sprint}
+                  style={{
+                    marginBottom: "10px",
+                    textAlign: "left",
+                    width: "100%",
+                    backgroundColor: "#E9F2FF",
+                  }}
+                  placeholder="Select Sprint"
+                  label="Select Sprint"
+                  onChange={(e) => setSprint(e.target.value)}>
+                  {sprintOptions?.map((proj) => (
+                    <MenuItem key={proj?.label} value={proj.value}>
+                      {proj?.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
           </Grid>
         </Grid>
+
         <Grid
           container
           sx={{
@@ -323,7 +316,7 @@ const MetricsDashboard = () => {
           </Grid>
         </Grid>
       </Box>
-      <SprintMetrics />
+      <SprintMetrics sprint={sprint} selectedProject={selectedProject} />
     </Container>
   );
 };

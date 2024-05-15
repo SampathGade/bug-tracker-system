@@ -6,7 +6,6 @@ import Dashboard from "./components/Dashboards/Dashboard";
 import ViewBugs from "./components/Dashboards/ViewBug/ViewBug";
 import ForgotPassword from "./components/Login/ForgetPassword";
 import "./App.css";
-import BugComponent from "./components/Dashboards/ViewBug/ViewBug";
 import OnboardingComponent from "./components/Dashboards/OnBoarding/OnboardingComponent";
 import ViewPeopleComponent from "./components/Dashboards/ViewUsers/ViewPeopleComponent";
 import ProjectComponent from "./components/Dashboards/ViewProjects/ViewProjectComponent";

@@ -28,7 +28,7 @@ const OnboardingComponent = () => {
   const handleSelectUser = (user) => {
     setSelectedUser(user);
     setRole(user?.role);
-    setManager(user.projectManager);
+    setManager(user?.projectManager);
   };
 
   const handleCloseOverlay = () => {
@@ -58,11 +58,13 @@ const OnboardingComponent = () => {
     fetchManagers();
   }, [projectManager?.projectManager]); // Ensure this effect runs only once or when user.projectManager changes
 
-  const handleSubmit = async (status) => {
+  const handleSubmit = async (status, roleInfo, pm) => {
+    const finalRole = roleInfo ?? role;
+    const finalPM = pm ?? projectManager;
     const payload = {
       email: projectManager?.email,
-      role,
-      projectManager,
+      role: finalRole,
+      projectManager: finalPM,
       status,
     };
     const response = await fetch("http://localhost:8080/auth/updateStatus", {
@@ -105,6 +107,7 @@ const OnboardingComponent = () => {
                 user={user}
                 onSelectUser={handleSelectUser}
                 handleSubmit={handleSubmit}
+                managers={managers}
               />
             ))
           ) : (
@@ -122,13 +125,13 @@ const OnboardingComponent = () => {
           {selectedUser && (
             <EditUserOverlay
               user={selectedUser}
-              managers={managers}
               handleSubmit={handleSubmit}
               handleOverlayClick={handleOverlayClick}
               role={role}
               setRole={setRole}
               projectManager={projectManager}
               setManager={setManager}
+              managers={managers}
             />
           )}
         </div>

@@ -12,6 +12,12 @@ const BugComponent = () => {
   const [editBugData, setEditBugData] = useState(null);
   const [userRole, setUserRole] = useState("");
   const [forceUpdate, setForceUpdate] = useState(false); // State to trigger re-renders
+  const sprintOptions = Array.from({ length: 27 }, (_, i) => ({
+    value: i + 1,
+    label: `Sprint ${i + 1}`,
+  })).concat({ value: "Backlog", label: "Backlog" });
+  const currentSprint = localStorage.getItem("currentSprint") || "1";
+  const [sprint, setSprint] = useState(currentSprint);
 
   useEffect(() => {
     const userEmail = localStorage.getItem("userEmail");
@@ -74,6 +80,9 @@ const BugComponent = () => {
         projects={projects}
         filters={filters}
         onFilterChange={handleFilterChange}
+        sprint={sprint}
+        setSprint={setSprint}
+        sprintOptions={sprintOptions}
       />
       {showCreateBugModal && (
         <CreateBugModal onClose={toggleCreateBugModal} projects={projects} />
@@ -81,7 +90,11 @@ const BugComponent = () => {
       {editBugData && (
         <EditBugModal bug={editBugData} onClose={closeEditBugModal} />
       )}
-      <BugsBoard filters={filters} onEditBug={openEditBugModal} />
+      <BugsBoard
+        filters={filters}
+        onEditBug={openEditBugModal}
+        sprint={sprint}
+      />
     </div>
   );
 };

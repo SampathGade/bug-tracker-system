@@ -33,7 +33,7 @@ const MyIssues = ({ bugs, title }) => {
             paddingTop: "20px",
             overflowY: "auto",
           }}>
-          {[...bugs, ...bugs, ...bugs]?.map((item, index) => {
+          {bugs?.map((item, index) => {
             return (
               <Box
                 sx={{
@@ -76,7 +76,6 @@ const MyIssues = ({ bugs, title }) => {
                     }}>
                     {" "}
                     {item?.description}
-                    sdjh scisgd cighsd cjgds cighsd csd ciksd ich sdih od
                   </Typography>
                 </Typography>
 

@@ -212,6 +212,14 @@ const CreateBugModal = ({ onClose }) => {
                         <input type="number" value={storyPoints} onChange={(e) => setStoryPoints(e.target.value)} required />
                     </label>
                     <label>
+                        Priority:
+                        <select value={priority} onChange={handlePriorityChange}>
+                            {priorityOptions.map(p => (
+                                <option key={p.value} value={p.value}>{p.label}</option>
+                            ))}
+                        </select>
+                    </label>
+                    <label>
                         Type:
                         <select value={type} onChange={(e) => setType(e.target.value)}>
                             {types.map(t => (
@@ -232,14 +240,6 @@ const CreateBugModal = ({ onClose }) => {
                     <label>
                         SLA Date:
                         <input type="date" value={slaDate} onChange={handleSlaDateChange} min={today} required />
-                    </label>
-                    <label>
-                        Priority:
-                        <select value={priority} onChange={handlePriorityChange}>
-                            {priorityOptions.map(p => (
-                                <option key={p.value} value={p.value}>{p.label}</option>
-                            ))}
-                        </select>
                     </label>
                     <div className="form-actions">
                         <button type="submit" disabled={isLoading || isUploading}>

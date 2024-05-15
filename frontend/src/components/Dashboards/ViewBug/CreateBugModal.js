@@ -32,6 +32,12 @@ const CreateBugModal = ({ onClose }) => {
         .concat(Array.from({ length: 27 }, (_, i) => ({ value: (i + 1).toString(), label: `Sprint ${i + 1}` })))
         .concat({ value: 'Backlog', label: 'Backlog' });
 
+        const priorityOptions = [
+            { value: 'High', label: 'High' },
+            { value: 'Medium', label: 'Medium' },
+            { value: 'Low', label: 'Low' }
+        ];    
+
     useEffect(() => {
         const fetchProjects = async () => {
             const response = await fetch('http://localhost:8080/project/getProjects', {
@@ -99,12 +105,6 @@ const CreateBugModal = ({ onClose }) => {
                 id: userId
             }
         };
-
-        const priorityOptions = [
-            { value: 'High', label: 'High' },
-            { value: 'Medium', label: 'Medium' },
-            { value: 'Low', label: 'Low' }
-        ];
     
         const response = await fetch('http://localhost:8080/bug/createBug', {
             method: 'POST',

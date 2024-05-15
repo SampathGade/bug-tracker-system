@@ -24,6 +24,7 @@ const CreateBugModal = ({ onClose }) => {
     const userEmail = localStorage.getItem("userEmail");
     const userId = localStorage.getItem("userId");
     const currentSprint = localStorage.getItem('currentSprint');
+    const [priority, setPriority] = useState('Medium');
 
     const today = new Date().toISOString().split('T')[0]; // format today's date as YYYY-MM-DD
 
@@ -90,13 +91,20 @@ const CreateBugModal = ({ onClose }) => {
                 storyPoints,
                 expectedOutcome,
                 actualOutcome,
-                slaDate
+                slaDate,
+                priority
             },
             userDetails: {
                 email: userEmail,
                 id: userId
             }
         };
+
+        const priorityOptions = [
+            { value: 'High', label: 'High' },
+            { value: 'Medium', label: 'Medium' },
+            { value: 'Low', label: 'Low' }
+        ];
     
         const response = await fetch('http://localhost:8080/bug/createBug', {
             method: 'POST',
@@ -148,6 +156,10 @@ const CreateBugModal = ({ onClose }) => {
 
     const handleSlaDateChange = (e) => {
         setSlaDate(e.target.value);
+    };
+
+    const handlePriorityChange = (e) => {
+        setPriority(e.target.value);
     };
 
     return (
@@ -220,6 +232,14 @@ const CreateBugModal = ({ onClose }) => {
                     <label>
                         SLA Date:
                         <input type="date" value={slaDate} onChange={handleSlaDateChange} min={today} required />
+                    </label>
+                    <label>
+                        Priority:
+                        <select value={priority} onChange={handlePriorityChange}>
+                            {priorityOptions.map(p => (
+                                <option key={p.value} value={p.value}>{p.label}</option>
+                            ))}
+                        </select>
                     </label>
                     <div className="form-actions">
                         <button type="submit" disabled={isLoading || isUploading}>

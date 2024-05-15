@@ -36,6 +36,7 @@ const CreateBugModal = ({ onClose }) => {
   const userId = localStorage.getItem("userId");
   const currentSprint = localStorage.getItem("currentSprint");
   const [slaDate, setSlaDate] = useState("");
+  const today = new Date().toISOString().split("T")[0];
 
   const sprintOptions = [
     { value: currentSprint, label: `Current Sprint (${currentSprint})` },

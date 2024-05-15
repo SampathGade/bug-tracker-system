@@ -17,11 +17,14 @@ const CreateBugModal = ({ onClose }) => {
     const [type, setType] = useState(types[0]);
     const [sprint, setSprint] = useState(localStorage.getItem('currentSprint') || '1');
     const [storyPoints, setStoryPoints] = useState('');
+    const [slaDate, setSlaDate] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const userRole = localStorage.getItem("userRole");
     const userEmail = localStorage.getItem("userEmail");
     const userId = localStorage.getItem("userId");
+
+    const today = new Date().toISOString().split('T')[0]; // format today's date as YYYY-MM-DD
 
     const sprintOptions = Array.from({ length: 27 }, (_, i) => ({ value: i + 1, label: `Sprint ${i + 1}` }))
         .concat({ value: 'Backlog', label: 'Backlog' });
@@ -84,7 +87,8 @@ const CreateBugModal = ({ onClose }) => {
                 sprint,
                 storyPoints,
                 expectedOutcome,
-                actualOutcome
+                actualOutcome,
+                slaDate
             },
             userDetails: {
                 email: userEmail,
@@ -139,6 +143,10 @@ const CreateBugModal = ({ onClose }) => {
     const assigneeOptions = [{ value: 'Auto', label: 'Auto Assign' }].concat(
         assignees.map(user => ({ value: user, label: user }))
     );
+
+    const handleSlaDateChange = (e) => {
+        setSlaDate(e.target.value);
+    };
 
     return (
         <div className="overlay" onClick={handleOverlayClick}>
@@ -206,6 +214,10 @@ const CreateBugModal = ({ onClose }) => {
                         Actual Outcome:
                         <textarea value={actualOutcome.text} onChange={(e) => setActualOutcome({ ...actualOutcome, text: e.target.value })} required />
                         <ImageUploader onUpload={handleActualImageUpload} onUploadStart={handleActualImageUploadStart} />
+                    </label>
+                    <label>
+                        SLA Date:
+                        <input type="date" value={slaDate} onChange={handleSlaDateChange} min={today} required />
                     </label>
                     <div className="form-actions">
                         <button type="submit" disabled={isLoading || isUploading}>

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import UserCell from './UserCell';
 import EditUserOverlay from './EditUserOverlay';
-import './OnboardingComponent.css'; // Import CSS
+import SearchBar from './SearchBar';
+import './OnboardingComponent.css'; 
 
 const OnboardingComponent = () => {
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
-    const [refresh, setRefresh] = useState(false); // To trigger re-fetching
+    const [refresh, setRefresh] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -34,6 +36,7 @@ const OnboardingComponent = () => {
 
     return (
         <div className="onboarding-container">
+        <SearchBar users={users} onSelectUser={handleSelectUser} />
             {users ? users.map(user => (
                 <UserCell key={user.email} user={user} onSelectUser={handleSelectUser} />
             )) : <p>No Pending Requests</p>}

@@ -24,20 +24,20 @@
     align-items: center;
 }
 
-.search-bar { /*new*/
+.search-bar {
     width: 100%;
     margin-bottom: 10px;
     position: relative;
 }
 
-.search-bar input { /*new*/
+.search-bar input {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-.dropdown { /*new*/
+.dropdown {
     position: absolute;
     width: 100%;
     border: 1px solid #ccc;
@@ -48,11 +48,11 @@
     z-index: 1;
 }
 
-.dropdown li { /*new*/
+.dropdown li { 
     padding: 8px;
     cursor: pointer;
 }
 
-.dropdown li:hover { /*new*/
+.dropdown li:hover {
     background-color: #f0f0f0;
 }

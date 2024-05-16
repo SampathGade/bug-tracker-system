@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import ProjectCell from './ProjectCell';
 import EditProjectOverlay from './EditProjectOverlay';
 import CreateProjectOverlay from './CreateProjectOverlay';
-import './ViewProjectsComponent.css'; // Ensure you have this CSS
+import SearchBar from './SearchBar';
+import './ViewProjectsComponent.css';
 
 const ViewProjectsComponent = () => {
     const [projects, setProjects] = useState([]);
     const [selectedProject, setSelectedProject] = useState(null);
     const [creatingProject, setCreatingProject] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [projectsPerPage] = useState(5); // You can adjust the number of projects per page
-    const [refreshKey, setRefreshKey] = useState(0); // State variable to trigger re-renders
+    const [projectsPerPage] = useState(5);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     useEffect(() => {
         const email = localStorage.getItem('userEmail');
@@ -61,6 +62,7 @@ const ViewProjectsComponent = () => {
     return (
         <div className="projects-container">
             <button onClick={handleOpenCreateProject}>Create Project</button>
+            <SearchBar items={projects} onSelectItem={handleSelectProject} />
             <div className='projects-card-list'>
                 {currentProjects.map(project => (
                     <ProjectCell key={project.id} project={project} onSelectProject={handleSelectProject} />

@@ -56,3 +56,35 @@
     background-color: #0056b3;
 }
 
+.search-bar {
+    width: 100%;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.dropdown {
+    position: absolute;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: white;
+    z-index: 1;
+}
+
+.dropdown li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.dropdown li:hover { 
+    background-color: #f0f0f0;
+}

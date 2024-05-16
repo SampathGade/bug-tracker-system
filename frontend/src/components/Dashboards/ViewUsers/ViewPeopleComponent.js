@@ -1,65 +1,79 @@
-import React, { useState, useEffect } from 'react';
-import PersonCell from './PersonCell';
-import EditPersonOverlay from './EditPersonOverlay';
-import './ViewPeopleComponent.css';
-import SearchBar from './SearchBar';
+import React, { useState, useEffect } from "react";
+import PersonCell from "./PersonCell";
+import EditPersonOverlay from "./EditPersonOverlay";
+import "./ViewPeopleComponent.css"; // Import the CSS for styling
+import Container from "../../Container";
+import SearchBar from "./SearchBar";
 
 const ViewPeopleComponent = () => {
-    const [people, setPeople] = useState([]);
-    const [selectedPerson, setSelectedPerson] = useState(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [peoplePerPage] = useState(5);
+  const [people, setPeople] = useState([]);
+  const [selectedPerson, setSelectedPerson] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [peoplePerPage] = useState(5);
 
-    useEffect(() => {
-        const userEmail = localStorage.getItem('userEmail');
-        const userRole = localStorage.getItem('userRole');
+  useEffect(() => {
+    const userEmail = localStorage.getItem("userEmail");
+    const userRole = localStorage.getItem("userRole");
 
-        const fetchPeople = async () => {
-            const response = await fetch('http://localhost:8080/users/getDetails', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email: userEmail, role: userRole }) 
-            });
-            if (response.ok) {
-                const data = await response.json();
-                setPeople(data);
-            }
-        };
-        fetchPeople();
-    }, []);
-
-    const handleSelectPerson = (person) => {
-        setSelectedPerson(person);
+    const fetchPeople = async () => {
+      const response = await fetch("http://localhost:8080/users/getDetails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: userEmail, role: userRole }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setPeople(data);
+      }
     };
+    fetchPeople();
+  }, []);
 
-    const handleCloseOverlay = () => {
-        setSelectedPerson(null);
-    };
+  const handleSelectPerson = (person) => {
+    setSelectedPerson(person);
+  };
 
-    const indexOfLastPerson = currentPage * peoplePerPage;
-    const indexOfFirstPerson = indexOfLastPerson - peoplePerPage;
-    const currentPeople = people.slice(indexOfFirstPerson, indexOfLastPerson);
+  const handleCloseOverlay = () => {
+    setSelectedPerson(null);
+  };
 
-    const paginate = pageNumber => setCurrentPage(pageNumber);
+  const indexOfLastPerson = currentPage * peoplePerPage;
+  const indexOfFirstPerson = indexOfLastPerson - peoplePerPage;
+  const currentPeople = people.slice(indexOfFirstPerson, indexOfLastPerson);
 
-    return (
-        <div className="people-container">
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  return (
+    <Container>
+      <div className="people-container">
         <SearchBar people={people} onSelectPerson={handleSelectPerson} />
-            {currentPeople.map(person => (
-                <PersonCell key={person.email} person={person} onSelectPerson={handleSelectPerson} />
-            ))}
-            {selectedPerson && <EditPersonOverlay person={selectedPerson} onClose={handleCloseOverlay} />}
-            <div className="pagination">
-                {[...Array(Math.ceil(people.length / peoplePerPage)).keys()].map(number => (
-                    <button key={number + 1} onClick={() => paginate(number + 1)}>
-                        {number + 1}
-                    </button>
-                ))}
-            </div>
+        {currentPeople.map((person) => (
+          <PersonCell
+            key={person.email}
+            person={person}
+            onSelectPerson={handleSelectPerson}
+          />
+        ))}
+        {selectedPerson && (
+          <EditPersonOverlay
+            person={selectedPerson}
+            onClose={handleCloseOverlay}
+          />
+        )}
+        <div className="pagination">
+          {[...Array(Math.ceil(people.length / peoplePerPage)).keys()].map(
+            (number) => (
+              <button key={number + 1} onClick={() => paginate(number + 1)}>
+                {number + 1}
+              </button>
+            )
+          )}
         </div>
-    );
+      </div>
+    </Container>
+  );
 };
 
 export default ViewPeopleComponent;

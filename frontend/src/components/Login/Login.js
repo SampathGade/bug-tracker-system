@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import "./Login.css";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './Login.css';
+import TextField from '@mui/material/TextField';
+import { toast } from 'react-toastify';
 
 const LoginComponent = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [otp, setOtp] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [otp, setOtp] = useState('');
   const [showOtpInput, setShowOtpInput] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("userEmail")) {
-      navigate("/dashboard");
+    if (localStorage.getItem('userEmail')) {
+      navigate('/dashboard');
     }
   }, [navigate]);
 
-  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validateEmail = email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const isFormValid = email && password && validateEmail(email);
 
   const fetchIpAddress = async () => {
@@ -46,68 +48,69 @@ const LoginComponent = () => {
 
   const handleNavigation = async () => {
     await fetchCurrentSprint();
-    navigate("/dashboard");
+    navigate('/dashboard');
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
     const ip = await fetchIpAddress();
     if (!ip) {
-      alert("Unable to fetch IP address. Please try again later.");
+      alert('Unable to fetch IP address. Please try again later.');
       return;
     }
     try {
-      const response = await fetch("http://localhost:8080/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('http://localhost:8080/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, ip }),
       });
 
       if (response.status === 207) {
         const data = await response.json();
-        localStorage.setItem("userRole", data.role);
-        localStorage.setItem("userEmail", email);
-        localStorage.setItem("userId", data.id);
+        localStorage.setItem('userRole', data.role);
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userId', data.id);
         handleNavigation();
       } else if (response.status === 200) {
         setShowOtpInput(true);
       } else if (response.status === 401) {
-        alert("Invalid credentials or other authentication error.");
+        toast.error('Invalid credentials or other authentication error.');
       } else {
-        alert("Issue Validating credentials, Please try again");
+        toast.error('Issue Validating credentials, Please try again');
       }
     } catch {
-      alert("Network error, please try again.");
+      toast.error('Network error, please try again.');
     }
   };
 
-  const handleOtpSubmit = async (event) => {
+  const handleOtpSubmit = async event => {
     event.preventDefault();
     const ip = await fetchIpAddress();
     if (!ip) {
-      alert("Unable to fetch IP address. Please try again later.");
+      alert('Unable to fetch IP address. Please try again later.');
       return;
     }
     try {
-      const response = await fetch("http://localhost:8080/auth/verify-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('http://localhost:8080/auth/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp, ip }),
       });
 
       if (response.status === 200) {
         const data = await response.json();
-        localStorage.setItem("userRole", data.role);
-        localStorage.setItem("userEmail", email);
-        localStorage.setItem("userId", data.id);
+        localStorage.setItem('userRole', data.role);
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userId', data.id);
         handleNavigation();
       } else if (response.status === 401) {
-        alert("Invalid OTP.");
+        alert('Invalid OTP.');
+        toast.e('Error validating OTP, please try again later.');
       } else {
-        alert("Error validating OTP, please try again later.");
+        toast('Error validating OTP, please try again later.');
       }
     } catch {
-      alert("Network error, please try again.");
+      toast('Network error, please try again.');
     }
   };
 
@@ -119,35 +122,62 @@ const LoginComponent = () => {
           {!showOtpInput ? (
             <form onSubmit={handleSubmit}>
               <div className="input-field">
-                <label>Email</label>
+                {/* <label>Email</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   required
+                /> */}
+                <TextField
+                  id="outlined-basic"
+                  label="Enter your email"
+                  variant="outlined"
+                  onChange={e => setEmail(e.target.value)}
+                  style={{
+                    width: '100%',
+                  }}
                 />
               </div>
               <div className="input-field">
-                <label>Password</label>
+                {/* <label>Password</label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
                   required
+                /> */}
+                <TextField
+                  id="outlined-basic"
+                  label="Enter your password"
+                  variant="outlined"
+                  onChange={e => setPassword(e.target.value)}
+                  style={{
+                    width: '100%',
+                    marginTop: '20px',
+                  }}
                 />
               </div>
               <div className="btn-block">
-                <button className="btn-frgt-pass cls-c-p" onClick={() => navigate("/forgot-password")}>
-                  Forgot Password
+                <button
+                  className="btn-frgt-pass cls-c-p"
+                  onClick={() => navigate('/forgot-password')}
+                  style={{
+                    textAlign: 'right',
+                    marginTop: '10px',
+                  }}>
+                  Forgot password?
                 </button>
                 <button className="btn-login cls-c-p" type="submit" disabled={!isFormValid}>
                   Login
                 </button>
-                <div className="btn-sign-up">
+                <div className="btn-sign-up ">
                   <span>Don’t have an account?</span>
-                  <button className="btn-sign-up-text cls-c-p" onClick={() => navigate("/signup")}>Sign Up</button>
+                  <button className="btn-sign-up-text cls-c-p" onClick={() => navigate('/signup')}>
+                    Sign Up
+                  </button>
                 </div>
               </div>
             </form>
@@ -156,7 +186,7 @@ const LoginComponent = () => {
               <input
                 type="text"
                 value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ""))}
+                onChange={e => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
                 placeholder="Enter OTP"
                 required
               />

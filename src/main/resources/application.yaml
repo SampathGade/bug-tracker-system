@@ -1,15 +1,14 @@
 spring:
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: Bug-Tracker
+      uri: "mongodb+srv://bug_tracker:bug_tracker@bugtracker.hc6snqa.mongodb.net/"
+      database: bug_tracker
   mail:
     host: smtp.gmail.com
     port: 465
-    username: drakedraganeel@gmail.com
-    password: your-app-password
-    protocol: smtps  # Notice 'smtps' for secure SMTP
+    username: saisampathgade@gmail.com
+    password: ulipkabqiphwgzjc
+    protocol: smtps # Notice 'smtps' for secure SMTP
     properties:
       mail:
         smtp:
@@ -21,14 +20,14 @@ spring:
         smtps:
           ssl:
             enable: true
-          connectiontimeout: 5000  # Timeout in milliseconds
-          timeout: 5000            # Socket read timeout
+          connectiontimeout: 5000 # Timeout in milliseconds
+          timeout: 5000 # Socket read timeout
           writetimeout: 5000
 logging:
-    level:
-      org.springframework.mail: DEBUG
-      com.sun.mail: DEBUG
-      org.springframework.data.mongodb.core.MongoTemplate: DEBUG
-      org.springframework.data.mongodb.core.ReactiveMongoTemplate: DEBUG
+  level:
+    org.springframework.mail: DEBUG
+    com.sun.mail: DEBUG
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+    org.springframework.data.mongodb.core.ReactiveMongoTemplate: DEBUG
 server:
   port: 8080

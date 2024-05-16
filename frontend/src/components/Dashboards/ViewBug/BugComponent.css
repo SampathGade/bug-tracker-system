@@ -24,7 +24,8 @@
   align-items: center;
   justify-content: space-between; /* Distributes space between items */
   padding: 16px;
-  border-radius: 12px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
   background: radial-gradient(
     circle at 18.7% 37.8%,
     rgb(250, 250, 250) 0%,
@@ -40,10 +41,12 @@
 .bugs-board {
   display: flex;
   justify-content: space-between;
-  padding: 48px 0px;
+  padding: 28px 10px;
   gap: 10px;
   overflow-y: auto; /* Enables vertical scrolling when content overflows */
-  max-height: calc(100vh - 120px); /* Adjust this value based on your nav and any other headers' total height */
+  max-height: calc(
+    100vh - 120px
+  ); /* Adjust this value based on your nav and any other headers' total height */
 }
 
 .bug-column {
@@ -57,19 +60,18 @@
 
 .bug-card {
   background-color: white;
-  border: 1px solid #ccc;
   margin: 5px 0;
   padding: 16px;
-  border-radius: 12px;
+  border-radius: 16px !important;
   cursor: pointer;
 }
-.bug-card h3{
-    font-weight: 500;
-    font-size: 16px;
-    text-transform: capitalize;
+.bug-card h3 {
+  font-weight: 500;
+  font-size: 16px;
+  text-transform: capitalize;
 }
-.bug-card p{
-    font-size: 14px;
+.bug-card p {
+  font-size: 14px;
 }
 .overlay {
   display: flex;
@@ -81,33 +83,31 @@
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  padding: 20px;  /* Add padding to ensure content does not touch the edges */
+  padding: 20px; /* Add padding to ensure content does not touch the edges */
 }
 
 .overlay-content {
-  position: relative;  /* Ensure it's positioned relatively within the overlay */
+  position: relative; /* Ensure it's positioned relatively within the overlay */
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  width: 80%;  /* Adjust width as necessary */
-  max-height: 80vh;  /* Max height to 80% of the viewport height */
-  overflow-y: auto;  /* Enable vertical scrolling */
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);  /* Optional: adds shadow for better depth perception */
+  width: 80%; /* Adjust width as necessary */
+  max-height: 80vh; /* Max height to 80% of the viewport height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: adds shadow for better depth perception */
 }
-
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
   .overlay-content {
-    width: 90%;  /* Ensure it remains accessible on smaller devices */
-    max-height: 90vh;  /* Slightly more space for smaller devices */
+    width: 90%; /* Ensure it remains accessible on smaller devices */
+    max-height: 90vh; /* Slightly more space for smaller devices */
   }
 }
 
 .bug-column:hover {
   background-color: #e2e2e2;
 }
-
 
 .bug-card:hover {
   transform: translateY(-2px); /* Slight lift effect on hover */
@@ -123,8 +123,8 @@
   justify-content: center;
   margin-left: 10px;
 }
-.assignee-icon{
-    margin-right: -5px;
+.assignee-icon {
+  margin-right: -5px;
 }
 
 .assignee-icon input[type="checkbox"] + label .icon-label {
@@ -158,36 +158,40 @@
   margin-bottom: 10px;
   align-self: flex-start; /* Align button at the top of its container */
 }
-.bugs-board .bug-column h2{
-    font-size: 20px;
-    font-weight: 600;
+.bugs-board .bug-column h2 {
+  font-size: 20px;
+  font-weight: 600;
 }
-.bugs-board .bug-column:nth-child(1) h2{
-    background-color: #DFE1E6;
-    padding: 8px;
-    border-radius: 6px;
-    color: #42526E;
+.bugs-board .bug-column:nth-child(1) h2 {
+  background-color: #dfe1e6;
+  padding: 8px;
+  border-radius: 6px;
+  color: #42526e;
 }
-.bugs-board .bug-column:nth-child(1){
-    background-color: #DFE1E6;
+.bugs-board .bug-column:nth-child(1) {
+  background-color: #dfe1e6;
 }
-.bugs-board .bug-column:nth-child(2) h2{
-    background-color: #DEEBFF;
-    padding: 8px;
-    border-radius: 6px;
-    color: #0052CC;
+.bugs-board .bug-column:nth-child(2) h2 {
+  background-color: #deebff;
+  padding: 8px;
+  border-radius: 6px;
+  color: #0052cc;
 }
-.bugs-board .bug-column:nth-child(2){
-    background-color: #DEEBFF;
+.bugs-board .bug-column:nth-child(2) {
+  background-color: #deebff;
 }
-.bugs-board .bug-column:nth-child(3) h2{
-    background-color: #E3FCEF;
-    padding: 8px;
-    border-radius: 6px;
-    color: #006644;
+.bugs-board .bug-column:nth-child(3) h2 {
+  background-color: #e3fcef;
+  padding: 8px;
+  border-radius: 6px;
+  color: #006644;
 }
-.bugs-board .bug-column:nth-child(3){
-    background-color: #E3FCEF;
+.bugs-board .bug-column:nth-child(3) {
+  background-color: #e3fcef;
+}
+
+.bug-selection {
+  background-color: red;
 }
 
 .search-bar {

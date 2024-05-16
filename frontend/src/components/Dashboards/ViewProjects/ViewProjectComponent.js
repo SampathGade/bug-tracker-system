@@ -7,6 +7,7 @@ import ResponsiveAppBar from "../AppBar";
 import { Grid } from "@mui/material";
 import LeftPanel from "../LeftPanel";
 import Container from "../../Container";
+import SearchBar from "./SearchBar";
 
 const ViewProjectsComponent = () => {
   const [projects, setProjects] = useState([]);
@@ -76,6 +77,7 @@ const ViewProjectsComponent = () => {
           onClick={handleOpenCreateProject}>
           Create Project
         </button>
+        <SearchBar items={projects} onSelectItem={handleSelectProject} />
         <div className="projects-card-list" style={{ marginTop: "20px" }}>
           {currentProjects.map((project) => (
             <ProjectCell

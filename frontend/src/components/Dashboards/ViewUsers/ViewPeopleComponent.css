@@ -1,58 +1,91 @@
 .people-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .person-cell {
-    padding: 16px;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    border-radius: 12px;
-    background: linear-gradient(to top, #dfe9f3 0%, white 100%);
-    box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
-    flex-basis: 28%;
+  padding: 16px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  border-radius: 12px;
+  background: linear-gradient(to top, #dfe9f3 0%, white 100%);
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+  flex-basis: 28%;
 }
-.person-cell p{
-    font-weight: 500;
+.person-cell p {
+  font-weight: 500;
 }
 
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .overlay-content {
-    background: white;
-    padding: 20px;
-    width: 60%;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  background: white;
+  padding: 20px;
+  width: 60%;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
 .pagination {
-    width: 100%; /* Ensures the pagination bar spans the width of the container */
-    display: flex;
-    justify-content: center;
-    margin-top: auto; /* Pushes the pagination bar to the bottom */
+  width: 100%; /* Ensures the pagination bar spans the width of the container */
+  display: flex;
+  justify-content: center;
+  margin-top: auto; /* Pushes the pagination bar to the bottom */
 }
 
 .pagination button {
-    padding: 8px 16px;
-    margin: 0 5px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 8px 16px;
+  margin: 0 5px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .pagination button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
+}
+
+.search-bar {
+  width: 100%;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.dropdown {
+  position: absolute;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-top: none;
+  max-height: 150px;
+  overflow-y: auto;
+  background-color: white;
+  z-index: 1;
+}
+
+.dropdown li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.dropdown li:hover {
+  background-color: #f0f0f0;
 }

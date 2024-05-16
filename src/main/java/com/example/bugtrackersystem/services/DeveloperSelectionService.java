@@ -77,7 +77,7 @@ public class DeveloperSelectionService {
         return bestDeveloper;
     }
 
-    private double calculatePerformancePercentage(PerformanceValue performanceValue) {
+    double calculatePerformancePercentage(PerformanceValue performanceValue) {
         if (performanceValue == null) {
             return 0;
         }

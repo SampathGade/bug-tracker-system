@@ -28,4 +28,5 @@ public class Bug {
     private Outcome expectedOutcome;
     private Outcome actualOutcome;
     private Date slaDate;
+    private String priority;
 }

@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId> <!-- Added artifactId -->
+		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.6.4</version>
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>bug-tracker-system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>bug-tracker-system</name>
-	<description>Bug tracker system in Spring boot</description>
+	<description>Bug tracker system in Spring Boot</description>
+	<properties>
+		<java.version>11</java.version>
+	</properties>
 	<dependencies>
 		<!-- Spring Boot Starter Web -->
 		<dependency>
@@ -24,10 +28,10 @@
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
 		<!-- Spring Boot Starter Security -->
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-security</artifactId>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 		<!-- Spring Boot Starter Mail for sending emails -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -45,23 +49,27 @@
 			<version>1.18.12</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<!-- JUnit 5 for testing -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.8.1</version>
+			<scope>test</scope>
 		</dependency>
-
+		<!-- Mockito dependency -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>4.1.0</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Spring Boot Test dependency -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-logging</artifactId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-
-	<properties>
-		<java.version>11</java.version>
-	</properties>
-
 	<build>
 		<plugins>
 			<!-- Spring Boot Maven Plugin for packaging -->
@@ -69,17 +77,41 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<!-- Maven Compiler Plugin for Java version -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
-					<source>11</source>
-					<target>11</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 				</configuration>
+			</plugin>
+			<!-- Jacoco Maven Plugin for code coverage -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.8</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<excludes>
+								<exclude>**/*Data*.class</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
-
-
 </project>

@@ -4,6 +4,7 @@ import EditUserOverlay from "./EditUserOverlay";
 import "./OnboardingComponent.css"; // Import CSS
 import Container from "../../Container";
 import { Box, Typography } from "@mui/material";
+import SearchBar from "./SearchBar";
 
 const OnboardingComponent = () => {
   const [users, setUsers] = useState([]);
@@ -12,6 +13,7 @@ const OnboardingComponent = () => {
   const [role, setRole] = useState(selectedUser?.role);
   const [managers, setManagers] = useState([]); // Initialize managers as an empty array
   const [projectManager, setManager] = useState(selectedUser?.projectManager);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -86,6 +88,7 @@ const OnboardingComponent = () => {
 
   return (
     <Container>
+      <SearchBar users={users} onSelectUser={handleSelectUser} />
       <Box>
         <Typography
           sx={{

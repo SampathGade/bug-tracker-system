@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import PersonCell from "./PersonCell";
 import EditPersonOverlay from "./EditPersonOverlay";
 import "./ViewPeopleComponent.css"; // Import the CSS for styling
-import ResponsiveAppBar from "../AppBar";
-import { Grid } from "@mui/material";
-import LeftPanel from "../LeftPanel";
 import Container from "../../Container";
+import SearchBar from "./SearchBar";
 
 const ViewPeopleComponent = () => {
   const [people, setPeople] = useState([]);
@@ -50,6 +48,7 @@ const ViewPeopleComponent = () => {
   return (
     <Container>
       <div className="people-container">
+        <SearchBar people={people} onSelectPerson={handleSelectPerson} />
         {currentPeople.map((person) => (
           <PersonCell
             key={person.email}

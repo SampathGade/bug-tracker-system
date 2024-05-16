@@ -31,6 +31,8 @@ const CreateBugModal = ({ onClose }) => {
   const [storyPoints, setStoryPoints] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [priority, setPriority] = useState("Medium");
+
   const userRole = localStorage.getItem("userRole");
   const userEmail = localStorage.getItem("userEmail");
   const userId = localStorage.getItem("userId");
@@ -70,6 +72,11 @@ const CreateBugModal = ({ onClose }) => {
     };
     fetchProjects();
   }, [userEmail, userRole]);
+  const priorityOptions = [
+    { value: "High", label: "High" },
+    { value: "Medium", label: "Medium" },
+    { value: "Low", label: "Low" },
+  ];
 
   useEffect(() => {
     if (selectedProject) {
@@ -114,6 +121,7 @@ const CreateBugModal = ({ onClose }) => {
         expectedOutcome,
         actualOutcome,
         slaDate,
+        priority,
       },
       userDetails: {
         email: userEmail,
@@ -173,6 +181,10 @@ const CreateBugModal = ({ onClose }) => {
 
   const handleSlaDateChange = (e) => {
     setSlaDate(e.target.value);
+  };
+
+  const handlePriorityChange = (e) => {
+    setPriority(e.target.value);
   };
 
   return (
@@ -327,6 +339,16 @@ const CreateBugModal = ({ onClose }) => {
               },
             }}
           />
+          <label>
+            Priority:
+            <select value={priority} onChange={handlePriorityChange}>
+              {priorityOptions.map((p) => (
+                <option key={p.value} value={p.value}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+          </label>
           {/* <label>
                         Type:
                         <select value={type} onChange={(e) => setType(e.target.value)}>

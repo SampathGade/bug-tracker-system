@@ -189,3 +189,55 @@
 .bugs-board .bug-column:nth-child(3){
     background-color: #E3FCEF;
 }
+
+.search-bar {
+  width: 120px; 
+  margin-left: auto;
+}
+
+.search-bar input { 
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.dropdown { 
+  position: absolute;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-top: none;
+  max-height: 150px;
+  overflow-y: auto;
+  background-color: white;
+  z-index: 1;
+}
+
+.dropdown li { 
+  padding: 8px;
+  cursor: pointer;
+}
+
+.dropdown li:hover { 
+  background-color: #f0f0f0;
+}
+
+.action-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  gap: 900px; 
+}
+
+.search-bar { 
+  width: 100px;
+  margin-left: auto;
+}
+
+.search-bar input { 
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}

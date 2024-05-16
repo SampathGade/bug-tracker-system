@@ -3,6 +3,7 @@ import FiltersPanel from './FiltersPanel';
 import BugsBoard from './BugsBoard';
 import CreateBugModal from './CreateBugModal';
 import EditBugModal from './EditBugModal';
+import SearchBar from './SearchBar';
 import './BugComponent.css';
 
 const BugComponent = () => {
@@ -11,7 +12,8 @@ const BugComponent = () => {
     const [showCreateBugModal, setShowCreateBugModal] = useState(false);
     const [editBugData, setEditBugData] = useState(null);
     const [userRole, setUserRole] = useState('');
-    const [forceUpdate, setForceUpdate] = useState(false);  // State to trigger re-renders
+    const [forceUpdate, setForceUpdate] = useState(false);
+    const [bugs, setBugs] = useState([]);
 
     useEffect(() => {
         const userEmail = localStorage.getItem("userEmail");
@@ -55,14 +57,47 @@ const BugComponent = () => {
 
     const closeEditBugModal = () => {
         setEditBugData(null);
-        setForceUpdate(f => !f);  // Toggle to trigger re-render
+        setForceUpdate(f => !f);
     };
+
+    useEffect(() => {
+        const fetchBugs = async () => {
+            try {
+                const response = await fetch('http://localhost:8080/bug/getBugsByUserAndSprint', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: localStorage.getItem("userEmail"), 
+                        role: localStorage.getItem("userRole"), 
+                        project: filters.project, 
+                        assignee: filters.assignee,
+                        sprint: localStorage.getItem("currentSprint") || '1' // Add sprint to the API request
+                    })
+                });
+                if (response.ok) {
+                    const fetchedBugs = await response.json();
+                    setBugs(fetchedBugs);
+                } else {
+                    console.error('Failed to fetch bugs');
+                }
+            } catch (error) {
+                console.error('Error fetching bugs:', error);
+            }
+        };
+
+        fetchBugs();
+    }, [filters]);
 
     return (
         <div>
-            {userRole !== 'developer' && (
-                <button onClick={toggleCreateBugModal} className="create-bug-button">Create Bug</button>
-            )}
+            <div className="action-bar"> {/*new*/}
+                {userRole !== 'developer' && (
+                    <button onClick={toggleCreateBugModal} className="create-bug-button">Create Bug</button>
+                )}
+                <SearchBar bugs={bugs} onSelectBug={openEditBugModal} /> {/*new*/}
+            </div>
             <FiltersPanel projects={projects} filters={filters} onFilterChange={handleFilterChange} />
             {showCreateBugModal && <CreateBugModal onClose={toggleCreateBugModal} projects={projects} />}
             {editBugData && <EditBugModal bug={editBugData} onClose={closeEditBugModal} />}

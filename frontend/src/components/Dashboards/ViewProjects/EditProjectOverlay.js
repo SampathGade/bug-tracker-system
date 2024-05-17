@@ -77,7 +77,6 @@ const EditProjectOverlay = ({ project, onClose }) => {
           <div>
             <TextField
               label="Project Name"
-              required
               variant="outlined"
               style={{
                 width: "100%",
@@ -88,7 +87,6 @@ const EditProjectOverlay = ({ project, onClose }) => {
             />
             <TextField
               label="Description"
-              required
               multiline
               variant="outlined"
               style={{
@@ -98,7 +96,7 @@ const EditProjectOverlay = ({ project, onClose }) => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-            <FormControl required sx={{ width: "100%", marginLeft: 0 }}>
+            <FormControl sx={{ width: "100%", marginLeft: 0 }}>
               <InputLabel id="demo-simple-select-required-label">
                 Project Manager
               </InputLabel>
@@ -126,6 +124,32 @@ const EditProjectOverlay = ({ project, onClose }) => {
             </FormControl>
           </div>
           <div>
+            <FormControl sx={{ width: "100%", marginLeft: 0 }}>
+              <InputLabel id="demo-simple-select-required-label">
+                Developers
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                style={{
+                  marginBottom: "10px",
+                  textAlign: "left",
+                  width: "100%",
+                }}
+                onChange={handleAddDeveloper}
+                defaultValue=""
+                placeholder="Developers"
+                label="Developers">
+                <MenuItem value="" disabled>
+                  Select a developer to add
+                </MenuItem>
+                {allDevelopers.map((dev) => (
+                  <MenuItem key={dev.id} value={dev.email}>
+                    {dev.email}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <Box
               sx={{
                 display: "flex",
@@ -156,32 +180,6 @@ const EditProjectOverlay = ({ project, onClose }) => {
                 </div>
               ))}
             </Box>
-            <FormControl required sx={{ width: "100%", marginLeft: 0 }}>
-              <InputLabel id="demo-simple-select-required-label">
-                Project Manager
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                style={{
-                  marginBottom: "10px",
-                  textAlign: "left",
-                  width: "100%",
-                }}
-                onChange={handleAddDeveloper}
-                defaultValue=""
-                placeholder="Project Manager"
-                label="Project Manager">
-                <MenuItem value="" disabled>
-                  Select a developer to add
-                </MenuItem>
-                {allDevelopers.map((dev) => (
-                  <MenuItem key={dev.id} value={dev.email}>
-                    {dev.email}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
           </div>
         </div>
         <div className="form-actions">

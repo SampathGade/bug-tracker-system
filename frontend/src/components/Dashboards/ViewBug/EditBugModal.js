@@ -154,7 +154,6 @@ const EditBugModal = ({ bug, onClose }) => {
           <div style={{ height: "10px" }} />
           <TextField
             label="Title"
-            required
             variant="outlined"
             style={{
               width: "100%",
@@ -166,7 +165,6 @@ const EditBugModal = ({ bug, onClose }) => {
           />
           <TextField
             label="Description"
-            required
             multiline
             variant="outlined"
             style={{
@@ -188,7 +186,7 @@ const EditBugModal = ({ bug, onClose }) => {
             disabled
           />
 
-          <FormControl required sx={{ m: 0, width: "100%" }}>
+          <FormControl sx={{ m: 0, width: "100%" }}>
             <InputLabel id="demo-simple-select-required-label">
               Status
             </InputLabel>
@@ -210,7 +208,7 @@ const EditBugModal = ({ bug, onClose }) => {
             </Select>
           </FormControl>
 
-          <FormControl required sx={{ m: 0, width: "100%" }}>
+          <FormControl sx={{ m: 0, width: "100%" }}>
             <InputLabel id="demo-simple-select-required-label">
               Assignee
             </InputLabel>
@@ -236,7 +234,6 @@ const EditBugModal = ({ bug, onClose }) => {
 
           <TextField
             label="Expected Outcome"
-            required
             multiline
             variant="outlined"
             style={{
@@ -270,7 +267,6 @@ const EditBugModal = ({ bug, onClose }) => {
 
           <TextField
             label=" Actual Outcome"
-            required
             multiline
             variant="outlined"
             style={{

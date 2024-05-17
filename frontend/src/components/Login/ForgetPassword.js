@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
+import { Card, TextField } from "@mui/material";
 
 const ForgotPasswordComponent = () => {
   const [email, setEmail] = useState("");
@@ -80,58 +81,89 @@ const ForgotPasswordComponent = () => {
   return (
     <div className="login-container">
       <div className="login-detail-sec">
-        <h2>Forgot Password</h2>
-        <div className="form-container">
-        {!showResetForm ? (
-          <form onSubmit={handleEmailSubmit}>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-              required
-            />
-            <div className="btn-reset-pass-block">
-              <button className="btn-login cls-c-p" type="submit" disabled={!validateEmail(email)}>
-                Send OTP
-              </button>
-              <button className="btn-frgt-pass cls-c-p" onClick={() => navigate("/login")}>Back to Login</button>
-            </div>
-          </form>
-        ) : (
-          <form onSubmit={handleResetSubmit}>
-            <input
-              type="text"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ""))}
-              placeholder="OTP"
-              required
-            />
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="New Password"
-              required
-            />
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm New Password"
-              required
-            />
-            <button type="submit" disabled={!isResetEnabled}>
-              Reset Password
-            </button>
-            <button type="button" onClick={handleResendOtp}>
-              Resend OTP
-            </button>
-          </form>
-        )}
-        </div>
+        <Card
+          sx={{
+            padding: "30px",
+            borderRadius: "30px",
+          }}>
+          <h2>Forgot Password</h2>
+          <div className="form-container">
+            {!showResetForm ? (
+              <form onSubmit={handleEmailSubmit}>
+                <TextField
+                  id="outlined-basic"
+                  label="Enter your email"
+                  variant="outlined"
+                  value={email}
+                  required
+                  onChange={(e) => setEmail(e.target.value)}
+                  style={{
+                    width: "100%",
+                    marginBottom: "20px",
+                  }}
+                />
+                <div className="btn-reset-pass-block">
+                  <button
+                    className="btn-login cls-c-p"
+                    type="submit"
+                    disabled={!validateEmail(email)}>
+                    Send OTP
+                  </button>
+                  <button
+                    className="btn-frgt-pass cls-c-p"
+                    onClick={() => navigate("/login")}>
+                    Back to Login
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <form onSubmit={handleResetSubmit}>
+                <input
+                  type="text"
+                  value={otp}
+                  onChange={(e) =>
+                    setOtp(e.target.value.replace(/[^0-9]/g, ""))
+                  }
+                  placeholder="OTP"
+                  required
+                />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="New Password"
+                  required
+                />
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm New Password"
+                  required
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-end",
+                  }}>
+                  <button type="submit" disabled={!isResetEnabled}>
+                    Reset Password
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleResendOtp}
+                    style={{
+                      marginLeft: "10px",
+                    }}>
+                    Resend OTP
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </Card>
       </div>
-      <div className="login-img"></div>
     </div>
   );
 };

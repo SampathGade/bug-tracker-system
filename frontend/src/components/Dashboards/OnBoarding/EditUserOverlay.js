@@ -6,6 +6,7 @@ import {
   Select,
 } from "@mui/material";
 import React from "react";
+import { rolesList } from "../../../utils/constants";
 
 const EditUserOverlay = ({
   user,
@@ -17,12 +18,15 @@ const EditUserOverlay = ({
   projectManager,
   setManager,
 }) => {
+  console.log("role", role);
+  const isNotProjectManager =
+    role !== rolesList.projectManager && role !== rolesList.admin;
   return (
     <div className="overlay" onClick={handleOverlayClick}>
       <div className="overlay-content" onClick={(e) => e.stopPropagation()}>
         <h2>Edit User</h2>
         <p>Email: {user.email}</p>
-        <FormControl required sx={{ width: "100%", marginLeft: 0 }}>
+        <FormControl sx={{ width: "100%", marginLeft: 0 }}>
           <InputLabel id="demo-simple-select-required-label">Role</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -43,29 +47,31 @@ const EditUserOverlay = ({
             <MenuItem value="External User">External User</MenuItem>
           </Select>
         </FormControl>
-        <FormControl required sx={{ width: "100%", marginLeft: 0 }}>
-          <InputLabel id="demo-simple-select-required-label">
-            Project Manager
-          </InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            style={{
-              marginBottom: "10px",
-              textAlign: "left",
-              width: "100%",
-            }}
-            value={projectManager}
-            onChange={(e) => setManager(e.target.value)}
-            placeholder="Project Manager"
-            label="Project Manager">
-            {managers.map((manager) => (
-              <MenuItem key={manager.email} value={manager.email}>
-                {manager.email}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        {isNotProjectManager && (
+          <FormControl sx={{ width: "100%", marginLeft: 0 }}>
+            <InputLabel id="demo-simple-select-required-label">
+              Select Project Manager
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              style={{
+                marginBottom: "10px",
+                textAlign: "left",
+                width: "100%",
+              }}
+              value={projectManager}
+              onChange={(e) => setManager(e.target.value)}
+              placeholder="Select Project Manager"
+              label="Select Project Manager">
+              {managers.map((manager) => (
+                <MenuItem key={manager.email} value={manager.email}>
+                  {manager.email}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
         <div
           style={{
             display: "flex",

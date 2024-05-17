@@ -26,6 +26,8 @@ const MetricsDashboard = () => {
   const [sprint, setSprint] = useState(currentSprint);
 
   const userEmail = localStorage.getItem("userEmail");
+  const userFirstName = localStorage.getItem("userFirstName");
+  const userLastName = localStorage.getItem("userLastName") || "";
   const role = localStorage.getItem("userRole");
   const isAdmin = role === rolesList.admin;
   const isManager = role === rolesList.projectManager;
@@ -123,6 +125,10 @@ const MetricsDashboard = () => {
       return item;
     }
   });
+
+  const displayName = userLastName ? `${userFirstName} ${userLastName}` : userFirstName;
+
+
   return (
     <Container>
       <Box
@@ -146,8 +152,7 @@ const MetricsDashboard = () => {
               marginLeft: "10px",
               fontFamily: "Poppins",
             }}>
-            {" "}
-            Sai Sampath Gade
+             {displayName}
           </Typography>
         </Typography>
         <Typography

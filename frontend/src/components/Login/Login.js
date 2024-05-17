@@ -71,6 +71,8 @@ const LoginComponent = () => {
         localStorage.setItem("userRole", data.role);
         localStorage.setItem("userEmail", email);
         localStorage.setItem("userId", data.id);
+        localStorage.setItem("userFirstName", data.firstName);
+        localStorage.setItem("userLastName",data.lastName);
         handleNavigation();
       } else if (response.status === 200) {
         setShowOtpInput(true);
@@ -103,6 +105,8 @@ const LoginComponent = () => {
         localStorage.setItem("userRole", data.role);
         localStorage.setItem("userEmail", email);
         localStorage.setItem("userId", data.id);
+        localStorage.setItem("userFirstName", data.firstName);
+        localStorage.setItem("userLastName",data.lastName);
         handleNavigation();
       } else if (response.status === 401) {
         alert("Invalid OTP.");

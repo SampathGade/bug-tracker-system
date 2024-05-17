@@ -23,6 +23,7 @@ const UserCell = ({ user, onSelectUser, handleSubmit, managers }) => {
         padding: "12px",
         width: { sm: "100%", xs: "100%", lg: "45%", md: "45%" },
         borderRadius: "20px",
+        cursor: "pointer",
         ":hover": {
           transition: "transform 0.15s ease-in-out",
           transform: "scale3d(1.05, 1.05, 1)",
@@ -148,7 +149,12 @@ const UserCell = ({ user, onSelectUser, handleSubmit, managers }) => {
             }}
             onClick={(e) => {
               e.stopPropagation();
-              handleSubmit("accepted", selectedRole, selectedManager);
+              handleSubmit(
+                "accepted",
+                selectedRole,
+                selectedManager,
+                user.email
+              );
             }}>
             Accept
           </Button>

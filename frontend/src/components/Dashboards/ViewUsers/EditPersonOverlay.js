@@ -50,13 +50,15 @@ const EditPersonOverlay = ({ person, onClose }) => {
     }
   };
 
+  const disableUpdate = !projectManager || !role;
+  console.log("role", !role);
   return (
     <div className="overlay" onClick={() => onClose()}>
       <div className="overlay-content" onClick={(e) => e.stopPropagation()}>
         <h2>Edit Person</h2>
         <p>Email: {person.email}</p>
 
-        <FormControl required sx={{ width: "100%", marginLeft: 0 }}>
+        <FormControl sx={{ width: "100%", marginLeft: 0 }}>
           <InputLabel id="demo-simple-select-required-label">Role</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -78,7 +80,7 @@ const EditPersonOverlay = ({ person, onClose }) => {
           </Select>
         </FormControl>
 
-        <FormControl required sx={{ width: "100%", marginLeft: 0 }}>
+        <FormControl sx={{ width: "100%", marginLeft: 0 }}>
           <InputLabel id="demo-simple-select-required-label">
             Project Manager
           </InputLabel>
@@ -112,7 +114,10 @@ const EditPersonOverlay = ({ person, onClose }) => {
             }}>
             Cancel
           </Button>
-          <Button variant="contained" onClick={handleUpdatePerson}>
+          <Button
+            variant="contained"
+            onClick={handleUpdatePerson}
+            disabled={disableUpdate}>
             Update
           </Button>
         </div>

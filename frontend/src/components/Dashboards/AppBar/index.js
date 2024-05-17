@@ -9,7 +9,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
 
-const settings = ["Profile", "Dashboard", "Logout"];
+const settings = ["Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();

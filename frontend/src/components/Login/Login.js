@@ -143,6 +143,7 @@ const LoginComponent = () => {
                     id="outlined-basic"
                     label="Enter your password"
                     variant="outlined"
+                    type="password"
                     onChange={(e) => setPassword(e.target.value)}
                     style={{
                       width: "100%",

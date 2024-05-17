@@ -13,7 +13,6 @@ const OnboardingComponent = () => {
   const [role, setRole] = useState(selectedUser?.role);
   const [managers, setManagers] = useState([]); // Initialize managers as an empty array
   const [projectManager, setManager] = useState(selectedUser?.projectManager);
-  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -60,11 +59,12 @@ const OnboardingComponent = () => {
     fetchManagers();
   }, [projectManager?.projectManager]); // Ensure this effect runs only once or when user.projectManager changes
 
-  const handleSubmit = async (status, roleInfo, pm) => {
+  const handleSubmit = async (status, roleInfo, pm, userEmail) => {
     const finalRole = roleInfo ?? role;
     const finalPM = pm ?? projectManager;
+    const finalUserEmail = userEmail ?? projectManager;
     const payload = {
-      email: projectManager?.email,
+      email: finalUserEmail,
       role: finalRole,
       projectManager: finalPM,
       status,

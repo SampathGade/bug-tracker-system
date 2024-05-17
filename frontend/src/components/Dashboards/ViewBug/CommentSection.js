@@ -116,8 +116,7 @@ function CommentSection({ bugId, comments }) {
           handleImageUploadReset(); // Reset image uploader
         }}>
         <TextField
-          label="Description"
-          required
+          label="Comment"
           multiline
           variant="outlined"
           style={{ width: "100%", marginBottom: "10px" }}

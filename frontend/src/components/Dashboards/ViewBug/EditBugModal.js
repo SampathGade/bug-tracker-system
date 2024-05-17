@@ -11,6 +11,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const EditBugModal = ({ bug, onClose }) => {
   const [name, setName] = useState(bug.name);
@@ -250,19 +251,39 @@ const EditBugModal = ({ bug, onClose }) => {
             disabled={isLoading}
           />
           {expectedOutcome.images.map((img, index) => (
-            <div key={index} className="image-container">
+            <span
+              key={index}
+              style={{
+                width: "100px",
+                position: "relative",
+                border: "1px solid black",
+                borderRadius: "10px",
+                cursor: "pointer",
+                margin: "5px",
+              }}>
               <img
                 src={img}
                 alt="Expected outcome"
-                style={{ width: "100px", height: "auto", margin: "5px" }}
+                style={{
+                  width: "100px",
+                  height: "auto",
+                  borderRadius: "10px",
+                }}
                 onClick={() => setOverlayImage(img)}
               />
-              <button
-                type="button"
-                onClick={() => handleDeleteImage("expected", index)}>
-                Delete
-              </button>
-            </div>
+              <CancelIcon
+                color="error"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteImage("expected", index);
+                }}
+                sx={{
+                  position: "absolute",
+                  right: "-10px",
+                  top: "-10px",
+                }}
+              />
+            </span>
           ))}
 
           <TextField
@@ -278,25 +299,45 @@ const EditBugModal = ({ bug, onClose }) => {
             }
             disabled={isLoading}
           />
-
           <ImageUploader
             onUpload={(urls) => handleImageUpload("actual", urls)}
             disabled={isLoading}
           />
+
           {actualOutcome.images.map((img, index) => (
-            <div key={index} className="image-container">
+            <span
+              key={index}
+              style={{
+                width: "100px",
+                position: "relative",
+                border: "1px solid black",
+                borderRadius: "10px",
+                cursor: "pointer",
+                margin: "5px",
+              }}>
               <img
                 src={img}
                 alt="Actual outcome"
-                style={{ width: "100px", height: "auto", margin: "5px" }}
+                style={{
+                  width: "100px",
+                  height: "auto",
+                  borderRadius: "10px",
+                }}
                 onClick={() => setOverlayImage(img)}
               />
-              <button
-                type="button"
-                onClick={() => handleDeleteImage("actual", index)}>
-                Delete
-              </button>
-            </div>
+              <CancelIcon
+                color="error"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteImage("actual", index);
+                }}
+                sx={{
+                  position: "absolute",
+                  right: "-10px",
+                  top: "-10px",
+                }}
+              />
+            </span>
           ))}
           <div className="form-actions">
             <Button variant="contained" type="submit" disabled={isLoading}>

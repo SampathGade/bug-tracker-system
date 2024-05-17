@@ -36,6 +36,12 @@ const MetricsDashboard = () => {
   const title4 = `Sprint ${sprint} Progress`;
 
   useEffect(() => {
+    if (!localStorage.getItem("userEmail")) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     const fetchProjects = async () => {
       try {
         const response = await fetch(

@@ -3,7 +3,6 @@ import FiltersPanel from "./FiltersPanel";
 import BugsBoard from "./BugsBoard";
 import CreateBugModal from "./CreateBugModal";
 import EditBugModal from "./EditBugModal";
-import SearchBar from "./SearchBar";
 import "./BugComponent.css";
 
 const BugComponent = () => {
@@ -114,7 +113,6 @@ const BugComponent = () => {
             Create Bug
           </button>
         )} */}
-      <SearchBar bugs={bugs} onSelectBug={openEditBugModal} />
       {/* </div> */}
       <FiltersPanel
         projects={projects}

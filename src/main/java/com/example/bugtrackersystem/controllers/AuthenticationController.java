@@ -98,7 +98,8 @@ public class AuthenticationController {
             User user = authService.validateOtp(signUpRequest.getEmail(), signUpRequest.getOtp(), null);
             if (user != null) {
                 authService.createUser(signUpRequest.getEmail(),
-                        signUpRequest.getPassword(), signUpRequest.getRole());
+                        signUpRequest.getPassword(), signUpRequest.getRole(), signUpRequest.getFirstName(),
+                        signUpRequest.getLastName());
                 return ResponseEntity.ok("user created successfully");
             } else {
                 logger.error("Unauthorized OTP attempt for user: {}", signUpRequest.getEmail());

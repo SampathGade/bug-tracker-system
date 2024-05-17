@@ -11,4 +11,6 @@ public class UpdateUserRequest {
     private String email;
     private String role;
     private String projectManager;
+    private String firstName;
+    private String lastName;
 }

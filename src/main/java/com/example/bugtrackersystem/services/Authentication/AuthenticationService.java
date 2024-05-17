@@ -135,9 +135,11 @@ public class AuthenticationService {
         //need to write logic to send the request Email to admin
     }
 
-    public void createUser(String email, String password, String role) {
+    public void createUser(String email, String password, String role, String firstName, String lastName) {
         User user = userRepository.findByEmail(email);
         user.setEmail(email);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(role);
         user.setStatus("Pending");

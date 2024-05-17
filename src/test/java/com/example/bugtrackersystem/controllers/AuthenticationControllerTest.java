@@ -221,7 +221,7 @@ class AuthenticationControllerTest {
         user.setEmail("test@example.com");
 
         when(authService.validateOtp(anyString(), anyString(), any())).thenReturn(user);
-        doNothing().when(authService).createUser(anyString(), anyString(), anyString());
+        doNothing().when(authService).createUser(anyString(), anyString(), anyString(),anyString(),anyString());
 
         ResponseEntity<?> response = authController.createUser(request);
         assertEquals(HttpStatus.OK, response.getStatusCode());

@@ -19,6 +19,8 @@ const SignUpComponent = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("");
   const [showOtpForm, setShowOtpForm] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [isExternalUser, setIsExternalUser] = useState(false);
   const navigate = useNavigate();
 
@@ -75,7 +77,7 @@ const SignUpComponent = () => {
       const response = await fetch("http://localhost:8080/auth/create-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, role, otp }),
+        body: JSON.stringify({ email, password, role, otp, firstName, lastName}),
       });
       if (response.status === 200) {
         navigate("/login", { replace: true });
@@ -151,6 +153,19 @@ const SignUpComponent = () => {
                       marginBottom: "10px",
                     }}
                   />
+                  <TextField
+                    label="First Name"
+                    variant="outlined"
+                    required
+                    value={firstName} // Bind to state
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />;
+                  <TextField
+                    label="Last Name"
+                    variant="outlined"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)} 
+                  />;
                   <TextField
                     label="Password"
                     variant="outlined"

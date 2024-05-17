@@ -27,6 +27,8 @@ public class User {
     private String projectManager;
     private List<Session> sessions;
     private Performance performances;
+    private String firstName;
+    private String lastName;
 
     // Additional constructors and methods can be added as needed
 }

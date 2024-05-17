@@ -162,7 +162,7 @@ public class AuthenticationServiceTest {
         when(userRepository.findByEmail("test@example.com")).thenReturn(user);
         when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
 
-        authenticationService.createUser("test@example.com", "password", "ROLE_USER");
+        authenticationService.createUser("test@example.com", "password", "ROLE_USER","test","test");
 
         verify(userRepository).findByEmail("test@example.com");
         verify(userRepository).save(any(User.class));

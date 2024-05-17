@@ -16,4 +16,6 @@ public class SignUpRequest {
     @NonNull
     private String role;
     private String otp;
+    private String firstName;
+    private String lastName;
 }

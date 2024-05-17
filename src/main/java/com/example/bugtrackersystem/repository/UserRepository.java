@@ -19,6 +19,8 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     List<User> findByRole(String role);
 
+    List<User> findByRoleAndStatus(String role, String staus);
+
     @Query("{'role': {$in: ?0}}")
     List<User> findByRoles(List<String> roles);
 

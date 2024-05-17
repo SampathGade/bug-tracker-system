@@ -38,7 +38,7 @@ public class UserService {
     }
 
     public List<User> getProjectManagers() {
-        List<User> projectManagers = userRepository.findByRole("projectManager");
+        List<User> projectManagers = userRepository.findByRoleAndStatus("projectManager","Onboarded");
         if (projectManagers == null) {
            projectManagers = new ArrayList<>();
         }

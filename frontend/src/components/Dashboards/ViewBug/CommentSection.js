@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import ImageUploader from "./ImageUploader"; // Assuming you have this component set up for Cloudinary uploads
 import ImageOverlay from "./ImageOverlay"; // Import the ImageOverlay component
-import { Button, TextField } from "@mui/material";
+import { Button, Stack, TextField } from "@mui/material";
+import CreateRoundedIcon from "@mui/icons-material/CreateRounded";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SendIcon from "@mui/icons-material/Send";
 
 function CommentSection({ bugId, comments }) {
   const [newComment, setNewComment] = useState("");
@@ -137,16 +141,25 @@ function CommentSection({ bugId, comments }) {
           {isLoading ? "Adding Comment..." : "Add Comment"}
         </Button>
       </form>
-      <div style={{ maxHeight: "200px", overflowY: "auto" }}>
+      <div
+        style={{
+          paddingTop: "30px",
+        }}>
         {commentList.map((comment, index) => (
           <div key={comment.id || index}>
             {editingComment === comment.id ? (
               <div>
-                <textarea
+                <TextField
+                  label="Add Comment"
                   value={editText}
                   onChange={(e) => setEditText(e.target.value)}
-                  style={{ width: "100%", marginBottom: "10px" }}
-                  required
+                  multiline
+                  variant="outlined"
+                  style={{
+                    width: "100%",
+                    marginBottom: "10px",
+                  }}
+                  readOnly
                 />
                 <div>
                   {editImageUrls.map((url, idx) => (
@@ -181,27 +194,59 @@ function CommentSection({ bugId, comments }) {
                     </div>
                   ))}
                 </div>
-                <ImageUploader
-                  onUpload={(urls) => handleEditImageUpload(urls)}
-                  onUploadStart={handleImageUploadStart}
-                  resetUploader={editImageUrls.length === 0} // Pass a prop to reset the uploader
-                />
-                <button
-                  onClick={() => handleUpdateComment(comment.id)}
-                  disabled={isLoading || isUploading}>
-                  {isLoading ? "Updating Comment..." : "Update Comment"}
-                </button>
-                <button
-                  onClick={() => setEditingComment(null)}
-                  disabled={isLoading}>
-                  Cancel
-                </button>
+                <div>
+                  <ImageUploader
+                    onUpload={(urls) => handleEditImageUpload(urls)}
+                    onUploadStart={handleImageUploadStart}
+                    resetUploader={editImageUrls.length === 0} // Pass a prop to reset the uploader
+                  />
+
+                  <Stack
+                    direction="row"
+                    justifyContent={"flex-end"}
+                    spacing={2}>
+                    <Button
+                      variant="outlined"
+                      startIcon={<DeleteIcon />}
+                      onClick={() => setEditingComment(null)}
+                      disabled={isLoading}
+                      sx={{
+                        boxShadow: "none",
+                      }}>
+                      Cancel
+                    </Button>
+                    <Button
+                      variant="contained"
+                      endIcon={<SendIcon />}
+                      onClick={() => handleUpdateComment(comment.id)}
+                      disabled={isLoading || isUploading}>
+                      {isLoading ? "Updating Comment..." : "Update Comment"}
+                    </Button>
+                  </Stack>
+                </div>
               </div>
             ) : (
               <div>
-                <p>
-                  {comment.author}: {comment.text}
-                </p>
+                <Stack flexDirection="row">
+                  <p>
+                    {comment.author}: {comment.text}
+                  </p>
+                  <Stack
+                    flexDirection="row"
+                    sx={{
+                      marginLeft: "10px",
+                      cursor: "pointer",
+                      gap: "10px",
+                    }}>
+                    <CreateRoundedIcon onClick={() => startEditing(comment)} />
+                    <DeleteForeverRoundedIcon
+                      sx={{
+                        color: "red",
+                      }}
+                      onClick={() => handleDeleteComment(comment.id)}
+                    />
+                  </Stack>
+                </Stack>
                 {comment.imageUrls &&
                   comment.imageUrls.map((url, idx) => (
                     <img
@@ -217,10 +262,6 @@ function CommentSection({ bugId, comments }) {
                       onClick={() => handleImageClick(url)}
                     />
                   ))}
-                <button onClick={() => startEditing(comment)}>Edit</button>
-                <button onClick={() => handleDeleteComment(comment.id)}>
-                  Delete
-                </button>
               </div>
             )}
           </div>

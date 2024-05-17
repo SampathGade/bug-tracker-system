@@ -16,8 +16,8 @@
   display: flex;
   width: 100%;
   align-items: center;
-  margin-right: 10%;
-  justify-content: flex-end;
+  margin-left: 7%;
+  justify-content: flex-start;
 }
 .login-img {
   background-image: url(../../images/image.png) lightgray 100% / no-repeat;

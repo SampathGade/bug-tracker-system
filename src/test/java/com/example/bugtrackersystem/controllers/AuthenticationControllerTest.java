@@ -349,4 +349,41 @@ class AuthenticationControllerTest {
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertEquals("An internal server error occurred. Please try again.", response.getBody());
     }
+
+    @Test
+    void testVerifyEmailPasswordSuccess() {
+        SignUpRequest request = new SignUpRequest();
+        request.setEmail("test@example.com");
+
+        when(authService.isDuplicateUser(anyString())).thenReturn(true);
+        doNothing().when(authService).generateAndSendOtp(anyString());
+
+        ResponseEntity<String> response = authController.validEmailPassword(request);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Email validating successful", response.getBody());
+    }
+
+    @Test
+    void testVerifyEmailPasswordNotDuplicate() {
+        SignUpRequest request = new SignUpRequest();
+        request.setEmail("test@example.com");
+
+        when(authService.isDuplicateUser(anyString())).thenReturn(false);
+
+        ResponseEntity<String> response = authController.validEmailPassword(request);
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertEquals("Onboarding request pending or already an user", response.getBody());
+    }
+
+    @Test
+    void testVerifyEmailPasswordException() {
+        SignUpRequest request = new SignUpRequest();
+        request.setEmail("test@example.com");
+
+        when(authService.isDuplicateUser(anyString())).thenThrow(new RuntimeException("Error"));
+
+        ResponseEntity<String> response = authController.validEmailPassword(request);
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("An internal server error occurred. Please try again.", response.getBody());
+    }
 }

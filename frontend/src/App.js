@@ -11,6 +11,9 @@ import ViewPeopleComponent from "./components/Dashboards/ViewUsers/ViewPeopleCom
 import ProjectComponent from "./components/Dashboards/ViewProjects/ViewProjectComponent";
 import CreateBug from "./components/Dashboards/CreateBug";
 import MetricsDashboard from "./components/Dashboards/MetricsDashboard";
+import CloseSprint from "./components/CloseSprint";
+import CreateProjectOverlay from "./components/Dashboards/ViewProjects/CreateProjectOverlay";
+import ViewBugsList from "./components/ViewBugsList";
 
 function App() {
   return (
@@ -26,8 +29,11 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/succesfulSignUp" element={<SuccessfulSignUp />} />
           <Route path="/dashboard" element={<MetricsDashboard />} />
-          <Route path="/bugs" element={<Dashboard />} />
+          <Route path="/bugs" element={<ViewBugsList />} />
           <Route path="/create-bug" element={<CreateBug />} />
+          <Route path="/sprint-dashboard" element={<Dashboard />} />
+          <Route path="/close-sprint" element={<CloseSprint />} />
+          <Route path="/create-project" element={<CreateProjectOverlay />} />
           <Route path="/my-projects" element={<ProjectComponent />} />
           <Route path="/onboarding" element={<OnboardingComponent />} />
           <Route path="/my-team" element={<ViewPeopleComponent />} />

@@ -1,46 +1,28 @@
-import React, { useState } from 'react';
+import React from "react";
+import Select from "react-select";
 
 const SearchBar = ({ items, onSelectItem }) => {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filteredItems, setFilteredItems] = useState([]);
+  const formattedPeople = items?.map((item) => ({
+    label: item?.name,
+    value: item?.name,
+    ...item,
+  }));
 
-    const handleSearch = (e) => {
-        const term = e.target.value;
-        setSearchTerm(term);
-        if (term.length > 0) {
-            const filtered = items.filter(item => item.name.toLowerCase().includes(term.toLowerCase()));
-            setFilteredItems(filtered);
-        } else {
-            setFilteredItems([]);
-        }
-    };
-
-    const handleSelect = (name) => {
-        const item = items.find(item => item.name === name);
-        onSelectItem(item);
-        setSearchTerm('');
-        setFilteredItems([]);
-    };
-
-    return (
-        <div className="search-bar">
-            <input
-                type="text"
-                placeholder="Search by project name..."
-                value={searchTerm}
-                onChange={handleSearch}
-            />
-            {filteredItems.length > 0 && (
-                <ul className="dropdown"> 
-                    {filteredItems.map(item => (
-                        <li key={item.id} onClick={() => handleSelect(item.name)}>
-                            {item.name}
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </div>
-    );
+  const handleSelect = (name) => {
+    const person = items.find((person) => person.name === name);
+    onSelectItem(person);
+  };
+  return (
+    <div className="search-bar">
+      <Select
+        options={formattedPeople ?? []}
+        onChange={(option) => handleSelect(option.name)}
+        placeholder="Search by project name..."
+        isSearchable
+        className="bug-selection"
+      />
+    </div>
+  );
 };
 
 export default SearchBar;

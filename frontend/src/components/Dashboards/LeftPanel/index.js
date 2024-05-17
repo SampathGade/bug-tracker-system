@@ -5,6 +5,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import BugReportIcon from "@mui/icons-material/BugReport";
 import FolderIcon from "@mui/icons-material/Folder";
 import GroupsIcon from "@mui/icons-material/Groups";
+import AssignmentTurnedInSharpIcon from "@mui/icons-material/AssignmentTurnedInSharp";
+import TabletIcon from "@mui/icons-material/Tablet";
+import { rolesList } from "../../../utils/constants";
 
 const LeftPanel = () => {
   const navigate = useNavigate();
@@ -13,11 +16,25 @@ const LeftPanel = () => {
   const isDashboard = pathname === "/dashboard";
   const isBugs = pathname === "/bugs";
   const isCreateBug = pathname === "/create-bug";
+  const isSprintDashboard = pathname === "/sprint-dashboard";
+  const isCloseSprints = pathname === "/close-sprint";
+  const isCreateProject = pathname === "/create-project";
   const isMyProjects = pathname === "/my-projects";
   const isOnBoarding = pathname === "/onboarding";
   const isMyTeam = pathname === "/my-team";
+  const role = localStorage.getItem("userRole");
+  const isAdmin = role === rolesList.admin;
+  const isManager = role === rolesList.projectManager;
+  const isTester = role === rolesList.tester;
+
   const [isBugsExpanded, setIsBugsExpanded] = useState(
     (isBugs || isCreateBug) ?? false
+  );
+  const [isSprintExpanded, setIsSprintExpanded] = useState(
+    (isSprintDashboard || isCloseSprints) ?? false
+  );
+  const [isProjectExpanded, setIsProjectExpanded] = useState(
+    (isCreateProject || isMyProjects) ?? false
   );
 
   return (
@@ -56,6 +73,65 @@ const LeftPanel = () => {
           cursor: "pointer",
         }}
         onClick={() => {
+          setIsSprintExpanded(!isSprintExpanded);
+        }}>
+        <TabletIcon
+          sx={{
+            color: isSprintDashboard || isCloseSprints ? "#1976d2" : "black",
+          }}
+        />
+        <Typography
+          sx={{
+            fontSize: "18px",
+            marginLeft: "10px",
+            fontFamily: "Poppins",
+            fontWeight: "500",
+            color: isSprintDashboard || isCloseSprints ? "#1976d2" : "black",
+          }}>
+          Sprints
+        </Typography>
+      </Box>
+      {isSprintExpanded && (
+        <Box
+          sx={{
+            marginLeft: "33px",
+          }}>
+          <Typography
+            sx={{
+              fontSize: "14px",
+              marginTop: "8px",
+              cursor: "pointer",
+              fontFamily: "Poppins",
+              fontWeight: "500",
+              color: isSprintDashboard ? "#1976d2" : "black",
+            }}
+            onClick={() => navigate("/sprint-dashboard")}>
+            Sprint Dashboard
+          </Typography>
+          {(isAdmin || isManager) && (
+            <Typography
+              sx={{
+                fontSize: "14px",
+                marginTop: "8px",
+                cursor: "pointer",
+                fontFamily: "Poppins",
+                fontWeight: "500",
+                color: isCloseSprints ? "#1976d2" : "black",
+              }}
+              onClick={() => navigate("/close-sprint")}>
+              Close Sprint
+            </Typography>
+          )}
+        </Box>
+      )}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          marginTop: "10px",
+          cursor: "pointer",
+        }}
+        onClick={() => {
           setIsBugsExpanded(!isBugsExpanded);
         }}>
         <BugReportIcon
@@ -77,18 +153,20 @@ const LeftPanel = () => {
           sx={{
             marginLeft: "33px",
           }}>
-          <Typography
-            sx={{
-              fontSize: "14px",
-              marginTop: "8px",
-              cursor: "pointer",
-              fontFamily: "Poppins",
-              fontWeight: "500",
-              color: isCreateBug ? "#1976d2" : "black",
-            }}
-            onClick={() => navigate("/create-bug")}>
-            Create Bug
-          </Typography>
+          {(isAdmin || isManager || isTester) && (
+            <Typography
+              sx={{
+                fontSize: "14px",
+                marginTop: "8px",
+                cursor: "pointer",
+                fontFamily: "Poppins",
+                fontWeight: "500",
+                color: isCreateBug ? "#1976d2" : "black",
+              }}
+              onClick={() => navigate("/create-bug")}>
+              Create Bug
+            </Typography>
+          )}
           <Typography
             sx={{
               fontSize: "14px",
@@ -110,59 +188,102 @@ const LeftPanel = () => {
           marginTop: "10px",
           cursor: "pointer",
         }}
-        onClick={() => navigate("/my-projects")}>
-        <FolderIcon sx={{ color: isMyProjects ? "#1976d2" : "black" }} />
+        onClick={() => {
+          setIsProjectExpanded(!isProjectExpanded);
+        }}>
+        <FolderIcon
+          sx={{ color: isCreateProject || isMyProjects ? "#1976d2" : "black" }}
+        />
         <Typography
           sx={{
             fontSize: "18px",
             marginLeft: "10px",
             fontFamily: "Poppins",
             fontWeight: "500",
-            color: isMyProjects ? "#1976d2" : "black",
+            color: isCreateProject || isMyProjects ? "#1976d2" : "black",
           }}>
-          My Projects
+          Projects
         </Typography>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          marginTop: "10px",
-          cursor: "pointer",
-        }}
-        onClick={() => navigate("/onboarding")}>
-        <FolderIcon sx={{ color: isOnBoarding ? "#1976d2" : "black" }} />
-        <Typography
+      {isProjectExpanded && (
+        <Box
           sx={{
-            fontSize: "18px",
-            marginLeft: "10px",
-            fontFamily: "Poppins",
-            fontWeight: "500",
-            color: isOnBoarding ? "#1976d2" : "black",
+            marginLeft: "33px",
           }}>
-          On Boarding
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          marginTop: "10px",
-          cursor: "pointer",
-        }}
-        onClick={() => navigate("/my-team")}>
-        <GroupsIcon sx={{ color: isMyTeam ? "#1976d2" : "black" }} />
-        <Typography
+          {(isAdmin || isManager) && (
+            <Typography
+              sx={{
+                fontSize: "14px",
+                marginTop: "8px",
+                cursor: "pointer",
+                fontFamily: "Poppins",
+                fontWeight: "500",
+                color: isCreateProject ? "#1976d2" : "black",
+              }}
+              onClick={() => navigate("/create-project")}>
+              Create New Project
+            </Typography>
+          )}
+          <Typography
+            sx={{
+              fontSize: "14px",
+              marginTop: "8px",
+              cursor: "pointer",
+              fontFamily: "Poppins",
+              fontWeight: "500",
+              color: isMyProjects ? "#1976d2" : "black",
+            }}
+            onClick={() => navigate("/my-projects")}>
+            My Projects
+          </Typography>
+        </Box>
+      )}
+      {isAdmin && (
+        <Box
           sx={{
-            fontSize: "18px",
-            marginLeft: "10px",
-            fontFamily: "Poppins",
-            fontWeight: "500",
-            color: isMyTeam ? "#1976d2" : "black",
-          }}>
-          My Team
-        </Typography>
-      </Box>
+            display: "flex",
+            alignItems: "center",
+            marginTop: "10px",
+            cursor: "pointer",
+          }}
+          onClick={() => navigate("/onboarding")}>
+          <AssignmentTurnedInSharpIcon
+            sx={{ color: isOnBoarding ? "#1976d2" : "black" }}
+          />
+          <Typography
+            sx={{
+              fontSize: "18px",
+              marginLeft: "10px",
+              fontFamily: "Poppins",
+              fontWeight: "500",
+              color: isOnBoarding ? "#1976d2" : "black",
+            }}>
+            On Boarding
+          </Typography>
+        </Box>
+      )}
+      {(isAdmin || isManager) && (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            marginTop: "10px",
+            cursor: "pointer",
+          }}
+          onClick={() => navigate("/my-team")}>
+          <GroupsIcon sx={{ color: isMyTeam ? "#1976d2" : "black" }} />
+          <Typography
+            sx={{
+              fontSize: "18px",
+              marginLeft: "10px",
+              fontFamily: "Poppins",
+              fontWeight: "500",
+              color: isMyTeam ? "#1976d2" : "black",
+            }}>
+            My Team
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 };

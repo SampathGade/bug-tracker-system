@@ -4,12 +4,16 @@ import EditPersonOverlay from "./EditPersonOverlay";
 import "./ViewPeopleComponent.css"; // Import the CSS for styling
 import Container from "../../Container";
 import SearchBar from "./SearchBar";
+import { rolesList } from "../../../utils/constants";
 
 const ViewPeopleComponent = () => {
   const [people, setPeople] = useState([]);
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [peoplePerPage] = useState(5);
+  const [peoplePerPage] = useState(6);
+  const role = localStorage.getItem("userRole");
+  const isAdmin = role === rolesList.admin;
+  const isManager = role === rolesList.projectManager;
 
   useEffect(() => {
     const userEmail = localStorage.getItem("userEmail");
@@ -32,7 +36,9 @@ const ViewPeopleComponent = () => {
   }, []);
 
   const handleSelectPerson = (person) => {
-    setSelectedPerson(person);
+    if (isAdmin || isManager) {
+      setSelectedPerson(person);
+    }
   };
 
   const handleCloseOverlay = () => {
@@ -47,8 +53,13 @@ const ViewPeopleComponent = () => {
 
   return (
     <Container>
-      <div className="people-container">
-        <SearchBar people={people} onSelectPerson={handleSelectPerson} />
+      <SearchBar people={people} onSelectPerson={handleSelectPerson} />
+      <div
+        className="people-container"
+        style={{
+          marginTop: "30px",
+          justifyContent: "space-between",
+        }}>
         {currentPeople.map((person) => (
           <PersonCell
             key={person.email}
@@ -65,7 +76,14 @@ const ViewPeopleComponent = () => {
         <div className="pagination">
           {[...Array(Math.ceil(people.length / peoplePerPage)).keys()].map(
             (number) => (
-              <button key={number + 1} onClick={() => paginate(number + 1)}>
+              <button
+                key={number + 1}
+                onClick={() => paginate(number + 1)}
+                style={{
+                  backgroundColor:
+                    currentPage === number + 1 ? "#1976d2" : "lightgrey",
+                  boxShadow: "none",
+                }}>
                 {number + 1}
               </button>
             )

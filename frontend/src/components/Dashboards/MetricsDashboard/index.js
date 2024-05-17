@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import SprintMetrics from "../SprintManagament/SprintMetrics";
 import Container from "../../Container";
 import {
   Box,
@@ -13,6 +12,9 @@ import {
 } from "@mui/material";
 import MyIssues from "./MyIssues";
 import { useNavigate } from "react-router-dom";
+import PieChart from "../SprintManagament/PieChart";
+import { rolesList } from "../../../utils/constants";
+import dayjs from "dayjs";
 
 const MetricsDashboard = () => {
   const navigate = useNavigate();
@@ -20,11 +22,18 @@ const MetricsDashboard = () => {
   const [filters, setFilters] = useState({ project: "", assignee: [] });
   const [bugs, setBugs] = useState([]);
   const [selectedProject, setSelectedProject] = useState("");
-  const [sprint, setSprint] = useState(
-    localStorage.getItem("currentSprint") || "1"
-  );
+  const currentSprint = localStorage.getItem("currentSprint") || "1";
+  const [sprint, setSprint] = useState(currentSprint);
+
   const userEmail = localStorage.getItem("userEmail");
   const role = localStorage.getItem("userRole");
+  const isAdmin = role === rolesList.admin;
+  const isManager = role === rolesList.projectManager;
+  const title1 = isAdmin || isManager ? "All Issues" : "My Issues";
+  const title2 =
+    isAdmin || isManager ? "Work Items Due Today" : "My Work Items Due Today";
+  const title3 = isAdmin || isManager ? "Backlogs" : "My Backlogs";
+  const title4 = `Sprint ${sprint} Progress`;
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -88,13 +97,26 @@ const MetricsDashboard = () => {
     fetchBugs();
   }, [filters, selectedProject, sprint]); // Add currentSprint to the dependency array
 
-  console.log("projects", bugs);
-
   const sprintOptions = Array.from({ length: 27 }, (_, i) => ({
     value: i + 1,
     label: `Sprint ${i + 1}`,
   })).concat({ value: "Backlog", label: "Backlog" });
 
+  const dueTodayBugs = bugs?.filter((item) => {
+    const budEta = dayjs(item?.slaDate).format("DD/MM/YYYY");
+    const today = dayjs().format("DD/MM/YYYY");
+    if (budEta === today) {
+      return item;
+    }
+  });
+  const backlogBugs = bugs?.filter((item) => {
+    const budEta = dayjs(item?.slaDate);
+    const currentDate = dayjs();
+    const isBacklog = budEta.isBefore(currentDate);
+    if (isBacklog) {
+      return item;
+    }
+  });
   return (
     <Container>
       <Box
@@ -130,7 +152,7 @@ const MetricsDashboard = () => {
             alignItems: "center",
             fontFamily: "Poppins",
           }}>
-          Company:
+          Email:
           <Typography
             sx={{
               fontSize: "16px",
@@ -139,7 +161,7 @@ const MetricsDashboard = () => {
               marginLeft: "6px",
               fontFamily: "Poppins",
             }}>
-            saisampathgadeuk@gmail.com
+            {userEmail}
           </Typography>
         </Typography>
         <Grid
@@ -306,17 +328,28 @@ const MetricsDashboard = () => {
             gap: "20px",
           }}>
           <Grid item xs={12} sm={12} md={5.8} lg={5.8}>
-            <MyIssues bugs={bugs} />
+            <MyIssues
+              bugs={bugs}
+              title={title1}
+              isAdmin={isAdmin}
+              isManager={isManager}
+            />
           </Grid>
           <Grid item xs={12} sm={12} md={5.8} lg={5.8}>
-            <MyIssues title={"My Work Items Due Today"} bugs={bugs} />
+            <MyIssues title={title2} bugs={dueTodayBugs} />
           </Grid>
           <Grid item xs={12} sm={12} md={5.8} lg={5.8}>
-            <MyIssues title={"My Backlogs"} bugs={bugs} />
+            <MyIssues title={title3} bugs={backlogBugs} />
+          </Grid>
+          <Grid item xs={12} sm={12} md={5.8} lg={5.8}>
+            <PieChart
+              sprint={sprint}
+              selectedProject={selectedProject}
+              title4={title4}
+            />
           </Grid>
         </Grid>
       </Box>
-      <SprintMetrics sprint={sprint} selectedProject={selectedProject} />
     </Container>
   );
 };

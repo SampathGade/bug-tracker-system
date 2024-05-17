@@ -3,11 +3,9 @@ import ProjectCell from "./ProjectCell";
 import EditProjectOverlay from "./EditProjectOverlay";
 import CreateProjectOverlay from "./CreateProjectOverlay";
 import "./ViewProjectsComponent.css"; // Ensure you have this CSS
-import ResponsiveAppBar from "../AppBar";
-import { Grid } from "@mui/material";
-import LeftPanel from "../LeftPanel";
 import Container from "../../Container";
 import SearchBar from "./SearchBar";
+import { rolesList } from "../../../utils/constants";
 
 const ViewProjectsComponent = () => {
   const [projects, setProjects] = useState([]);
@@ -16,6 +14,9 @@ const ViewProjectsComponent = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [projectsPerPage] = useState(5); // You can adjust the number of projects per page
   const [refreshKey, setRefreshKey] = useState(0); // State variable to trigger re-renders
+  const role = localStorage.getItem("userRole");
+  const isAdmin = role === rolesList.admin;
+  const isManager = role === rolesList.projectManager;
 
   useEffect(() => {
     const email = localStorage.getItem("userEmail");
@@ -43,8 +44,10 @@ const ViewProjectsComponent = () => {
   }, [currentPage, refreshKey]); // Depend on currentPage and refreshKey to refetch when page or refreshKey changes
 
   const handleSelectProject = (project) => {
-    setSelectedProject(project);
-    setCreatingProject(false);
+    if (isAdmin || isManager) {
+      setSelectedProject(project);
+      setCreatingProject(false);
+    }
   };
 
   const handleCloseOverlay = () => {
@@ -52,11 +55,6 @@ const ViewProjectsComponent = () => {
     setCreatingProject(false);
     setCurrentPage(1); // Reset to first page or refresh as needed
     setRefreshKey((oldKey) => oldKey + 1); // Change refreshKey to trigger re-render
-  };
-
-  const handleOpenCreateProject = () => {
-    setCreatingProject(true);
-    setSelectedProject(null);
   };
 
   // Pagination logic
@@ -72,13 +70,10 @@ const ViewProjectsComponent = () => {
   return (
     <Container>
       <div className="projects-container">
-        <button
-          style={{ width: "15%", alignSelf: "end" }}
-          onClick={handleOpenCreateProject}>
-          Create Project
-        </button>
         <SearchBar items={projects} onSelectItem={handleSelectProject} />
-        <div className="projects-card-list" style={{ marginTop: "20px" }}>
+        <div
+          className="projects-card-list"
+          style={{ marginTop: "20px", justifyContent: "space-between" }}>
           {currentProjects.map((project) => (
             <ProjectCell
               key={project.id}
@@ -99,7 +94,14 @@ const ViewProjectsComponent = () => {
         <div className="pagination">
           {[...Array(Math.ceil(projects.length / projectsPerPage)).keys()].map(
             (number) => (
-              <button key={number + 1} onClick={() => paginate(number + 1)}>
+              <button
+                key={number + 1}
+                onClick={() => paginate(number + 1)}
+                style={{
+                  backgroundColor:
+                    currentPage === number + 1 ? "#1976d2" : "lightgrey",
+                  boxShadow: "none",
+                }}>
                 {number + 1}
               </button>
             )

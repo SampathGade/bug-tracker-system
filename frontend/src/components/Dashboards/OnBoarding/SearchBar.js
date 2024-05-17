@@ -1,46 +1,32 @@
-import React, { useState } from 'react';
+import React from "react";
+import Select from "react-select";
 
-const SearchBar = ({ users, onSelectUser }) => { //new
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filteredUsers, setFilteredUsers] = useState([]);
+const SearchBar = ({ users, onSelectUser }) => {
+  const formattedPeople = users?.map((item) => ({
+    label: item?.email,
+    value: item?.email,
+    ...item,
+  }));
 
-    const handleSearch = (e) => {
-        const term = e.target.value;
-        setSearchTerm(term);
-        if (term.length > 0) {
-            const filtered = users.filter(user => user.email.toLowerCase().includes(term.toLowerCase()));
-            setFilteredUsers(filtered);
-        } else {
-            setFilteredUsers([]);
-        }
-    };
+  const handleSelect = (email) => {
+    const person = users.find((person) => person.email === email);
+    onSelectUser(person);
+  };
 
-    const handleSelect = (email) => {
-        const user = users.find(user => user.email === email);
-        onSelectUser(user);
-        setSearchTerm('');
-        setFilteredUsers([]);
-    };
-
-    return (
-        <div className="search-bar"> {/*new*/}
-            <input
-                type="text"
-                placeholder="Search by email..."
-                value={searchTerm}
-                onChange={handleSearch}
-            />
-            {filteredUsers.length > 0 && (
-                <ul className="dropdown"> {/*new*/}
-                    {filteredUsers.map(user => (
-                        <li key={user.email} onClick={() => handleSelect(user.email)}>
-                            {user.email}
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </div>
-    );
+  return (
+    <div className="search-bar">
+      <Select
+        options={formattedPeople ?? []}
+        onChange={(option) => handleSelect(option.email)}
+        placeholder="Search by email..."
+        isSearchable
+        className="bug-selection"
+        styles={{
+          borderRadius: "30px",
+        }}
+      />
+    </div>
+  );
 };
 
 export default SearchBar;

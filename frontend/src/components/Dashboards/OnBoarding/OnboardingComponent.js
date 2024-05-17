@@ -89,7 +89,10 @@ const OnboardingComponent = () => {
   return (
     <Container>
       <SearchBar users={users} onSelectUser={handleSelectUser} />
-      <Box>
+      <Box
+        sx={{
+          marginTop: "30px",
+        }}>
         <Typography
           sx={{
             fontSize: "20px",

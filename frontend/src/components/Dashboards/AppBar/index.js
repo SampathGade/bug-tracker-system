@@ -9,7 +9,6 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router-dom";
 
-
 const settings = ["Profile", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
@@ -17,18 +16,16 @@ function ResponsiveAppBar() {
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
- 
   const handleCloseUserMenu = (e) => {
-const value = e.target.innerHTML
+    const value = e.target.innerHTML;
     setAnchorElUser(null);
     if (value === "Logout") {
-      console.log('value', value)
-      handleLogout()
+      console.log("value", value);
+      handleLogout();
     } else if (value === "Dashboard") {
       navigate("/dashboard");
     }
@@ -39,8 +36,8 @@ const value = e.target.innerHTML
     return email.substr(0, 2).toUpperCase();
   };
 
-  const userInfo = getUserInitials()
-  
+  const userInfo = getUserInitials();
+
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");

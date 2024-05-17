@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import CreateBugModal from "../ViewBug/CreateBugModal";
-import ResponsiveAppBar from "../AppBar";
-import { Grid } from "@mui/material";
-import LeftPanel from "../LeftPanel";
 import Container from "../../Container";
 
 const CreateBug = () => {

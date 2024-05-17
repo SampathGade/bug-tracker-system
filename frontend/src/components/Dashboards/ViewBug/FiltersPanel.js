@@ -2,9 +2,15 @@ import React, { useState, useEffect } from "react";
 import "./BugComponent.css";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
-const FiltersPanel = ({ filters, onFilterChange, projects, sprint,
-    setSprint,sprintOptions }) => {
-
+const FiltersPanel = ({
+  filters,
+  onFilterChange,
+  projects,
+  sprint,
+  setSprint,
+  sprintOptions,
+  disablePeopleFilter = false,
+}) => {
   const [assignees, setAssignees] = useState([]);
 
   useEffect(() => {
@@ -103,24 +109,26 @@ const FiltersPanel = ({ filters, onFilterChange, projects, sprint,
             ))}
           </Select>
         </FormControl>
-        <div className="assignee-icons">
-          {assignees.map((assignee) => (
-            <div key={assignee} className="assignee-icon">
-              <input
-                type="checkbox"
-                id={`assignee-${assignee}`}
-                checked={filters.assignee.includes(assignee)}
-                onChange={(e) =>
-                  handleAssigneeChange(assignee, e.target.checked)
-                }
-                hidden
-              />
-              <label htmlFor={`assignee-${assignee}`}>
-                <div className="icon-label">{getInitials(assignee)}</div>
-              </label>
-            </div>
-          ))}
-        </div>
+        {!disablePeopleFilter && (
+          <div className="assignee-icons">
+            {assignees.map((assignee) => (
+              <div key={assignee} className="assignee-icon">
+                <input
+                  type="checkbox"
+                  id={`assignee-${assignee}`}
+                  checked={filters.assignee.includes(assignee)}
+                  onChange={(e) =>
+                    handleAssigneeChange(assignee, e.target.checked)
+                  }
+                  hidden
+                />
+                <label htmlFor={`assignee-${assignee}`}>
+                  <div className="icon-label">{getInitials(assignee)}</div>
+                </label>
+              </div>
+            ))}
+          </div>
+        )}
       </Box>
     </div>
   );

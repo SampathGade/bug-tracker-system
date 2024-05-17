@@ -8,7 +8,10 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Grid,
+  Button,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const CreateBugModal = ({ onClose }) => {
   const [projects, setProjects] = useState([]);
@@ -32,6 +35,7 @@ const CreateBugModal = ({ onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [priority, setPriority] = useState("Medium");
+  const navigate = useNavigate();
 
   const userRole = localStorage.getItem("userRole");
   const userEmail = localStorage.getItem("userEmail");
@@ -136,6 +140,7 @@ const CreateBugModal = ({ onClose }) => {
     });
 
     if (response.ok) {
+      navigate("/bugs");
       onClose(); // Close the modal
     } else {
       const errorData = await response.json();
@@ -197,10 +202,7 @@ const CreateBugModal = ({ onClose }) => {
       <div onClick={(e) => e.stopPropagation()}>
         <form onSubmit={handleSubmit}>
           <h2>Create New Bug</h2>
-          {/* <label>
-                        Title:
-                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
-                    </label> */}
+
           <TextField
             label="Title"
             required
@@ -223,10 +225,7 @@ const CreateBugModal = ({ onClose }) => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
-          {/* <label>
-                        Description:
-                        <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
-                    </label> */}
+
           <FormControl required sx={{ m: 1, width: "100%", marginLeft: 0 }}>
             <InputLabel id="demo-simple-select-required-label">
               Select Project
@@ -250,18 +249,7 @@ const CreateBugModal = ({ onClose }) => {
               ))}
             </MUISelect>
           </FormControl>
-          {/* <label>
-                        Project:
-                        <select value={selectedProject} onChange={(e) => setSelectedProject(e.target.value)}>
-                            {projects.map(proj => (
-                                <option key={proj.name} value={proj.name}>{proj.name}</option>
-                            ))}
-                        </select>
-                    </label> */}
-          {/* <label>
-                        Project Manager:
-                        <input type="text" value={projectManager} readOnly />
-                    </label> */}
+
           <TextField
             label="Project Manager"
             required
@@ -273,14 +261,6 @@ const CreateBugModal = ({ onClose }) => {
             value={projectManager}
             readOnly
           />
-          {/* <label>
-                        Assignee:
-                        <select value={assignee} onChange={(e) => setAssignee(e.target.value)}>
-                            {assignees.map(user => (
-                                <option key={user} value={user}>{user}</option>
-                            ))}
-                        </select>
-                    </label> */}
           <FormControl required sx={{ m: 1, width: "100%", marginLeft: 0 }}>
             <InputLabel id="demo-simple-select-required-label">
               Assignee
@@ -317,10 +297,6 @@ const CreateBugModal = ({ onClose }) => {
               />
             </div>
           </label>
-          {/* <label>
-                        Story Points:
-                        <input type="number" value={storyPoints} onChange={(e) => setStoryPoints(e.target.value)} required />
-                    </label> */}
           <TextField
             label="Story Points"
             variant="outlined"
@@ -339,24 +315,34 @@ const CreateBugModal = ({ onClose }) => {
               },
             }}
           />
-          <label>
-            Priority:
-            <select value={priority} onChange={handlePriorityChange}>
+          <FormControl required sx={{ m: 1, width: "100%", marginLeft: 0 }}>
+            <InputLabel
+              id="demo-simple-select-required-label"
+              style={{
+                zIndex: 0,
+              }}>
+              Priority
+            </InputLabel>
+            <MUISelect
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              style={{
+                marginBottom: "10px",
+                textAlign: "left",
+                width: "100%",
+                zIndex: 0,
+              }}
+              placeholder="Priority"
+              label="Priority"
+              value={priority}
+              onChange={handlePriorityChange}>
               {priorityOptions.map((p) => (
-                <option key={p.value} value={p.value}>
+                <MenuItem key={p.value} value={p.value}>
                   {p.label}
-                </option>
+                </MenuItem>
               ))}
-            </select>
-          </label>
-          {/* <label>
-                        Type:
-                        <select value={type} onChange={(e) => setType(e.target.value)}>
-                            {types.map(t => (
-                                <option key={t} value={t}>{t}</option>
-                            ))}
-                        </select>
-                    </label> */}
+            </MUISelect>
+          </FormControl>
           <FormControl required sx={{ m: 1, width: "100%", marginLeft: 0 }}>
             <InputLabel
               id="demo-simple-select-required-label"
@@ -385,54 +371,69 @@ const CreateBugModal = ({ onClose }) => {
               ))}
             </MUISelect>
           </FormControl>
-          {/* <label>
-                        Expected Outcome:
-                        <textarea value={expectedOutcome} onChange={(e) => setExpectedOutcome(e.target.value)} required />
-                    </label> */}
-          <TextField
-            label="Expected Outcome"
-            variant="outlined"
-            style={{
-              width: "100%",
-              marginBottom: "10px",
-            }}
-            value={expectedOutcome.text}
-            onChange={(e) =>
-              setExpectedOutcome({ ...expectedOutcome, text: e.target.value })
-            }
-            InputLabelProps={{
-              style: {
-                zIndex: 0,
-              },
-            }}
-            required
-          />
-          <ImageUploader
-            onUpload={handleExpectedImageUpload}
-            onUploadStart={handleExpectedImageUploadStart}
-          />
-          <TextField
-            label="Actual Outcome"
-            variant="outlined"
-            style={{
-              width: "100%",
-              marginBottom: "10px",
-            }}
-            value={actualOutcome.text}
-            onChange={(e) =>
-              setActualOutcome({ ...actualOutcome, text: e.target.value })
-            }
-            required
-            InputLabelProps={{
-              style: {
-                zIndex: 0,
-              },
-            }}
-          />
-          <ImageUploader
-            onUpload={handleActualImageUpload}
-            onUploadStart={handleActualImageUploadStart}
-          />
+          <Grid
+            container
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
+              // gap: "10px",
+            }}>
+            <Grid item md={5.7} lg={5.7}>
+              <TextField
+                label="Expected Outcome"
+                variant="outlined"
+                multiline
+                style={{
+                  width: "100%",
+                  marginBottom: "10px",
+                }}
+                value={expectedOutcome.text}
+                onChange={(e) =>
+                  setExpectedOutcome({
+                    ...expectedOutcome,
+                    text: e.target.value,
+                  })
+                }
+                InputLabelProps={{
+                  style: {
+                    zIndex: 0,
+                  },
+                }}
+                required
+              />
+              <ImageUploader
+                onUpload={handleExpectedImageUpload}
+                onUploadStart={handleExpectedImageUploadStart}
+              />
+            </Grid>
+            <Grid item md={5.7} lg={5.7}>
+              <TextField
+                label="Actual Outcome"
+                variant="outlined"
+                multiline
+                style={{
+                  minHeight: "50px",
+                  width: "100%",
+                  marginBottom: "10px",
+                }}
+                value={actualOutcome.text}
+                onChange={(e) =>
+                  setActualOutcome({ ...actualOutcome, text: e.target.value })
+                }
+                required
+                InputLabelProps={{
+                  style: {
+                    zIndex: 0,
+                  },
+                }}
+              />
+              <ImageUploader
+                onUpload={handleActualImageUpload}
+                onUploadStart={handleActualImageUploadStart}
+              />
+            </Grid>
+          </Grid>
           <label>
             SLA Date:
             <input
@@ -443,13 +444,30 @@ const CreateBugModal = ({ onClose }) => {
               required
             />
           </label>
+          {/* <DatePicker
+            label="Basic date picker"
+            // value={slaDate}
+            onChange={(e) => console.log(e.target.value)}
+            sx={{
+              boxShadow: "none",
+            }}
+          /> */}
           <div className="form-actions">
-            <button type="submit" disabled={isLoading || isUploading}>
+            <Button type="button" variant="contained">
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isLoading || isUploading}>
               {isLoading ? "Creating Bug..." : "Create Bug"}
-            </button>
-            <button type="button" onClick={onClose}>
+            </Button>
+            {/* <button type="button" onClick={onClose}>
               Cancel
             </button>
+            <button type="submit" disabled={isLoading || isUploading}>
+              {isLoading ? "Creating Bug..." : "Create Bug"}
+            </button> */}
           </div>
         </form>
       </div>

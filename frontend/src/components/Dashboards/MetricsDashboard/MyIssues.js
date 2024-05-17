@@ -2,7 +2,8 @@ import { Box, Card, Typography } from "@mui/material";
 import React from "react";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 
-const MyIssues = ({ bugs, title }) => {
+const MyIssues = ({ bugs, title, isAdmin, isManager }) => {
+  const displayAssignee = isAdmin || isManager;
   return (
     <Box>
       <Card
@@ -78,44 +79,71 @@ const MyIssues = ({ bugs, title }) => {
                     {item?.description}
                   </Typography>
                 </Typography>
-
-                <Typography
+                <Box
                   sx={{
-                    fontSize: "14px",
-                    fontFamily: "Poppins",
-                    marginTop: "10px",
                     display: "flex",
                     alignItems: "center",
+                    justifyContent: "space-between",
                   }}>
-                  Status:
                   <Typography
                     sx={{
                       fontSize: "14px",
-                      fontWeight: "500",
                       fontFamily: "Poppins",
-                      marginLeft: "10px",
+                      marginTop: "10px",
+                      display: "flex",
+                      alignItems: "center",
                     }}>
-                    {item?.status}
+                    Status:
+                    <Typography
+                      sx={{
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        fontFamily: "Poppins",
+                        marginLeft: "10px",
+                      }}>
+                      {item?.status}
+                    </Typography>
                   </Typography>
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "14px",
-                    fontFamily: "Poppins",
-                    display: "flex",
-                    alignItems: "center",
-                  }}>
-                  Type:
                   <Typography
                     sx={{
                       fontSize: "14px",
-                      fontWeight: "500",
                       fontFamily: "Poppins",
-                      marginLeft: "10px",
+                      display: "flex",
+                      alignItems: "center",
                     }}>
-                    {item?.type}
+                    Type:
+                    <Typography
+                      sx={{
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        fontFamily: "Poppins",
+                        marginLeft: "10px",
+                      }}>
+                      {item?.type}
+                    </Typography>
                   </Typography>
-                </Typography>
+                </Box>
+                {displayAssignee && (
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      fontFamily: "Poppins",
+                      display: "flex",
+                      alignItems: "center",
+                      marginTop: "10px",
+                    }}>
+                    Assignee:
+                    <Typography
+                      sx={{
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        fontFamily: "Poppins",
+                        marginLeft: "10px",
+                      }}>
+                      {item?.assignee}
+                    </Typography>
+                  </Typography>
+                )}
               </Box>
             );
           })}

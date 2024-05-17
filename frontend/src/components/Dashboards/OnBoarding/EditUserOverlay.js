@@ -1,3 +1,10 @@
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import React from "react";
 
 const EditUserOverlay = ({
@@ -15,29 +22,75 @@ const EditUserOverlay = ({
       <div className="overlay-content" onClick={(e) => e.stopPropagation()}>
         <h2>Edit User</h2>
         <p>Email: {user.email}</p>
-        <label>
-          Role:
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
-            <option value="Developer">Developer</option>
-            <option value="Tester">Tester</option>
-            <option value="projectManager">Project Manager</option>
-            <option value="External User">External User</option>
-          </select>
-        </label>
-        <label>
-          Project Manager:
-          <select
+        <FormControl required sx={{ width: "100%", marginLeft: 0 }}>
+          <InputLabel id="demo-simple-select-required-label">Role</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            style={{
+              marginBottom: "10px",
+              textAlign: "left",
+              width: "100%",
+            }}
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            placeholder="Role"
+            label="Role">
+            <MenuItem value="developer">Developer</MenuItem>
+            <MenuItem value="tester">Tester</MenuItem>
+            <MenuItem value="projectManager">Project Manager</MenuItem>
+            <MenuItem value="admin">Admin</MenuItem>
+            <MenuItem value="External User">External User</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl required sx={{ width: "100%", marginLeft: 0 }}>
+          <InputLabel id="demo-simple-select-required-label">
+            Project Manager
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            style={{
+              marginBottom: "10px",
+              textAlign: "left",
+              width: "100%",
+            }}
             value={projectManager}
-            onChange={(e) => setManager(e.target.value)}>
+            onChange={(e) => setManager(e.target.value)}
+            placeholder="Project Manager"
+            label="Project Manager">
             {managers.map((manager) => (
-              <option key={manager.email} value={manager.email}>
+              <MenuItem key={manager.email} value={manager.email}>
                 {manager.email}
-              </option>
+              </MenuItem>
             ))}
-          </select>
-        </label>
-        <button onClick={() => handleSubmit("accepted")}>Accept</button>
-        <button onClick={() => handleSubmit("rejected")}>Reject</button>
+          </Select>
+        </FormControl>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => handleSubmit("rejected")}
+            style={{
+              flexBasis: "48%",
+              boxShadow: "none",
+            }}>
+            Reject
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => handleSubmit("accepted")}
+            style={{
+              flexBasis: "48%",
+            }}>
+            Accept
+          </Button>
+        </div>
       </div>
     </div>
   );

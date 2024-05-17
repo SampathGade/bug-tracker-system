@@ -107,16 +107,15 @@ const BugComponent = () => {
 
   return (
     <div style={{ height: "100%" }}>
-      <div className="action-bar">
-        {" "}
-        {/*new*/}
-        {userRole !== "developer" && (
+      {/* <div className="action-bar"> */}
+      {/*new*/}
+      {/* {userRole !== "developer" && (
           <button onClick={toggleCreateBugModal} className="create-bug-button">
             Create Bug
           </button>
-        )}
-        <SearchBar bugs={bugs} onSelectBug={openEditBugModal} /> {/*new*/}
-      </div>
+        )} */}
+      <SearchBar bugs={bugs} onSelectBug={openEditBugModal} />
+      {/* </div> */}
       <FiltersPanel
         projects={projects}
         filters={filters}

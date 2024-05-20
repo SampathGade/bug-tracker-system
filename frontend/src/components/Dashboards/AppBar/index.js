@@ -4,16 +4,17 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
+import GitHubIcon from "@mui/icons-material/GitHub";
 import Container from "@mui/material/Container";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import IconButton from "@mui/material/IconButton";
 import { useNavigate } from "react-router-dom";
 
 const settings = ["Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
   const navigate = useNavigate();
-
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenUserMenu = (event) => {
@@ -24,7 +25,6 @@ function ResponsiveAppBar() {
     const value = e.target.innerHTML;
     setAnchorElUser(null);
     if (value === "Logout") {
-      console.log("value", value);
       handleLogout();
     } else if (value === "Dashboard") {
       navigate("/dashboard");
@@ -41,6 +41,10 @@ function ResponsiveAppBar() {
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
+  };
+
+  const handleGitHubOpen = () => {
+    window.open("https://github.com", "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -66,7 +70,15 @@ function ResponsiveAppBar() {
             }}>
             Bug Tracking Tool
           </Typography>
-          <Box>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Tooltip title="GitHub">
+              <IconButton
+                color="inherit"
+                onClick={handleGitHubOpen}
+              >
+                <GitHubIcon />
+              </IconButton>
+            </Tooltip>
             <Tooltip title="Open Profile">
               <Box
                 onClick={handleOpenUserMenu}
@@ -107,4 +119,5 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;

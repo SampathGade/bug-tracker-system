@@ -27,4 +27,6 @@ public interface BugRepository extends MongoRepository<Bug, String> {
 
     List<Bug>findByAssigneeAndSprint(String sprint, String Assignee);
 
+    List<Bug>findByProjectAndAssigneeAndSprint(String project, String assignee, String sprint);
+
 }

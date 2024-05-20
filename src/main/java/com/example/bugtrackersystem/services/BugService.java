@@ -28,9 +28,9 @@ public class BugService {
             }
         } else if ("developer".equalsIgnoreCase(role)) {
             if(assignee != null && assignee.size()>0) {
-                return bugRepository.findByProjectAndAssigneeAndSprint(project, assignee, sprint);
+                return bugRepository.findByProjectAndAssigneeAndSprint(project, email, sprint);
             } else {
-                return bugRepository.findByProjectAndSprint(project, sprint);
+                return bugRepository.findByProjectAndAssigneeAndSprint(project, email, sprint);
             }
         } else {
             return bugRepository.findByCreatedByEmailAndProject(email, project);

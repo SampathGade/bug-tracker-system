@@ -59,12 +59,7 @@ const SignUpComponent = () => {
   const handleExternalUserChange = (e) => {
     const checked = e.target.checked;
     setIsExternalUser(checked);
-  };
-
-  const toggleExternalUser = () => {
-    setIsExternalUser(!isExternalUser);
-    setRole("");
-    setShowOtpForm(true);
+    setRole(""); // Clear the role when switching external user checkbox
   };
 
   const handleSubmitDetails = async (event) => {
@@ -77,7 +72,7 @@ const SignUpComponent = () => {
       const response = await fetch("http://localhost:8080/auth/create-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, role, otp, firstName, lastName}),
+        body: JSON.stringify({ email, password, role, otp, firstName, lastName }),
       });
       if (response.status === 200) {
         navigate("/login", { replace: true });
@@ -103,7 +98,7 @@ const SignUpComponent = () => {
           <div className="form-container">
             {!showOtpForm ? (
               <form
-                className=" cls-d-f cls-flex-column"
+                className="cls-d-f cls-flex-column"
                 onSubmit={handleSubmitEmail}>
                 <TextField
                   id="outlined-basic"
@@ -159,13 +154,13 @@ const SignUpComponent = () => {
                     required
                     value={firstName} // Bind to state
                     onChange={(e) => setFirstName(e.target.value)}
-                  />;
+                  />
                   <TextField
                     label="Last Name"
                     variant="outlined"
                     value={lastName}
-                    onChange={(e) => setLastName(e.target.value)} 
-                  />;
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
                   <TextField
                     label="Password"
                     variant="outlined"
@@ -206,12 +201,17 @@ const SignUpComponent = () => {
                       }}
                       placeholder="Select Role"
                       label="Select Role"
-                      onChange={(e) => setRole(e.target.value)}>
-                      <MenuItem value="projectManager">
-                        Project Manager
-                      </MenuItem>
-                      <MenuItem value="developer">Developer</MenuItem>
-                      <MenuItem value="tester">Tester</MenuItem>
+                      onChange={(e) => setRole(e.target.value)}
+                    >
+                      {isExternalUser ? (
+                        <MenuItem value="externalUser">External User</MenuItem>
+                      ) : (
+                        <>
+                          <MenuItem value="projectManager">Project Manager</MenuItem>
+                          <MenuItem value="developer">Developer</MenuItem>
+                          <MenuItem value="tester">Tester</MenuItem>
+                        </>
+                      )}
                     </Select>
                   </FormControl>
                   <button

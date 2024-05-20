@@ -159,6 +159,7 @@ const CreateBugModal = ({ onClose }) => {
 
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
+      resetFields();
       onClose();
     }
   };
@@ -214,6 +215,21 @@ const CreateBugModal = ({ onClose }) => {
     };
 
     recognition.start();
+  };
+
+  const resetFields = () => {
+    setSelectedProject("");
+    setName("");
+    setDescription("");
+    setProjectManager("");
+    setExpectedOutcome({ text: "", images: [] });
+    setActualOutcome({ text: "", images: [] });
+    setAssignee("");
+    setType(types[0]);
+    setSprint(localStorage.getItem("currentSprint") || "1");
+    setStoryPoints("");
+    setPriority("Medium");
+    setSlaDate("");
   };
 
   return (
@@ -476,7 +492,7 @@ const CreateBugModal = ({ onClose }) => {
             />
           </label>
           <div className="form-actions">
-            <Button type="button" variant="contained" onClick={onClose}>
+            <Button type="button" variant="contained" onClick={() => {resetFields(); onClose();}}>
               Cancel
             </Button>
             <Button

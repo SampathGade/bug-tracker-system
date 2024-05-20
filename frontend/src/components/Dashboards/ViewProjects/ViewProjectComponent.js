@@ -57,6 +57,13 @@ const ViewProjectsComponent = () => {
     setRefreshKey((oldKey) => oldKey + 1); // Change refreshKey to trigger re-render
   };
 
+  const handleDelete = () => {
+    setSelectedProject(null);
+    setCreatingProject(false);
+    setCurrentPage(1); // Reset to first page or refresh as needed
+    setRefreshKey((oldKey) => oldKey + 1);
+  }
+
   // Pagination logic
   const indexOfLastProject = currentPage * projectsPerPage;
   const indexOfFirstProject = indexOfLastProject - projectsPerPage;
@@ -86,6 +93,7 @@ const ViewProjectsComponent = () => {
           <EditProjectOverlay
             project={selectedProject}
             onClose={handleCloseOverlay}
+            onDelete={handleDelete}
           />
         )}
         {creatingProject && (

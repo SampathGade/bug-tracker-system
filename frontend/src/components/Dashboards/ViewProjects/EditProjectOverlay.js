@@ -10,7 +10,7 @@ import {
 import React, { useState, useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const EditProjectOverlay = ({ project, onClose }) => {
+const EditProjectOverlay = ({ project, onClose, onDelete }) => {
   const [name, setName] = useState(project.name);
   const [description, setDescription] = useState(project.description);
   const [projectManager, setProjectManager] = useState(
@@ -55,6 +55,18 @@ const EditProjectOverlay = ({ project, onClose }) => {
     );
     if (response.ok) {
       onClose();
+    }
+  };
+
+  const handleDeleteProject = async () => {
+    const response = await fetch(
+      `http://localhost:8080/project/deleteProject/${project.id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (response.ok) {
+      onDelete(project.id);
     }
   };
 
@@ -113,7 +125,7 @@ const EditProjectOverlay = ({ project, onClose }) => {
                 value={projectManager}
                 onChange={(e) => setProjectManager(e.target.value)}>
                 <MenuItem value="" disabled>
-                  Select a developer to add
+                  Select a manager
                 </MenuItem>
                 {managers?.map((m) => (
                   <MenuItem key={m.id} value={m.email}>
@@ -194,6 +206,15 @@ const EditProjectOverlay = ({ project, onClose }) => {
           </Button>
           <Button variant="contained" onClick={handleUpdateProject}>
             Update
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleDeleteProject}
+            sx={{
+              marginLeft: "10px",
+            }}>
+            Delete
           </Button>
         </div>
       </div>

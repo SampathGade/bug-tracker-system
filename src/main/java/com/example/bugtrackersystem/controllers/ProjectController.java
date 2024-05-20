@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.bugtrackersystem.entity.Project;
+import com.example.bugtrackersystem.repository.ProjectRepository;
 import com.example.bugtrackersystem.requests.CreateProjectRequest;
 import com.example.bugtrackersystem.requests.GetProjectsRequest;
 import com.example.bugtrackersystem.requests.UpdateProjectRequest;
@@ -20,6 +21,9 @@ public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
     @PostMapping("/createProject")
     public ResponseEntity<?> createProject(@RequestBody CreateProjectRequest createProjectRequest) {
@@ -48,6 +52,16 @@ public class ProjectController {
             projectService.updateProject(updateProjectRequest.getId(), updateProjectRequest.getName(), updateProjectRequest.getDescription(),updateProjectRequest.getProductManager(),
                     updateProjectRequest.getDevelopers());
             return ResponseEntity.ok().body("updated project");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
+        }
+    }
+
+    @DeleteMapping("/deleteProject/{id}")
+    public ResponseEntity<?> deleteProject(@PathVariable("id") String projectId) {
+        try {
+            projectRepository.deleteById(projectId);
+            return ResponseEntity.ok().body("Project deleted successfully");
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
         }

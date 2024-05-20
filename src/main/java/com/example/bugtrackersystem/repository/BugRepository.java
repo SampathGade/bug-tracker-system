@@ -17,7 +17,8 @@ public interface BugRepository extends MongoRepository<Bug, String> {
 
     List<Bug> findByAssignee(String assignee);
 
-    List<Bug> findByCreatedBy(String createdBy);
+    @Query("{ 'createdBy.email' : ?0, 'project' : ?1 }")
+    List<Bug> findByCreatedByEmailAndProject(String email, String project);
 
     Bug findByname(String name);
 

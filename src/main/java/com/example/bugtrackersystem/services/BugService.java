@@ -33,7 +33,7 @@ public class BugService {
                 return bugRepository.findByProjectAndSprint(project, sprint);
             }
         } else {
-            return bugRepository.findByCreatedBy(email);
+            return bugRepository.findByCreatedByEmailAndProject(email, project);
         }
     }
 

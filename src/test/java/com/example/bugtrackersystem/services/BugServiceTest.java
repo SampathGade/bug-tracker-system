@@ -79,7 +79,7 @@ public class BugServiceTest {
 
     @Test
     void testGetBugs_OtherRole() {
-        when(bugRepository.findByCreatedBy(anyString())).thenReturn(bugList);
+        when(bugRepository.findByCreatedByEmailAndProject(anyString(), anyString())).thenReturn(bugList);
         List<Bug> result = bugService.getBugs("tester", "test@example.com", "Project1", null, null);
         assertEquals(bugList, result);
     }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SprintMetrics from "../Dashboards/SprintManagament/SprintMetrics";
 import { Box } from "@mui/material";
 import FiltersPanel from "../Dashboards/ViewBug/FiltersPanel";
@@ -8,6 +9,7 @@ const CloseSprint = () => {
   const [projects, setProjects] = useState([]);
   const [filters, setFilters] = useState({ project: "", assignee: [] });
   const [selectedProject, setSelectedProject] = useState("");
+  const navigate = useNavigate();
 
   const sprintOptions = Array.from({ length: 27 }, (_, i) => ({
     value: i + 1,
@@ -53,6 +55,10 @@ const CloseSprint = () => {
     setSelectedProject(newFilters?.project);
   };
 
+  const handleDeveloperClick = (email) => {
+    navigate(`/developer-metrics/${email}`);
+  };
+
   return (
     <Container bodyStyles={{ padding: 0 }}>
       <FiltersPanel
@@ -64,7 +70,7 @@ const CloseSprint = () => {
         sprintOptions={sprintOptions}
         disablePeopleFilter={true}
       />
-      <SprintMetrics sprint={sprint} selectedProject={selectedProject} />
+      <SprintMetrics sprint={sprint} selectedProject={selectedProject} onDeveloperClick={handleDeveloperClick} />
     </Container>
   );
 };

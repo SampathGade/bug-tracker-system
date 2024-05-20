@@ -80,4 +80,14 @@ public class UserController {
             return ResponseEntity.internalServerError().body("An internal server error occurred. Please try again.");
         }
     }
+
+    @GetMapping("/api/performance/developer")
+    public User getDeveloperPerformance(@RequestParam String email) {
+        try {
+            return userService.getUserByEmail(email);
+        } catch (Exception e) {
+            // Handle the exception appropriately (e.g., return an error response)
+            return null;
+        }
+    }
 }

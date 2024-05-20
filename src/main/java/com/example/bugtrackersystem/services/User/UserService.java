@@ -64,4 +64,13 @@ public class UserService {
         return developers;
     }
 
+    public User getUserByEmail(String email) throws Exception {
+        User user = userRepository.findByEmail(email);
+        if (user !=null) {
+            return user;
+        } else {
+            throw new Exception("User not found");
+        }
+    }
+
 }

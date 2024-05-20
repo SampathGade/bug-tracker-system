@@ -181,13 +181,10 @@ const CreateBugModal = ({ onClose }) => {
     setIsUploading(true);
   };
 
-  const handleAssigneeChange = (newValue) => {
-    setAssignee(newValue ? newValue.value : "");
+  const handleAssigneeChange = (e) => {
+    const selectedValue = e.target.value;
+    setAssignee(selectedValue === "Auto Assign" ? "auto" : selectedValue);
   };
-
-  const assigneeOptions = [{ value: "Auto", label: "Auto Assign" }].concat(
-    assignees.map((user) => ({ value: user, label: user }))
-  );
 
   const handleSlaDateChange = (e) => {
     setSlaDate(e.target.value);
@@ -308,7 +305,10 @@ const CreateBugModal = ({ onClose }) => {
               placeholder="Assignee"
               label="Assignee"
               value={assignee}
-              onChange={(e) => setAssignee(e.target.value)}>
+              onChange={handleAssigneeChange}>
+              <MenuItem key="auto" value="Auto">
+                Auto Assign
+              </MenuItem>
               {assignees.map((user) => (
                 <MenuItem key={user} value={user}>
                   {user}

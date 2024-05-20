@@ -126,6 +126,9 @@ const MetricsDashboard = () => {
     }
   });
 
+  const openBugsCount = bugs?.filter((bug) => bug.status !== "done").length;
+  const closedBugsCount = bugs?.filter((bug) => bug.status === "done").length;
+
   const displayName = userLastName ? `${userFirstName} ${userLastName}` : userFirstName;
 
 
@@ -204,7 +207,7 @@ const MetricsDashboard = () => {
                     fontWeight: "600",
                     fontFamily: "Poppins",
                   }}>
-                  0
+                  {openBugsCount}
                 </Typography>
                 <Typography
                   sx={{
@@ -239,7 +242,7 @@ const MetricsDashboard = () => {
                     fontWeight: "600",
                     fontFamily: "Poppins",
                   }}>
-                  10
+                  {closedBugsCount}
                 </Typography>
                 <Typography
                   sx={{

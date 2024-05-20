@@ -16,9 +16,8 @@ public class EmailSenderImpl implements EmailSender {
         message.setFrom("drakedraganeel@gmail.com");  // Same as your `spring.mail.username`
         message.setTo(to);
         message.setSubject("Otp for bug tracker");
-        message.setText("Here is your OTP for login: " + otp);
+        message.setText("Here is your OTP for login/Sign up : " + otp);
         mailSender.send(message);
         System.out.println("OTP email sent successfully!");
-
     }
 }

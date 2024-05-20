@@ -96,7 +96,7 @@ public class AuthenticationService {
         user.setOtp(otp);
         user.setOtpExpiry(LocalDateTime.now().plusMinutes(10));
         userRepository.save(user);
-//        emailService.sendOtpEmail(email, otp);
+        emailService.sendOtpEmail(email, otp);
         logger.info("OTP generated and sent to email: {}", email);
     }
 

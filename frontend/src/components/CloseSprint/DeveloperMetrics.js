@@ -32,39 +32,46 @@ const DeveloperMetrics = ({ email, onBack }) => {
   if (error) return <div>Error: {error}</div>;
   if (!metrics) return <div>No data available.</div>;
 
+  const pastPerformance = metrics.performances?.pastPerformance;
+  const lastPerformance = metrics.performances?.lastPerformance;
+
   return (
     <Box>
       <Typography variant="h4" gutterBottom>
         Developer Metrics for {metrics.firstName} {metrics.lastName}
       </Typography>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Metric</TableCell>
-              <TableCell>Overall</TableCell>
-              <TableCell>Last Sprint</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell>Total</TableCell>
-              <TableCell>{metrics.performances.pastPerformance.total}</TableCell>
-              <TableCell>{metrics.performances.lastPerformance.total}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Completed</TableCell>
-              <TableCell>{metrics.performances.pastPerformance.completed}</TableCell>
-              <TableCell>{metrics.performances.lastPerformance.completed}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Spilled</TableCell>
-              <TableCell>{metrics.performances.pastPerformance.spilled}</TableCell>
-              <TableCell>{metrics.performances.lastPerformance.spilled}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {pastPerformance && lastPerformance ? (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Metric</TableCell>
+                <TableCell>Overall</TableCell>
+                <TableCell>Last Sprint</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>Total</TableCell>
+                <TableCell>{pastPerformance.total}</TableCell>
+                <TableCell>{lastPerformance.total}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Completed</TableCell>
+                <TableCell>{pastPerformance.completed}</TableCell>
+                <TableCell>{lastPerformance.completed}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Spilled</TableCell>
+                <TableCell>{pastPerformance.spilled}</TableCell>
+                <TableCell>{lastPerformance.spilled}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <Typography>No past performances available for the developer</Typography>
+      )}
       <Button onClick={onBack} variant="contained" sx={{ mt: 2 }}>
         Back
       </Button>

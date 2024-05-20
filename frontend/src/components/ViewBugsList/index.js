@@ -25,6 +25,7 @@ const ViewBugsList = () => {
 
   const userRole = localStorage.getItem("userRole");
   const userEmail = localStorage.getItem("userEmail");
+  const currentSprint = localStorage.getItem("currentSprint") || "1";
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -62,7 +63,7 @@ const ViewBugsList = () => {
               role: localStorage.getItem("userRole"),
               project: selectedProject,
               assignee: [],
-              sprint: null, // Add sprint to the API request
+              sprint: currentSprint, // Add sprint to the API request
             }),
           }
         );

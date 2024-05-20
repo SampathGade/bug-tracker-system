@@ -10,7 +10,10 @@ import {
   InputLabel,
   Grid,
   Button,
+  IconButton,
 } from "@mui/material";
+import MicIcon from '@mui/icons-material/Mic';
+import MicOffIcon from '@mui/icons-material/MicOff';
 import { useNavigate } from "react-router-dom";
 
 const CreateBugModal = ({ onClose }) => {
@@ -35,8 +38,9 @@ const CreateBugModal = ({ onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [priority, setPriority] = useState("Medium");
+  const [isListening, setIsListening] = useState(false);
   const navigate = useNavigate();
-
+  
   const userRole = localStorage.getItem("userRole");
   const userEmail = localStorage.getItem("userEmail");
   const userId = localStorage.getItem("userId");
@@ -76,6 +80,7 @@ const CreateBugModal = ({ onClose }) => {
     };
     fetchProjects();
   }, [userEmail, userRole]);
+
   const priorityOptions = [
     { value: "High", label: "High" },
     { value: "Medium", label: "Medium" },
@@ -192,6 +197,28 @@ const CreateBugModal = ({ onClose }) => {
     setPriority(e.target.value);
   };
 
+  const startListening = () => {
+    const recognition = new window.webkitSpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = (event) => {
+      const speechResult = event.results[0][0].transcript;
+      setDescription((prevDescription) => `${prevDescription} ${speechResult}`);
+    };
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
+  };
+
   return (
     <div
       style={{
@@ -214,17 +241,22 @@ const CreateBugModal = ({ onClose }) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <TextField
-            label="Description"
-            required
-            variant="outlined"
-            style={{
-              width: "100%",
-              marginBottom: "10px",
-            }}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+            <TextField
+              label="Description"
+              required
+              variant="outlined"
+              style={{
+                width: "90%",
+                marginRight: "10px",
+              }}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <IconButton onClick={startListening} color={isListening ? "secondary" : "primary"}>
+              {isListening ? <MicOffIcon /> : <MicIcon />}
+            </IconButton>
+          </div>
 
           <FormControl required sx={{ m: 1, width: "100%", marginLeft: 0 }}>
             <InputLabel id="demo-simple-select-required-label">
@@ -377,7 +409,6 @@ const CreateBugModal = ({ onClose }) => {
               display: "flex",
               alignItems: "flex-start",
               justifyContent: "space-between",
-              // gap: "10px",
             }}>
             <Grid item md={5.7} lg={5.7}>
               <TextField
@@ -444,16 +475,8 @@ const CreateBugModal = ({ onClose }) => {
               required
             />
           </label>
-          {/* <DatePicker
-            label="Basic date picker"
-            // value={slaDate}
-            onChange={(e) => console.log(e.target.value)}
-            sx={{
-              boxShadow: "none",
-            }}
-          /> */}
           <div className="form-actions">
-            <Button type="button" variant="contained">
+            <Button type="button" variant="contained" onClick={onClose}>
               Cancel
             </Button>
             <Button
@@ -462,12 +485,6 @@ const CreateBugModal = ({ onClose }) => {
               disabled={isLoading || isUploading}>
               {isLoading ? "Creating Bug..." : "Create Bug"}
             </Button>
-            {/* <button type="button" onClick={onClose}>
-              Cancel
-            </button>
-            <button type="submit" disabled={isLoading || isUploading}>
-              {isLoading ? "Creating Bug..." : "Create Bug"}
-            </button> */}
           </div>
         </form>
       </div>

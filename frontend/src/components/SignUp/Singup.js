@@ -86,6 +86,11 @@ const SignUpComponent = () => {
     }
   };
 
+  const handleRoleChange = (event) => {
+    setRole(event.target.value);
+    console.log("Role selected:", event.target.value);
+  };
+
   return (
     <div className="login-container">
       <div className="login-detail-sec">
@@ -201,16 +206,16 @@ const SignUpComponent = () => {
                       }}
                       placeholder="Select Role"
                       label="Select Role"
-                      onChange={(e) => setRole(e.target.value)}
+                      onChange={handleRoleChange} // Use the new handler
                     >
                       {isExternalUser ? (
                         <MenuItem value="externalUser">External User</MenuItem>
                       ) : (
-                        <>
-                          <MenuItem value="projectManager">Project Manager</MenuItem>
-                          <MenuItem value="developer">Developer</MenuItem>
-                          <MenuItem value="tester">Tester</MenuItem>
-                        </>
+                        [
+                          <MenuItem key="projectManager" value="projectManager">Project Manager</MenuItem>,
+                          <MenuItem key="developer" value="developer">Developer</MenuItem>,
+                          <MenuItem key="tester" value="tester">Tester</MenuItem>,
+                        ]
                       )}
                     </Select>
                   </FormControl>

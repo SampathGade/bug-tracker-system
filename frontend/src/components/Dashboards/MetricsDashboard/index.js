@@ -126,8 +126,8 @@ const MetricsDashboard = () => {
     }
   });
 
-  const openBugsCount = bugs?.filter((bug) => bug.status !== "done").length;
-  const closedBugsCount = bugs?.filter((bug) => bug.status === "done").length;
+  const openBugsCount = bugs?.filter((bug) => bug.status !== "Done").length;
+  const closedBugsCount = bugs?.filter((bug) => bug.status === "Done").length;
 
   const displayName = userLastName ? `${userFirstName} ${userLastName}` : userFirstName;
 

@@ -26,6 +26,7 @@ const LeftPanel = () => {
   const isAdmin = role === rolesList.admin;
   const isManager = role === rolesList.projectManager;
   const isTester = role === rolesList.tester;
+  const isExternalUser = role === "external user";
 
   const [isBugsExpanded, setIsBugsExpanded] = useState(
     (isBugs || isCreateBug) ?? false
@@ -37,13 +38,67 @@ const LeftPanel = () => {
     (isCreateProject || isMyProjects) ?? false
   );
 
+  if (isExternalUser) {
+    return (
+      <Box
+        sx={{
+          paddingLeft: "10px",
+          paddingTop: "20px",
+          backgroundColor: "#f0f0f0",
+        }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            marginTop: "10px",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            setIsBugsExpanded(!isBugsExpanded);
+          }}>
+          <BugReportIcon
+            sx={{ color: isBugs || isCreateBug ? "#1976d2" : "black" }}
+          />
+          <Typography
+            sx={{
+              fontSize: "18px",
+              marginLeft: "10px",
+              fontFamily: "Poppins",
+              fontWeight: "500",
+              color: isBugs || isCreateBug ? "#1976d2" : "black",
+            }}>
+            Bugs
+          </Typography>
+        </Box>
+        {isBugsExpanded && (
+          <Box
+            sx={{
+              marginLeft: "33px",
+            }}>
+            <Typography
+              sx={{
+                fontSize: "14px",
+                marginTop: "8px",
+                cursor: "pointer",
+                fontFamily: "Poppins",
+                fontWeight: "500",
+                color: isBugs ? "#1976d2" : "black",
+              }}
+              onClick={() => navigate("/bugs")}>
+              View Bugs
+            </Typography>
+          </Box>
+        )}
+      </Box>
+    );
+  }
+
   return (
     <Box
       sx={{
         paddingLeft: "10px",
         paddingTop: "20px",
         backgroundColor: "#f0f0f0",
-        // height: "100%",
       }}>
       <Box
         sx={{

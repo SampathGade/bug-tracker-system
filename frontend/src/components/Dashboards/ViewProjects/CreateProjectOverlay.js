@@ -46,6 +46,11 @@ const CreateProjectOverlay = () => {
       }
     );
     if (response.ok) {
+      // Reset form
+      setName("");
+      setDescription("");
+      setProjectManager("");
+      setDevelopers([]);
     } else {
       console.error("Failed to create project"); // Handle errors appropriately
     }
@@ -72,6 +77,7 @@ const CreateProjectOverlay = () => {
             label="Project Name"
             variant="outlined"
             required
+            value={name}
             onChange={(e) => setName(e.target.value)}
             style={{
               width: "100%",
@@ -84,6 +90,7 @@ const CreateProjectOverlay = () => {
             variant="outlined"
             required
             multiline
+            value={description}
             onChange={(e) => setDescription(e.target.value)}
             style={{
               width: "100%",
@@ -123,7 +130,7 @@ const CreateProjectOverlay = () => {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={projectManager}
+              value=""
               style={{
                 marginBottom: "10px",
                 textAlign: "left",

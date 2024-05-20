@@ -13,6 +13,6 @@ public class CreateProjectRequest {
     private String name;
     private String description;
     private String projectManager;
-    private List<String > users;
+    private List<String> developers;
     private List<String> bugTypes;
 }

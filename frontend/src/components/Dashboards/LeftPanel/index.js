@@ -45,7 +45,8 @@ const LeftPanel = () => {
           paddingLeft: "10px",
           paddingTop: "20px",
           backgroundColor: "#f0f0f0",
-        }}>
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -55,18 +56,18 @@ const LeftPanel = () => {
           }}
           onClick={() => {
             setIsBugsExpanded(!isBugsExpanded);
-          }}>
-          <BugReportIcon
-            sx={{ color: isBugs || isCreateBug ? "#1976d2" : "black" }}
-          />
+          }}
+        >
+          <BugReportIcon sx={{ color: isBugs ? "#1976d2" : "black" }} />
           <Typography
             sx={{
               fontSize: "18px",
               marginLeft: "10px",
               fontFamily: "Poppins",
               fontWeight: "500",
-              color: isBugs || isCreateBug ? "#1976d2" : "black",
-            }}>
+              color: isBugs ? "#1976d2" : "black",
+            }}
+          >
             Bugs
           </Typography>
         </Box>
@@ -74,7 +75,8 @@ const LeftPanel = () => {
           <Box
             sx={{
               marginLeft: "33px",
-            }}>
+            }}
+          >
             <Typography
               sx={{
                 fontSize: "14px",
@@ -84,8 +86,22 @@ const LeftPanel = () => {
                 fontWeight: "500",
                 color: isBugs ? "#1976d2" : "black",
               }}
-              onClick={() => navigate("/bugs")}>
+              onClick={() => navigate("/bugs")}
+            >
               View Bugs
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "14px",
+                marginTop: "8px",
+                cursor: "pointer",
+                fontFamily: "Poppins",
+                fontWeight: "500",
+                color: isCreateBug ? "#1976d2" : "black",
+              }}
+              onClick={() => navigate("/create-bug")}
+            >
+              Create Bug
             </Typography>
           </Box>
         )}
@@ -99,7 +115,8 @@ const LeftPanel = () => {
         paddingLeft: "10px",
         paddingTop: "20px",
         backgroundColor: "#f0f0f0",
-      }}>
+      }}
+    >
       <Box
         sx={{
           display: "flex",
@@ -107,7 +124,8 @@ const LeftPanel = () => {
           marginTop: "10px",
           cursor: "pointer",
         }}
-        onClick={() => navigate("/dashboard")}>
+        onClick={() => navigate("/dashboard")}
+      >
         <HomeIcon sx={{ color: isDashboard ? "#1976d2" : "black" }} />
         <Typography
           sx={{
@@ -116,7 +134,8 @@ const LeftPanel = () => {
             fontFamily: "Poppins",
             fontWeight: "500",
             color: isDashboard ? "#1976d2" : "black",
-          }}>
+          }}
+        >
           Dashboard
         </Typography>
       </Box>
@@ -129,7 +148,8 @@ const LeftPanel = () => {
         }}
         onClick={() => {
           setIsSprintExpanded(!isSprintExpanded);
-        }}>
+        }}
+      >
         <TabletIcon
           sx={{
             color: isSprintDashboard || isCloseSprints ? "#1976d2" : "black",
@@ -142,7 +162,8 @@ const LeftPanel = () => {
             fontFamily: "Poppins",
             fontWeight: "500",
             color: isSprintDashboard || isCloseSprints ? "#1976d2" : "black",
-          }}>
+          }}
+        >
           Sprints
         </Typography>
       </Box>
@@ -150,7 +171,8 @@ const LeftPanel = () => {
         <Box
           sx={{
             marginLeft: "33px",
-          }}>
+          }}
+        >
           <Typography
             sx={{
               fontSize: "14px",
@@ -160,7 +182,8 @@ const LeftPanel = () => {
               fontWeight: "500",
               color: isSprintDashboard ? "#1976d2" : "black",
             }}
-            onClick={() => navigate("/sprint-dashboard")}>
+            onClick={() => navigate("/sprint-dashboard")}
+          >
             Sprint Dashboard
           </Typography>
           {(isAdmin || isManager) && (
@@ -173,7 +196,8 @@ const LeftPanel = () => {
                 fontWeight: "500",
                 color: isCloseSprints ? "#1976d2" : "black",
               }}
-              onClick={() => navigate("/close-sprint")}>
+              onClick={() => navigate("/close-sprint")}
+            >
               Close Sprint
             </Typography>
           )}
@@ -188,7 +212,8 @@ const LeftPanel = () => {
         }}
         onClick={() => {
           setIsBugsExpanded(!isBugsExpanded);
-        }}>
+        }}
+      >
         <BugReportIcon
           sx={{ color: isBugs || isCreateBug ? "#1976d2" : "black" }}
         />
@@ -199,7 +224,8 @@ const LeftPanel = () => {
             fontFamily: "Poppins",
             fontWeight: "500",
             color: isBugs || isCreateBug ? "#1976d2" : "black",
-          }}>
+          }}
+        >
           Bugs
         </Typography>
       </Box>
@@ -207,8 +233,9 @@ const LeftPanel = () => {
         <Box
           sx={{
             marginLeft: "33px",
-          }}>
-          {(isAdmin || isManager || isTester) && (
+          }}
+        >
+          {(isAdmin || isManager || isTester || isExternalUser) && (
             <Typography
               sx={{
                 fontSize: "14px",
@@ -218,7 +245,8 @@ const LeftPanel = () => {
                 fontWeight: "500",
                 color: isCreateBug ? "#1976d2" : "black",
               }}
-              onClick={() => navigate("/create-bug")}>
+              onClick={() => navigate("/create-bug")}
+            >
               Create Bug
             </Typography>
           )}
@@ -231,7 +259,8 @@ const LeftPanel = () => {
               fontWeight: "500",
               color: isBugs ? "#1976d2" : "black",
             }}
-            onClick={() => navigate("/bugs")}>
+            onClick={() => navigate("/bugs")}
+          >
             View Bugs
           </Typography>
         </Box>
@@ -245,7 +274,8 @@ const LeftPanel = () => {
         }}
         onClick={() => {
           setIsProjectExpanded(!isProjectExpanded);
-        }}>
+        }}
+      >
         <FolderIcon
           sx={{ color: isCreateProject || isMyProjects ? "#1976d2" : "black" }}
         />
@@ -256,7 +286,8 @@ const LeftPanel = () => {
             fontFamily: "Poppins",
             fontWeight: "500",
             color: isCreateProject || isMyProjects ? "#1976d2" : "black",
-          }}>
+          }}
+        >
           Projects
         </Typography>
       </Box>
@@ -264,7 +295,8 @@ const LeftPanel = () => {
         <Box
           sx={{
             marginLeft: "33px",
-          }}>
+          }}
+        >
           {(isAdmin || isManager) && (
             <Typography
               sx={{
@@ -275,7 +307,8 @@ const LeftPanel = () => {
                 fontWeight: "500",
                 color: isCreateProject ? "#1976d2" : "black",
               }}
-              onClick={() => navigate("/create-project")}>
+              onClick={() => navigate("/create-project")}
+            >
               Create New Project
             </Typography>
           )}
@@ -288,7 +321,8 @@ const LeftPanel = () => {
               fontWeight: "500",
               color: isMyProjects ? "#1976d2" : "black",
             }}
-            onClick={() => navigate("/my-projects")}>
+            onClick={() => navigate("/my-projects")}
+          >
             My Projects
           </Typography>
         </Box>
@@ -301,7 +335,8 @@ const LeftPanel = () => {
             marginTop: "10px",
             cursor: "pointer",
           }}
-          onClick={() => navigate("/onboarding")}>
+          onClick={() => navigate("/onboarding")}
+        >
           <AssignmentTurnedInSharpIcon
             sx={{ color: isOnBoarding ? "#1976d2" : "black" }}
           />
@@ -312,7 +347,8 @@ const LeftPanel = () => {
               fontFamily: "Poppins",
               fontWeight: "500",
               color: isOnBoarding ? "#1976d2" : "black",
-            }}>
+            }}
+          >
             On Boarding
           </Typography>
         </Box>
@@ -325,7 +361,8 @@ const LeftPanel = () => {
             marginTop: "10px",
             cursor: "pointer",
           }}
-          onClick={() => navigate("/my-team")}>
+          onClick={() => navigate("/my-team")}
+        >
           <GroupsIcon sx={{ color: isMyTeam ? "#1976d2" : "black" }} />
           <Typography
             sx={{
@@ -334,7 +371,8 @@ const LeftPanel = () => {
               fontFamily: "Poppins",
               fontWeight: "500",
               color: isMyTeam ? "#1976d2" : "black",
-            }}>
+            }}
+          >
             My Team
           </Typography>
         </Box>

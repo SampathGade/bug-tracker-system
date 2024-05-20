@@ -334,35 +334,43 @@ const CreateBugModal = ({ onClose }) => {
           </FormControl>
           <label>
             Sprint:
-            <div style={{ padding: "10px 2px" }}>
-              <Select
-                options={sprintOptions}
-                onChange={(option) => setSprint(option.value)}
-                placeholder="Select or type a sprint"
-                isSearchable
-                value={sprintOptions.find((option) => option.value === sprint)}
-                className="bug-selection"
-              />
-            </div>
+            {userRole === "external user" ? (
+              <div style={{ padding: "10px 2px" }}>
+                Current Sprint ({currentSprint})
+              </div>
+            ) : (
+              <div style={{ padding: "10px 2px" }}>
+                <Select
+                  options={sprintOptions}
+                  onChange={(option) => setSprint(option.value)}
+                  placeholder="Select or type a sprint"
+                  isSearchable
+                  value={sprintOptions.find((option) => option.value === sprint)}
+                  className="bug-selection"
+                />
+              </div>
+            )}
           </label>
-          <TextField
-            label="Story Points"
-            variant="outlined"
-            style={{
-              width: "100%",
-              marginBottom: "10px",
-              marginTop: "20px",
-            }}
-            type="number"
-            value={storyPoints}
-            onChange={(e) => setStoryPoints(e.target.value)}
-            required
-            InputLabelProps={{
-              style: {
-                zIndex: 0,
-              },
-            }}
-          />
+          {userRole !== "external user" && (
+            <>
+              <TextField
+                label="Story Points"
+                variant="outlined"
+                style={{
+                  width: "100%",
+                  marginBottom: "10px",
+                  marginTop: "20px",
+                }}
+                type="number"
+                value={storyPoints}
+                onChange={(e) => setStoryPoints(e.target.value)}
+                required
+                InputLabelProps={{
+                  style: {
+                    zIndex: 0,
+                  },
+                }}
+              />
           <FormControl required sx={{ m: 1, width: "100%", marginLeft: 0 }}>
             <InputLabel
               id="demo-simple-select-required-label"
@@ -419,68 +427,73 @@ const CreateBugModal = ({ onClose }) => {
               ))}
             </MUISelect>
           </FormControl>
-          <Grid
-            container
-            sx={{
-              display: "flex",
-              alignItems: "flex-start",
-              justifyContent: "space-between",
-            }}>
-            <Grid item md={5.7} lg={5.7}>
-              <TextField
-                label="Expected Outcome"
-                variant="outlined"
-                multiline
-                style={{
-                  width: "100%",
-                  marginBottom: "10px",
-                }}
-                value={expectedOutcome.text}
-                onChange={(e) =>
-                  setExpectedOutcome({
-                    ...expectedOutcome,
-                    text: e.target.value,
-                  })
-                }
-                InputLabelProps={{
-                  style: {
-                    zIndex: 0,
-                  },
-                }}
-                required
-              />
-              <ImageUploader
-                onUpload={handleExpectedImageUpload}
-                onUploadStart={handleExpectedImageUploadStart}
-              />
-            </Grid>
-            <Grid item md={5.7} lg={5.7}>
-              <TextField
-                label="Actual Outcome"
-                variant="outlined"
-                multiline
-                style={{
-                  minHeight: "50px",
-                  width: "100%",
-                  marginBottom: "10px",
-                }}
-                value={actualOutcome.text}
-                onChange={(e) =>
-                  setActualOutcome({ ...actualOutcome, text: e.target.value })
-                }
-                required
-                InputLabelProps={{
-                  style: {
-                    zIndex: 0,
-                  },
-                }}
-              />
-              <ImageUploader
-                onUpload={handleActualImageUpload}
-                onUploadStart={handleActualImageUploadStart}
-              />
-            </Grid>
-          </Grid>
+              <Grid
+                container
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "space-between",
+                }}>
+                <Grid item md={5.7} lg={5.7}>
+                  <TextField
+                    label="Expected Outcome"
+                    variant="outlined"
+                    multiline
+                    style={{
+                      width: "100%",
+                      marginBottom: "10px",
+                    }}
+                    value={expectedOutcome.text}
+                    onChange={(e) =>
+                      setExpectedOutcome({
+                        ...expectedOutcome,
+                        text: e.target.value,
+                      })
+                    }
+                    InputLabelProps={{
+                      style: {
+                        zIndex: 0,
+                      },
+                    }}
+                    required
+                  />
+                  <ImageUploader
+                    onUpload={handleExpectedImageUpload}
+                    onUploadStart={handleExpectedImageUploadStart}
+                  />
+                </Grid>
+                <Grid item md={5.7} lg={5.7}>
+                  <TextField
+                    label="Actual Outcome"
+                    variant="outlined"
+                    multiline
+                    style={{
+                      minHeight: "50px",
+                      width: "100%",
+                      marginBottom: "10px",
+                    }}
+                    value={actualOutcome.text}
+                    onChange={(e) =>
+                      setActualOutcome({
+                        ...actualOutcome,
+                        text: e.target.value,
+                      })
+                    }
+                    required
+                    InputLabelProps={{
+                      style: {
+                        zIndex: 0,
+                      },
+                    }}
+                  />
+                  <ImageUploader
+                    onUpload={handleActualImageUpload}
+                    onUploadStart={handleActualImageUploadStart}
+                  />
+                </Grid>
+              </Grid>
+            </>
+          )}
           <label>
             SLA Date:
             <input

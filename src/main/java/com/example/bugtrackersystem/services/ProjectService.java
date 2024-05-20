@@ -36,8 +36,10 @@ public class ProjectService {
            projectList = projectRepository.findAll();
         } else if ("productManager".equalsIgnoreCase(role)) {
             projectList = projectRepository.findByProjectManager(email);
-        } else {
+        } else if ("developer".equalsIgnoreCase(role)){
             projectList = projectRepository.findByDevelopers(email);
+        } else if ("external user".equalsIgnoreCase(role)) {
+            projectList = projectRepository.findAll();
         }
         return projectList;
     }

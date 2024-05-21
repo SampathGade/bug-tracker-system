@@ -40,7 +40,7 @@ public class EmailSenderImplTest {
         assertEquals("drakedraganeel@gmail.com", capturedMessage.getFrom());
         assertEquals(to, capturedMessage.getTo()[0]);
         assertEquals("Otp for bug tracker", capturedMessage.getSubject());
-        assertEquals("Here is your OTP for login: " + otp, capturedMessage.getText());
+        assertEquals("Here is your OTP for login/Sign up :" + otp, capturedMessage.getText());
 
         // Verify that System.out.println was called
         // This part is tricky to verify directly. Usually, you'd avoid testing standard output.

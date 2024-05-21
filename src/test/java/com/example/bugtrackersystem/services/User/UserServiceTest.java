@@ -88,7 +88,7 @@ class UserServiceTest {
 
     @Test
     void getProjectManagers_ShouldReturnProjectManagers() {
-        when(userRepository.findByRole("projectManager")).thenReturn(Arrays.asList(user));
+        when(userRepository.findByRoleAndStatus("projectManager","Onboarded")).thenReturn(Arrays.asList(user));
 
         List<User> projectManagers = userService.getProjectManagers();
 
@@ -98,7 +98,7 @@ class UserServiceTest {
 
     @Test
     void getProjectManagers_ShouldReturnEmptyList_WhenNoProjectManagersFound() {
-        when(userRepository.findByRole("projectManager")).thenReturn(null);
+        when(userRepository.findByRoleAndStatus("projectManager","Onboarded")).thenReturn(null);
 
         List<User> projectManagers = userService.getProjectManagers();
 

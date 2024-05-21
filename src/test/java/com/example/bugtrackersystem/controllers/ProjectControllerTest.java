@@ -38,7 +38,7 @@ class ProjectControllerTest {
         request.setName("Test Project");
         request.setDescription("Test Description");
         request.setProjectManager("Manager");
-        request.setUsers(Arrays.asList("user1", "user2"));
+        request.setDevelopers(Arrays.asList("user1", "user2"));
 
         doNothing().when(projectService).createProject(anyString(), anyString(), anyString(), anyList());
 
@@ -54,7 +54,7 @@ class ProjectControllerTest {
         request.setName("Test Project");
         request.setDescription("Test Description");
         request.setProjectManager("Manager");
-        request.setUsers(Arrays.asList("user1", "user2"));
+        request.setDevelopers(Arrays.asList("user1", "user2"));
 
         doThrow(new RuntimeException("Internal error")).when(projectService).createProject(anyString(), anyString(), anyString(), anyList());
 
